@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000" width="1000" height="1000" fill-rule="nonzero" role="img" aria-label="RELOOP idle">
+  <defs>
+    <linearGradient id="reloop-head-grad" x1="0.2" y1="0" x2="0.8" y2="1">
+      <stop offset="0%" stop-color="#6CCB87" />
+      <stop offset="55%" stop-color="#00C389" />
+      <stop offset="100%" stop-color="#00C389" stop-opacity="0.82" />
+    </linearGradient>
+    <linearGradient id="reloop-body-grad" x1="0.25" y1="0" x2="0.75" y2="1">
+      <stop offset="0%" stop-color="#6CCB87" />
+      <stop offset="100%" stop-color="#00C389" stop-opacity="0.78" />
+    </linearGradient>
+    <radialGradient id="reloop-highlight" cx="0.35" cy="0.28" r="0.55">
+      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.22" />
+      <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0" />
+    </radialGradient>
+    <radialGradient id="reloop-ai-glow" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0%" stop-color="#0077FF" stop-opacity="0.95" />
+      <stop offset="70%" stop-color="#0077FF" stop-opacity="0.45" />
+      <stop offset="100%" stop-color="#0077FF" stop-opacity="0" />
+    </radialGradient>
+    <filter id="reloop-shadow-blur" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="18" />
+    </filter>
+    <filter id="reloop-ai-blur" x="-80%" y="-80%" width="260%" height="260%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="6" />
+    </filter>
+  </defs>
+  <g id="reloop-root">
+    <ellipse id="reloop-shadow" cx="500" cy="935" rx="190" ry="26" fill="#001B2A" fill-opacity="0.18" filter="url(#reloop-shadow-blur)" />
+    <g id="reloop-cape">
+    <path d="M 500 535 C 580 540, 620 620, 610 720 C 600 780, 540 800, 500 795 C 460 800, 400 780, 390 720 C 380 620, 420 540, 500 535 Z" fill="#6CCB87" fill-opacity="0.92" />
+    <path d="M 500 560 L 500 780" stroke="#00C389" stroke-width="3" stroke-opacity="0.35" stroke-linecap="round" />
+    <path d="M 500 620 L 545 700" stroke="#00C389" stroke-width="2.5" stroke-opacity="0.3" stroke-linecap="round" />
+    <path d="M 500 620 L 455 700" stroke="#00C389" stroke-width="2.5" stroke-opacity="0.3" stroke-linecap="round" />
+  </g>
+    <g id="reloop-body-group" transform="translate(0 0)">
+    <rect id="reloop-body" x="325" y="548" width="350" height="258" rx="52" ry="52" fill="url(#reloop-body-grad)" />
+    <g id="reloop-logo">
+      <text x="500" y="678" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-weight="800" font-size="36" fill="#6CCB87" letter-spacing="1">RELOOP</text>
+    </g>
+    <g id="reloop-arm-left" transform="rotate(-12 305 630)">
+      <rect x="278" y="625" width="54" height="168" rx="27" fill="url(#reloop-body-grad)" />
+    </g>
+    <g id="reloop-arm-right" transform="rotate(12 695 630)">
+      <rect x="668" y="625" width="54" height="168" rx="27" fill="url(#reloop-body-grad)" />
+    </g>
+    <g id="reloop-hand-left" transform="translate(305 810)"><ellipse cx="0" cy="8" rx="38" ry="34" fill="url(#reloop-body-grad)" />
+    <circle cx="-18" cy="-8" r="10" fill="url(#reloop-body-grad)" />
+    <circle cx="-6" cy="-12" r="10" fill="url(#reloop-body-grad)" />
+    <circle cx="6" cy="-12" r="10" fill="url(#reloop-body-grad)" />
+    <circle cx="18" cy="-8" r="10" fill="url(#reloop-body-grad)" />
+    <ellipse cx="28" cy="4" rx="12" ry="16" fill="url(#reloop-body-grad)" /></g>
+    <g id="reloop-hand-right" transform="translate(695 810) scale(-1 1)"><ellipse cx="0" cy="8" rx="38" ry="34" fill="url(#reloop-body-grad)" />
+    <circle cx="-18" cy="-8" r="10" fill="url(#reloop-body-grad)" />
+    <circle cx="-6" cy="-12" r="10" fill="url(#reloop-body-grad)" />
+    <circle cx="6" cy="-12" r="10" fill="url(#reloop-body-grad)" />
+    <circle cx="18" cy="-8" r="10" fill="url(#reloop-body-grad)" />
+    <ellipse cx="28" cy="4" rx="12" ry="16" fill="url(#reloop-body-grad)" /></g>
+    <rect id="reloop-leg-left" x="418" y="798" width="58" height="148" rx="22" fill="url(#reloop-body-grad)" />
+    <rect id="reloop-leg-right" x="524" y="798" width="58" height="148" rx="22" fill="url(#reloop-body-grad)" />
+    <ellipse id="reloop-foot-left" cx="447" cy="968" rx="52" ry="28" fill="#00C389" />
+    <ellipse id="reloop-foot-right" cx="553" cy="968" rx="52" ry="28" fill="#00C389" />
+    <ellipse id="reloop-foot-left-sole" cx="447" cy="978" rx="46" ry="12" fill="#001B2A" fill-opacity="0.35" />
+    <ellipse id="reloop-foot-right-sole" cx="553" cy="978" rx="46" ry="12" fill="#001B2A" fill-opacity="0.35" />
+    </g>
+    <g id="reloop-head-group" transform="translate(0 0) rotate(0 500 260)">
+    <path id="reloop-loop-left" d="M 175 195 C 95 120, 80 60, 130 45 C 175 35, 195 95, 185 155 C 178 188, 168 210, 155 228 L 142 218 C 158 198, 168 175, 172 150 C 178 110, 160 75, 135 68 C 105 60, 98 115, 155 175 Z" fill="#00C389" />
+    <path id="reloop-loop-right" d="M 825 195 C 905 120, 920 60, 870 45 C 825 35, 805 95, 815 155 C 822 188, 832 210, 845 228 L 858 218 C 842 198, 832 175, 828 150 C 822 110, 840 75, 865 68 C 895 60, 902 115, 845 175 Z" fill="#00C389" />
+    <circle id="reloop-head" cx="500" cy="260" r="290" fill="url(#reloop-head-grad)" />
+    <circle id="reloop-head-highlight" cx="500" cy="260" r="290" fill="url(#reloop-highlight)" />
+    <circle id="reloop-ai-ring-left" cx="228" cy="268" r="42" fill="url(#reloop-ai-glow)" filter="url(#reloop-ai-blur)" />
+    <circle id="reloop-ai-ring-left-core" cx="228" cy="268" r="22" fill="#0077FF" fill-opacity="0.85" />
+    <circle id="reloop-ai-ring-right" cx="772" cy="268" r="42" fill="url(#reloop-ai-glow)" filter="url(#reloop-ai-blur)" />
+    <circle id="reloop-ai-ring-right-core" cx="772" cy="268" r="22" fill="#0077FF" fill-opacity="0.85" />
+    <rect id="reloop-face" x="318" y="168" width="364" height="300" rx="72" ry="72" fill="#F3F7F9" />
+    
+    <g id="reloop-eye-left">
+    <ellipse cx="439" cy="260" rx="34" ry="56" fill="#001B2A" />
+    <circle cx="430.5" cy="240.4" r="9.520000000000001" fill="#F3F7F9" />
+    <circle cx="444.1" cy="248.8" r="4.08" fill="#F3F7F9" />
+  </g>
+    <g id="reloop-eye-right">
+    <ellipse cx="561" cy="260" rx="34" ry="56" fill="#001B2A" />
+    <circle cx="552.5" cy="240.4" r="9.520000000000001" fill="#F3F7F9" />
+    <circle cx="566.1" cy="248.8" r="4.08" fill="#F3F7F9" />
+  </g>
+    <circle id="reloop-blush-left" cx="439" cy="316" r="14" fill="#E84855" fill-opacity="0.18" />
+    <circle id="reloop-blush-right" cx="561" cy="316" r="14" fill="#E84855" fill-opacity="0.18" />
+    <path id="reloop-mouth" d="M 466 352 Q 500 362 534 352" stroke="#001B2A" stroke-width="8" fill="none" stroke-linecap="round" />
+    <g id="reloop-leaf">
+    <path d="M 500 8 C 545 25, 560 55, 552 85 C 545 108, 525 118, 500 115 C 475 118, 455 108, 448 85 C 440 55, 455 25, 500 8 Z" fill="#00C389" />
+    <path d="M 500 15 L 500 108" stroke="#F3F7F9" stroke-width="3" stroke-linecap="round" opacity="0.85" />
+    <path d="M 500 40 L 530 75" stroke="#F3F7F9" stroke-width="2.5" stroke-linecap="round" opacity="0.7" />
+    <path d="M 500 40 L 470 75" stroke="#F3F7F9" stroke-width="2.5" stroke-linecap="round" opacity="0.7" />
+  </g>
+    </g>
+  </g>
+</svg>

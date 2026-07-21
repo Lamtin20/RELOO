@@ -3,18 +3,32 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "node server.mjs",
+    "dev:next": "next dev",
     "build": "next build",
-    "start": "next start",
-    "lint": "eslint"
+    "start": "node server.mjs",
+    "start:next": "next start",
+    "lint": "eslint",
+    "db:check": "node scripts/check-supabase.mjs",
+    "db:migrate": "node scripts/apply-supabase-schema.mjs",
+    "db:seed": "tsx scripts/seed-supabase.mjs",
+    "db:tables": "node scripts/list-supabase-tables.mjs"
   },
   "dependencies": {
+    "@supabase/ssr": "^0.12.3",
+    "@supabase/supabase-js": "^2.110.7",
+    "lucide-react": "^1.24.0",
     "next": "16.2.10",
+    "pg": "^8.22.0",
     "react": "19.2.4",
-    "react-dom": "19.2.4"
+    "react-dom": "19.2.4",
+    "socket.io": "^4.8.3",
+    "socket.io-client": "^4.8.3"
   },
   "devDependencies": {
+    "@types/react": "19.2.17",
     "eslint": "^9",
-    "eslint-config-next": "16.2.10"
+    "eslint-config-next": "16.2.10",
+    "tsx": "^4.23.1"
   }
 }
