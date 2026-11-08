@@ -1,6 +1,11 @@
 "use client";
+import {useWarmConnection} from '@/components/mobile/useWarmConnection';
+import {QUICK_PUBLIC_ROUTES} from '@/lib/mobile/navigation-warm';
+import {NavigationFeedback} from '@/components/mobile/NavigationFeedback';
+import {useLocale} from '@/components/settings/LocaleProvider';
+import {uiText} from '@/lib/i18n/ui';
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useSyncExternalStore } from "react";
 import { createPortal } from "react-dom";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -13,38 +18,49 @@ import {
   LayoutDashboard,
   Headphones,
   LogIn,
-} from "lucide-react";
+  MessageCircle,
+  Video,
+  Camera,
+  ShoppingBag,
+  Compass,
+  HouseHeart,
+  MessageCircleMore,
+  UserRound,
+  PackageCheck,
+  Newspaper,
+} from "lucide";
 import { useAuth } from "@/lib/store";
+import { MorphIcon } from "@/components/ui/MorphIcon";
+import { useNativeApp } from "@/lib/mobile/useNativeApp";
+import { ShortsIcon } from "@/components/ui/ShortsIcon";
 
 const PROFILES = {
   marketplace: (isAuthenticated) => {
     const items = [
       { href: "/", label: "Trang chủ", icon: Home, match: (p) => p === "/" },
       {
-        href: isAuthenticated ? "/dashboard/assets" : "/auth",
-        label: "Quản lý tin",
-        icon: Tag,
-        match: (p) =>
-          p.startsWith("/dashboard/assets") && p !== "/dashboard/assets/new",
+        href: "/explore",
+        label: "Khám phá",
+        icon: Compass,
+        match: (p) => p.startsWith("/explore") || p.startsWith("/cashback"),
       },
       {
-        href: isAuthenticated ? "/dashboard/assets/new" : "/auth/register",
+        href: "/dang-tin",
         label: "Đăng tin",
         icon: Plus,
-        match: (p) => p === "/dashboard/assets/new",
+        match: (p) => p === "/dang-tin" || p === "/lend" || p === "/dashboard/assets/new",
         fab: true,
       },
       {
-        href: isAuthenticated ? "/dashboard/orders" : "/auth",
-        label: "Đơn thuê",
+        href: "/giao-dich",
+        label: "Giao dịch",
         icon: ClipboardList,
-        match: (p) =>
-          p.startsWith("/dashboard/orders") || p.startsWith("/checkout"),
+        match: (p) => p==='/giao-dich'||p.startsWith('/dashboard/orders')||p.startsWith('/dashboard/purchases'),
       },
       {
         href: "/account",
-        label: isAuthenticated ? "Tài khoản" : "Tài khoản",
-        icon: isAuthenticated ? User : LogIn,
+        label: "Tài khoản",
+        icon: User,
         match: (p) =>
           p === "/account" ||
           p.startsWith("/dashboard/profile") ||
@@ -135,40 +151,61 @@ function resolveProfile(pathname) {
 }
 
 function NavItem({ item, pathname }) {
-  const Icon = item.icon;
-  const active = item.match(pathname);
+ const {locale}=useLocale(),t=v=>uiText(locale,v);
+  const active = item.match(pathname),warmConnection=useWarmConnection();
+  const [engaged,setEngaged]=useState(false);
   return (
     <Link
       href={item.href}
-      className={`bottom-nav__item ${active ? "is-active" : ""}`.trim()}
+      prefetch={QUICK_PUBLIC_ROUTES.has(item.href)?warmConnection:undefined}
+      className={`bottom-nav__item ${item.fab ? "bottom-nav__item--post" : ""} ${active ? "is-active" : ""}`.trim()}
+      aria-current={active ? "page" : undefined}
+      title={t(item.label)}
+      data-market-nav="true"
+      onPointerEnter={()=>setEngaged(true)}
+      onPointerLeave={()=>setEngaged(false)}
+      onFocus={()=>setEngaged(true)}
+      onBlur={()=>setEngaged(false)}
     >
       <span className="bottom-nav__icon">
-        <Icon size={23} strokeWidth={active ? 2.25 : 1.75} />
+        {item.shorts ? <ShortsIcon active={active}/> : <MorphIcon
+          icon={active||engaged ? (item.icon===Home?HouseHeart:item.icon===Compass?ShoppingBag:item.icon===MessageCircle?MessageCircleMore:item.icon===User?UserRound:item.icon===Tag?PackageCheck:item.icon) : item.icon}
+          size={23}
+          strokeWidth={active ? 2.25 : 1.75}
+        />}
       </span>
-      <span className="bottom-nav__label">{item.label}</span>
+      <span className="bottom-nav__label">{t(item.label)}</span><NavigationFeedback/>
     </Link>
   );
 }
 
+function subscribeToHydration() {
+  return () => {};
+}
+
 export function BottomNav() {
+  const native = useNativeApp();
   const pathname = usePathname() || "/";
   const { isAuthenticated } = useAuth();
-  const [mounted, setMounted] = useState(false);
+  const mounted = useSyncExternalStore(
+    subscribeToHydration,
+    () => true,
+    () => false,
+  );
   const profile = resolveProfile(pathname);
-  const items = PROFILES[profile](isAuthenticated);
-
-  const fab = items.find((i) => i.fab);
-  const regular = items.filter((i) => !i.fab);
-  const left = regular.slice(0, 2);
-  const right = regular.slice(2);
-  const fabActive = fab?.match(pathname);
+  const focused = pathname.startsWith("/shorts") || pathname === "/dashboard/shorts/new" || pathname === '/dashboard/assets/new' || pathname === '/lend' || pathname === '/dashboard/security' || pathname.startsWith('/purchase/') || pathname.startsWith("/dashboard/messages") || pathname.startsWith("/rent/") || pathname.startsWith("/product/") || pathname.startsWith("/dashboard/kyc/verify");
+  const nativeItems = PROFILES.marketplace(isAuthenticated).map((item, index) => {
+    if (index === 1) return item;
+    if (index === 2 && isAuthenticated) return {...item,icon:Plus};
+    if (index === 4) return {...item,label:"Tài khoản",icon:User,match:p=>p==="/account"||p.startsWith('/dashboard/profile')||p.startsWith('/dashboard/kyc')};
+    return item;
+  });
+  const items = profile==='admin'?PROFILES.admin(isAuthenticated):native?nativeItems:PROFILES.marketplace(isAuthenticated);
 
   useEffect(() => {
-    setMounted(true);
-
     const mq = window.matchMedia("(max-width: 900px)");
     const syncBodyClass = () => {
-      document.body.classList.toggle("has-mobile-bottom-nav", mq.matches);
+      document.body.classList.toggle("has-mobile-bottom-nav", native && !focused);
     };
 
     syncBodyClass();
@@ -178,56 +215,22 @@ export function BottomNav() {
       mq.removeEventListener("change", syncBodyClass);
       document.body.classList.remove("has-mobile-bottom-nav");
     };
-  }, []);
+  }, [focused,native]);
 
   const nav = (
-    <nav className="bottom-nav bottom-nav--momo" aria-label="Bottom navigation">
-      <div className="bottom-nav__shell">
-        <div className="bottom-nav__surface" aria-hidden="true">
-          <svg
-            className="bottom-nav__shape"
-            viewBox="0 0 390 58"
-            preserveAspectRatio="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M0 6C0 2.69 2.69 0 6 0H149c5.2 0 9.9 2.8 12.4 7.3 5.8 9.2 15.8 14.7 26.6 14.7S209 16.5 214.8 7.3C217.3 2.8 222 0 227.2 0H384c3.31 0 6 2.69 6 6v52H0V6Z"
-              fill="#ffffff"
-            />
-          </svg>
-        </div>
-
-        {fab && (
-          <Link
-            href={fab.href}
-            className={`bottom-nav__fab ${fabActive ? "is-active" : ""}`}
-            aria-label={fab.label}
-          >
-            <span className="bottom-nav__fab-circle">
-              <Plus size={27} strokeWidth={2.6} />
-            </span>
-            <span className="bottom-nav__fab-pill">{fab.label}</span>
-          </Link>
-        )}
-
-        <div className="bottom-nav__row">
-          <div className="bottom-nav__side">
-            {left.map((item) => (
-              <NavItem key={item.href} item={item} pathname={pathname} />
-            ))}
-          </div>
-          <div className="bottom-nav__gap" aria-hidden="true" />
-          <div className="bottom-nav__side">
-            {right.map((item) => (
-              <NavItem key={item.href} item={item} pathname={pathname} />
-            ))}
-          </div>
-        </div>
+    <nav
+      className={`bottom-nav bottom-nav--reloo ${native && profile !== "admin" ? "bottom-nav--native" : ""}`}
+      aria-label="Điều hướng di động"
+    >
+      <div className="bottom-nav__clean-row" style={{gridTemplateColumns:`repeat(${items.length},minmax(0,1fr))`}}>
+        {items.map((item) => (
+          <NavItem key={item.href} item={item} pathname={pathname} />
+        ))}
       </div>
     </nav>
   );
 
-  if (!mounted) return null;
+  if (!mounted || !native || focused) return null;
 
   return createPortal(nav, document.body);
 }
