@@ -1,9 +1,15 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useId, useMemo, useRef, useState } from "react";
 import { MapPin, Search, Navigation, Loader2, Check, X } from "lucide-react";
 import { fetchProvinces, fetchWards } from "@/lib/vn-address";
 import { useGeolocation } from "@/lib/hooks/useGeolocation";
+import {useLocale} from '@/components/settings/LocaleProvider';
+import {locationPickerCopy} from '@/lib/i18n/mobile-experience';
+import './location-label.css';
+import {googleMapsLocation} from '@/lib/location-tools';
+import {locationLabel} from '@/lib/location-label';
+import {LocationMap} from './LocationMap';
 
 /**
  * LocationPicker - chọn Tỉnh/Thành + Phường/Xã.
@@ -27,15 +33,17 @@ export function LocationPicker({
   streetValue = "",
   onStreetChange,
   autoGeo = true,
-  label = "Khu vực",
-  geoLabel = "Dùng vị trí hiện tại của tôi",
-  streetLabel = "Số nhà, tên đường",
+  label:labelInput,
+  geoLabel:geoInput,
+  streetLabel:streetInput,
   hint = "",
   compact = false,
+  invalidProvince=false,invalidWard=false,
 }) {
+  const {locale}=useLocale(),t=locationPickerCopy[locale]||locationPickerCopy['vi-VN'],uid=useId(),label=labelInput??t.area,geoLabel=geoInput??t.geo,streetLabel=streetInput??t.street;
   const [provinces, setProvinces] = useState([]);
-  const [loadingProv, setLoadingProv] = useState(false);
-  const [wards, setWards] = useState([]);
+  const [loadingProv, setLoadingProv] = useState(true),[provError,setProvError]=useState(false),[provRetry,setProvRetry]=useState(0),[wardError,setWardError]=useState(false),[wardRetry,setWardRetry]=useState(0);
+  const [wards, setWards] = useState([]),[wardSource,setWardSource]=useState(null);
   const [loadingWards, setLoadingWards] = useState(false);
   const [openProv, setOpenProv] = useState(false);
   const [openWard, setOpenWard] = useState(false);
@@ -48,35 +56,34 @@ export function LocationPicker({
 
   useEffect(() => {
     let alive = true;
-    setLoadingProv(true);
     fetchProvinces()
       .then((data) => {
-        if (alive) setProvinces(data);
+        if (alive) {setProvinces(data);setProvError(false);}
       })
-      .catch(() => {})
+      .catch(() => {if(alive)setProvError(true);})
       .finally(() => alive && setLoadingProv(false));
     return () => {
       alive = false;
     };
-  }, []);
+  }, [provRetry]);
 
   useEffect(() => {
     if (!value?.province?.code) {
-      setWards([]);
-      return;
+      const timer=setTimeout(()=>setWards([]),0);
+      return ()=>clearTimeout(timer);
     }
     let alive = true;
-    setLoadingWards(true);
+    Promise.resolve().then(()=>{if(alive)setLoadingWards(true);});
     fetchWards(value.province.code)
       .then((data) => {
-        if (alive) setWards(data);
+        if (alive) {setWards(data);setWardSource(value.province.code);setWardError(false);}
       })
-      .catch(() => {})
+      .catch(() => {if(alive)setWardError(true);})
       .finally(() => alive && setLoadingWards(false));
     return () => {
       alive = false;
     };
-  }, [value?.province?.code]);
+  }, [value?.province?.code,wardRetry]);
 
   useEffect(() => {
     function onDoc(e) {
@@ -87,6 +94,7 @@ export function LocationPicker({
     return () => document.removeEventListener("mousedown", onDoc);
   }, []);
 
+  useEffect(()=>{function escape(event){if(event.key!=='Escape'||!openProv&&!openWard)return;event.preventDefault();if(openWard){setOpenWard(false);wardRef.current?.querySelector('button')?.focus();}else{setOpenProv(false);provRef.current?.querySelector('button')?.focus();}}document.addEventListener('keydown',escape);return()=>document.removeEventListener('keydown',escape);},[openProv,openWard]);
   const filteredProv = useMemo(() => {
     const q = provQ.trim().toLowerCase();
     if (!q) return provinces;
@@ -96,14 +104,16 @@ export function LocationPicker({
   }, [provinces, provQ]);
 
   const filteredWards = useMemo(() => {
+    if(wardSource!==value?.province?.code)return [];
     const q = wardQ.trim().toLowerCase();
     if (!q) return wards;
     return wards.filter((w) =>
       [w.name, w.codename].some((s) => s?.toLowerCase().includes(q))
     );
-  }, [wards, wardQ]);
+  }, [wards,wardQ,wardSource,value?.province?.code]);
 
   function pickProvince(p) {
+    setWardError(false);
     onChange?.({ province: p, ward: null, coords: null });
     setOpenProv(false);
     setProvQ("");
@@ -141,7 +151,7 @@ export function LocationPicker({
         >
           {geo.status === "requesting" ? (
             <>
-              <Loader2 size={14} className="spin" /> Đang xác định vị trí...
+              <Loader2 size={14} className="spin" /> {t.locating}
             </>
           ) : (
             <>
@@ -155,33 +165,34 @@ export function LocationPicker({
 
       {value?.coords && (
         <div className="loc-picker__hint loc-picker__hint--ok">
-          Đã định vị GPS ({value.coords.lat.toFixed(5)}, {value.coords.lng.toFixed(5)})
+          <span>{t.located}</span><details><summary>{t.details}</summary>{Number.isFinite(value.coords.accuracy)&&<p>{t.accuracy(Math.round(value.coords.accuracy))}</p>}<p>{t.share}</p></details>
+          {googleMapsLocation(value.coords)&&<a href={googleMapsLocation(value.coords)} target="_blank" rel="noopener noreferrer">{t.map}</a>}
         </div>
       )}
 
       <div className="loc-picker__row">
         <div className="loc-picker__field" ref={provRef}>
-          <label className="loc-picker__caption">Tỉnh / Thành phố</label>
+          <label className="loc-picker__caption">{t.province}</label>
           <button
             type="button"
-            className="loc-picker__select"
+            className="loc-picker__select" role="combobox" aria-label={t.province} aria-expanded={openProv} aria-haspopup="dialog" aria-controls={openProv?uid+'-province':undefined} aria-invalid={invalidProvince}
             onClick={() => setOpenProv((v) => !v)}
           >
             <MapPin size={14} />
             <span className="loc-picker__select-text">
-              {value?.province?.name || (loadingProv ? "Đang tải..." : "Chọn tỉnh/thành")}
+              {locationLabel(value?.province?.name) || (loadingProv ? t.loading : t.chooseProvince)}
             </span>
           </button>
 
           {openProv && (
-            <div className="loc-picker__dropdown">
+            <div className="loc-picker__dropdown" id={uid+'-province'} role="dialog" aria-label={t.chooseProvince}>
               <div className="loc-picker__search">
                 <Search size={14} />
                 <input
                   autoFocus
                   value={provQ}
                   onChange={(e) => setProvQ(e.target.value)}
-                  placeholder="Tìm tỉnh/thành..."
+                  placeholder={t.searchProvince}
                 />
                 {provQ && (
                   <button type="button" onClick={() => setProvQ("")} className="loc-picker__clear">
@@ -190,15 +201,16 @@ export function LocationPicker({
                 )}
               </div>
               <ul className="loc-picker__list">
+                {provError&&<li className="loc-picker__load-error" role="status"><span>{t.unavailable}</span><button type="button" disabled={loadingProv} onClick={()=>{setProvError(false);setLoadingProv(true);setProvRetry(n=>n+1);}}>{t.retry}</button></li>}
                 {filteredProv.map((p) => (
                   <li key={p.code}>
                     <button type="button" onClick={() => pickProvince(p)}>
-                      <span>{p.name}</span>
+                      <span>{locationLabel(p.name)}</span>
                       {value?.province?.code === p.code && <Check size={14} />}
                     </button>
                   </li>
                 ))}
-                {filteredProv.length === 0 && (
+                {filteredProv.length === 0 && !provError && (
                   <li className="loc-picker__empty">Không tìm thấy</li>
                 )}
               </ul>
@@ -207,33 +219,33 @@ export function LocationPicker({
         </div>
 
         <div className="loc-picker__field" ref={wardRef}>
-          <label className="loc-picker__caption">Phường / Xã</label>
+          <label className="loc-picker__caption">{t.ward}</label>
           <button
             type="button"
-            className="loc-picker__select"
+            className="loc-picker__select" role="combobox" aria-label={t.ward} aria-expanded={openWard} aria-haspopup="dialog" aria-controls={openWard?uid+'-ward':undefined} aria-invalid={invalidWard}
             onClick={() => value?.province && setOpenWard((v) => !v)}
             disabled={!value?.province}
           >
             <MapPin size={14} />
             <span className="loc-picker__select-text">
-              {value?.ward?.name ||
+              {locationLabel(value?.ward?.name) ||
                 (!value?.province
                   ? "Chọn tỉnh trước"
                   : loadingWards
-                  ? "Đang tải..."
-                  : "Chọn phường/xã")}
+                  ? t.loading
+                  : t.chooseWard)}
             </span>
           </button>
 
           {openWard && (
-            <div className="loc-picker__dropdown">
+            <div className="loc-picker__dropdown" id={uid+'-ward'} role="dialog" aria-label={t.chooseWard}>
               <div className="loc-picker__search">
                 <Search size={14} />
                 <input
                   autoFocus
                   value={wardQ}
                   onChange={(e) => setWardQ(e.target.value)}
-                  placeholder="Tìm phường/xã..."
+                  placeholder={t.searchWard}
                 />
                 {wardQ && (
                   <button type="button" onClick={() => setWardQ("")} className="loc-picker__clear">
@@ -242,20 +254,21 @@ export function LocationPicker({
                 )}
               </div>
               <ul className="loc-picker__list">
+                {wardError&&<li className="loc-picker__load-error" role="status"><span>{t.unavailable}</span><button type="button" disabled={loadingWards} onClick={()=>{setWardError(false);setLoadingWards(true);setWardRetry(n=>n+1);}}>{t.retry}</button></li>}
                 {filteredWards.map((w) => (
                   <li key={w.code}>
                     <button type="button" onClick={() => pickWard(w)}>
                       <span>
-                        <strong>{w.name}</strong>
+                        <strong>{locationLabel(w.name)}</strong>
                         <em className="loc-picker__list-sub">{w.division_type}</em>
                       </span>
                       {value?.ward?.code === w.code && <Check size={14} />}
                     </button>
                   </li>
                 ))}
-                {filteredWards.length === 0 && (
+                {filteredWards.length === 0 && !wardError && (
                   <li className="loc-picker__empty">
-                    {loadingWards ? "Đang tải..." : "Không tìm thấy"}
+                    {loadingWards ? t.loading : "Không tìm thấy"}
                   </li>
                 )}
               </ul>
@@ -264,6 +277,7 @@ export function LocationPicker({
         </div>
       </div>
 
+      {(value?.coords||value?.province)&&<LocationMap coords={value.coords} address={[value.ward?.name,value.province?.name].filter(Boolean).join(', ')} approximate={!value.coords}/>}
       {includeStreet && (
         <div className="loc-picker__street">
           <label className="loc-picker__caption">{streetLabel}</label>

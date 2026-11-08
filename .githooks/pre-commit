@@ -1,0 +1,4 @@
+#!/bin/sh
+# Install explicitly: git config core.hooksPath .githooks
+node --test tests/compliance-guardian.test.mjs || exit 1
+node scripts/check-source-secrets.mjs || exit 1

@@ -1,0 +1,2 @@
+# Runtime inference only; training/download dependencies are intentionally excluded.
+einops==0.8.1

@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Save, Eye } from "lucide-react";
 import { useReloo } from "@/lib/store";
 import { EmptyState } from "@/components/ui/EmptyState";
@@ -14,21 +14,11 @@ export default function CmsEditorPage() {
   const { state, actions } = useReloo();
   const page = state.cmsPages.find((p) => p.id === id);
 
-  const [form, setForm] = useState(null);
-  const [savedAt, setSavedAt] = useState(null);
-
-  useEffect(() => {
-    if (page) {
-      setForm({
-        title: page.title,
-        slug: page.slug,
-        metaDescription: page.metaDescription || "",
-        content: page.content || "",
-        published: !!page.published,
-      });
-    }
-  }, [page]);
-
+  return <CmsRecordEditor key={page? id+':loaded':id+':missing'} page={page} actions={actions}/>;
+}
+function CmsRecordEditor({page,actions}){
+  const [form,setForm]=useState(()=>page?{title:page.title,slug:page.slug,metaDescription:page.metaDescription||'',content:page.content||'',published:!!page.published}:null);
+  const [savedAt,setSavedAt]=useState(null);
   if (!page || !form) {
     return (
       <EmptyState

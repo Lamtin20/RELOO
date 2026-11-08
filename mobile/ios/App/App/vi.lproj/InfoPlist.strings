@@ -1,0 +1,6 @@
+"NSCalendarsFullAccessUsageDescription" = "RELOO cần quyền lịch để bạn chọn lịch cục bộ và cập nhật nhắc trả đồ do RELOO tạo. Nội dung lịch cá nhân không được dùng để đề xuất sản phẩm.";
+"NSCalendarsUsageDescription" = "Cho phép RELOO tạo và cập nhật nhắc trả đồ trong lịch cục bộ bạn chọn.";
+"NSLocationWhenInUseUsageDescription" = "Khi bạn chọn tìm khu gần tôi, RELOO dùng vị trí một lần để gợi ý khu trong 5 km. Không theo dõi nền hoặc tự xác minh nơi ở.";
+"NSCameraUsageDescription" = "Dùng camera khi bạn chọn chụp món đồ, quét QR bàn giao, quay video sản phẩm hoặc xác minh danh tính.";
+"NSMicrophoneUsageDescription" = "Chỉ dùng microphone khi bạn chọn quay video sản phẩm có âm thanh.";
+"NSPhotoLibraryUsageDescription" = "Chọn ảnh món đồ và video sản phẩm bạn muốn đăng lên RELOO.";

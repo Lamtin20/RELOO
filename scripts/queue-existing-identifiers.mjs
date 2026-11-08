@@ -1,0 +1,10 @@
+import { createClient } from "@supabase/supabase-js";
+import { queueIdentifier } from "../lib/security/identifiers.js";
+const db = createClient(process.env.SUPABASE_INTERNAL_URL || process.env.NEXT_PUBLIC_SUPABASE_URL, process.env.SUPABASE_SERVICE_ROLE_KEY, { auth: { persistSession: false, autoRefreshToken: false } });
+const id = process.argv[2];
+if (!id) throw new Error("An explicitly authorized profile ID is required");
+const { data: profile, error } = await db.from('profiles').select('id,phone,email').eq('id', id).single();
+if (error) throw new Error('Authorized profile unavailable');
+if (profile.phone) await queueIdentifier(db, id, 'PHONE', profile.phone);
+if (profile.email) await queueIdentifier(db, id, 'EMAIL', profile.email);
+console.log('Authorized profile identifiers queued; no activation was granted.');

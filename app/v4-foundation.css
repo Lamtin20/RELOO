@@ -1,0 +1,9 @@
+:root{--reloo-space-1:4px;--reloo-space-2:8px;--reloo-space-3:12px;--reloo-space-4:16px;--reloo-space-5:20px;--reloo-space-6:24px;--reloo-space-8:32px;--reloo-space-10:40px;--reloo-space-12:48px;--reloo-radius-control:12px;--reloo-radius-panel:16px;--reloo-radius-sheet:20px;--reloo-motion-fast:120ms;--reloo-motion-normal:200ms;--reloo-target-touch:44px;--reloo-focus-width:3px;--reloo-focus-offset:3px}
+.reloo-skip-link{position:fixed;z-index:10000;inset:12px auto auto 12px;transform:translateY(-180%);padding:12px 18px;background:var(--reloo-card,#fff);color:var(--reloo-primary,#087f5b);border:2px solid currentColor;border-radius:var(--reloo-radius-control);font-weight:600}
+.reloo-skip-link:focus{transform:none;outline:var(--reloo-focus-width) solid currentColor;outline-offset:var(--reloo-focus-offset)}
+.search-box :is(input,button,a):focus-visible{outline:var(--reloo-focus-width) solid var(--reloo-primary,#087f5b);outline-offset:var(--reloo-focus-offset)}
+.search-suggest__tabs>button,.search-suggest__row>button{min-height:var(--reloo-target-touch)}
+.native-header .native-search button{background:var(--reloo-primary,#087f5b);color:var(--reloo-card,#fff)}
+.di-modes button[aria-pressed=false]{color:var(--reloo-text-secondary,#536d60)}
+.auth-method-divider{color:var(--reloo-text-secondary,#536d60)}
+@media(prefers-reduced-motion:reduce){.search-box *,.r-image-loading *{animation:none!important;transition:none!important;scroll-behavior:auto!important}}

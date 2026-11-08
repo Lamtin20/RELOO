@@ -1,0 +1,7 @@
+listen_addresses: '0.0.0.0:3000'
+mbtiles:
+  sources:
+    vietnam: /data/tiles/vietnam.mbtiles
+fonts:
+  paths:
+    - /data/fonts

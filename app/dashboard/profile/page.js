@@ -1,330 +1,611 @@
 "use client";
-
-import { useState } from "react";
-import { User, Landmark, Phone, Plus, Trash2, CheckCircle2, Truck } from "lucide-react";
+import {RentalContinuation} from "@/components/neighborhood/RentalContinuation";
+import {ResidenceSettings} from "@/components/neighborhood/ResidenceSettings";
+import {IdentityNotice} from "@/components/profile/IdentityNotice";
+import Image from 'next/image';
+import { useCallback, useEffect, useState } from "react";
+import Link from "next/link";
+import {useSearchParams} from "next/navigation";
+import {
+  ArrowRight,
+  Check,
+  IdCard,
+  Landmark,
+  LoaderCircle,
+  LockKeyhole,
+  Mail,
+  MapPin,
+  Phone,
+  Plus,
+  Save,
+  ShieldCheck,
+  Star,
+  Trash2,
+  UserRound,
+} from "lucide-react";
 import { useAuth } from "@/lib/store";
-import { Badge, TrustScore } from "@/components/ui";
-import { BankAccountForm } from "@/components/bank/BankAccountForm";
-import { GoshipAddressForm } from "@/components/shipping/GoshipAddressForm";
-import { createBankAccountRecord } from "@/lib/customer/store-helpers";
-import { emptyGoshipAddress, formatGoshipAddress } from "@/lib/rent-draft";
-import { isValidPhone, sanitizePhoneInput, PHONE_ERROR } from "@/lib/utils";
-
-export default function ProfilePage() {
-  const { user, updateProfile, saveBankAccount, primaryBankAccount } = useAuth();
-
-  const [form, setForm] = useState(
-    user
+import { BankPicker } from "@/components/profile/BankPicker";
+import { DeleteAccount } from "@/components/profile/DeleteAccount";
+import { AddressFields } from "@/components/location/AddressFields";
+import {LanguageSettingsLink} from '@/components/settings/LanguageSettingsLink';
+const SECTIONS = [
+  ["personal", "Cá nhân", UserRound],
+  ["address", "Địa chỉ", MapPin],
+  ["bank", "Ngân hàng", Landmark],
+  ["security", "Bảo mật", ShieldCheck],
+];
+const EMPTY_ADDRESS = {
+  province: null,
+  ward: null,
+  house: "",
+  street: "",
+  hamlet: "",
+  note: "",
+  type: "HOME",
+};
+const EMPTY_BANK = {
+  bank: null,
+  number: "",
+  holder: "",
+  branch: "",
+  isDefault: true,
+  consent: false,
+};
+async function request(path, body, method = "POST") {
+  const response = await fetch(
+    path,
+    body
       ? {
-          name: user.name ?? "",
-          email: user.email ?? "",
-          phone: user.phone ?? "",
-          dateOfBirth: user.dateOfBirth ?? "",
-          nationalId: user.nationalId ?? "",
-          address: user.address ?? "",
-          bio: user.bio ?? "",
+          method,
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(body),
         }
-      : null
+      : {},
   );
-  const [contacts, setContacts] = useState(user?.emergencyContacts ?? []);
-  const [newContact, setNewContact] = useState({ name: "", phone: "" });
-  const [goshipAddress, setGoshipAddress] = useState(
-    () => user?.goshipAddress ?? { ...emptyGoshipAddress(), name: user?.name ?? "", phone: user?.phone ?? "" },
-  );
-  const [goshipErrors, setGoshipErrors] = useState({});
-  const [saved, setSaved] = useState(false);
-  const [formError, setFormError] = useState("");
-  const [contactError, setContactError] = useState("");
-
-  if (!user || !form) return null;
-
-  const update = (field) => (e) => {
-    setForm((f) => ({ ...f, [field]: e.target.value }));
-    setSaved(false);
-    setFormError("");
-  };
-
-  const updatePhone = (e) => {
-    setForm((f) => ({ ...f, phone: sanitizePhoneInput(e.target.value) }));
-    setSaved(false);
-    setFormError("");
-  };
-
-  const addContact = () => {
-    if (!newContact.name.trim()) {
-      setContactError("Vui lòng nhập tên người liên hệ.");
-      return;
-    }
-    if (!isValidPhone(newContact.phone)) {
-      setContactError(PHONE_ERROR);
-      return;
-    }
-    setContactError("");
-    setContacts((c) => [...c, { ...newContact, id: `ec_${Date.now()}` }]);
-    setNewContact({ name: "", phone: "" });
-    setSaved(false);
-  };
-
-  const removeContact = (id) => {
-    setContacts((c) => c.filter((item) => item.id !== id));
-    setSaved(false);
-  };
-
-  const handleSave = (e) => {
-    e.preventDefault();
-    if (!isValidPhone(form.phone)) {
-      setFormError(PHONE_ERROR);
-      return;
-    }
-    if (contacts.some((c) => !isValidPhone(c.phone))) {
-      setFormError("Liên hệ khẩn cấp cần số điện thoại đúng 10 số.");
-      return;
-    }
-    setFormError("");
-    updateProfile({
-      ...form,
-      emergencyContacts: contacts,
-      goshipAddress: {
-        ...goshipAddress,
-        name: form.name,
-        phone: form.phone,
-      },
-      address: formatGoshipAddress(goshipAddress) || form.address,
+  const result = await response.json();
+  if (!response.ok || !result.ok)
+    throw new Error(result.error || "Chưa tải được thông tin.");
+  return result;
+}
+export default function ProfilePage() {
+  const { user, refreshSession } = useAuth();
+  const userId = user?.id;
+  const params=useSearchParams();
+  const [section, setSection] = useState(()=>["personal","address","bank","security"].includes(params.get("section"))?params.get("section"):"personal"),
+    [form, setForm] = useState({ name: "", bio: "" }),
+    [address, setAddress] = useState(EMPTY_ADDRESS),
+    [legacyAddress, setLegacyAddress] = useState(""),
+    [banks, setBanks] = useState([]),
+    [bank, setBank] = useState(EMPTY_BANK),
+    [bankOpen, setBankOpen] = useState(false),
+    [loading, setLoading] = useState(true),
+    [busy, setBusy] = useState(false),
+    [error, setError] = useState(""),
+    [success, setSuccess] = useState("");
+  const load = useCallback(async () => {
+    const [profile, accounts] = await Promise.all([
+      request("/api/profile"),
+      request("/api/profile/banks"),
+    ]);
+    setForm({
+      name: profile.profile.name || "",
+      bio: profile.details.bio || "",
     });
-    setSaved(true);
-  };
-
-  function handleBankSaved({ bank, accountNumber }) {
-    const record = createBankAccountRecord({
-      customerId: user.id,
-      bank,
-      accountNumber,
-    });
-    saveBankAccount(record);
+    setAddress({ ...EMPTY_ADDRESS, ...profile.details.addressDetails });
+    setLegacyAddress(profile.details.address || "");
+    setBanks(accounts.accounts);
+  }, []);
+  useEffect(() => {
+    let alive = true;
+    const timer = setTimeout(() => {
+      if (userId)
+        load()
+          .catch((cause) => alive && setError(cause.message))
+          .finally(() => alive && setLoading(false));
+    }, 0);
+    return () => {
+      alive = false;
+      clearTimeout(timer);
+    };
+  }, [userId, load]);
+  async function save(event) {
+    event.preventDefault();
+    setBusy(true);
+    setError("");
+    setSuccess("");
+    try {
+      await request(
+        "/api/profile",
+        section === "address" ? { addressDetails: address } : form,
+        "PUT",
+      );
+      await refreshSession();
+      setSuccess(
+        section === "address" ? "Đã lưu địa chỉ." : "Đã lưu thông tin cá nhân.",
+      );
+      await load();
+    } catch (cause) {
+      setError(cause.message);
+    } finally {
+      setBusy(false);
+    }
   }
-
+  async function saveBank(event) {
+    event.preventDefault();
+    setBusy(true);
+    setError("");
+    setSuccess("");
+    try {
+      await request("/api/profile/banks", {
+        bin: bank.bank?.bin,
+        number: bank.number,
+        holder: bank.holder,
+        branch: bank.branch,
+        isDefault: bank.isDefault,
+        consent: bank.consent,
+      });
+      setBank(EMPTY_BANK);
+      setBankOpen(false);
+      await load();
+      setSuccess("Đã lưu ngân hàng và tiếp nhận thông tin đối chiếu.");
+    } catch (cause) {
+      setError(cause.message);
+    } finally {
+      setBusy(false);
+    }
+  }
+  async function manageBank(id, action) {
+    setBusy(true);
+    setError("");
+    try {
+      await request("/api/profile/banks", { id, action }, "PATCH");
+      await load();
+      setSuccess(
+        action === "DEFAULT"
+          ? "Đã đổi ngân hàng mặc định."
+          : "Đã xóa tài khoản ngân hàng khỏi hồ sơ.",
+      );
+    } catch (cause) {
+      setError(cause.message);
+    } finally {
+      setBusy(false);
+    }
+  }
+  if (!user) return null;
+  const locked = user.activationStatus === "RESTRICTED";
   return (
-    <div className="dashboard-page animate-fade-up">
-      <div className="dashboard-page-header">
+    <div className="dashboard-page profile-page">
+      <header className="profile-header">
+        <div className="profile-avatar">
+          <UserRound size={30} />
+        </div>
         <div>
           <h1>Hồ sơ cá nhân</h1>
-          <p className="text-muted mt-2">
-            Quản lý thông tin cá nhân, tài khoản ngân hàng và liên hệ khẩn cấp
-          </p>
+          <p>{user.name}</p>
         </div>
-      </div>
-
-      <div className="panel dashboard-profile-header mt-6">
-        <img src={user.avatar} alt={user.name} className="dashboard-profile-avatar" />
-        <div>
-          <h2>{user.name}</h2>
-          <div className="flex items-center gap-2 mt-1 flex-wrap">
-            <Badge variant="green">{user.kycLevel}</Badge>
-            <span className="text-sm text-muted">
-              Tham gia từ {new Date(user.joinedAt).getFullYear()}
-            </span>
-            {user.isPro && <Badge variant="warning">Pro Store</Badge>}
-          </div>
-        </div>
-        <div className="dashboard-profile-header__score">
-          <TrustScore score={Math.round((user.trustScore ?? 0) / 10)} size={64} showLabel={false} />
-          <span className="text-xs text-muted mt-1">{user.trustScore ?? 0} điểm</span>
-        </div>
-      </div>
-
-      <form onSubmit={handleSave}>
-        <div className="panel mt-6">
-          <div className="panel-header">
-            <div className="flex items-center gap-2">
-              <User size={18} className="text-green" />
-              <h2 className="panel-title">Thông tin cơ bản</h2>
-            </div>
-          </div>
-
-          <div className="dashboard-form-row">
-            <div className="input-group">
-              <label className="input-label" htmlFor="name">
-                Họ và tên
-              </label>
-              <input id="name" className="input" value={form.name} onChange={update("name")} />
-            </div>
-            <div className="input-group">
-              <label className="input-label" htmlFor="phone">
-                Số điện thoại
-              </label>
-              <input
-                id="phone"
-                className="input"
-                inputMode="numeric"
-                maxLength={10}
-                placeholder="09xxxxxxxx"
-                value={form.phone}
-                onChange={updatePhone}
-              />
-              <span className="input-hint">Nhập đúng 10 số, bắt đầu bằng 0</span>
-              {formError && (
-                <span className="input-hint" style={{ color: "var(--danger)" }}>
-                  {formError}
-                </span>
-              )}
-            </div>
-          </div>
-
-          <div className="dashboard-form-row">
-            <div className="input-group">
-              <label className="input-label" htmlFor="dateOfBirth">
-                Ngày tháng năm sinh
-              </label>
-              <input
-                id="dateOfBirth"
-                type="date"
-                className="input"
-                value={form.dateOfBirth}
-                onChange={update("dateOfBirth")}
-              />
-            </div>
-            <div className="input-group">
-              <label className="input-label" htmlFor="nationalId">
-                Căn cước công dân
-              </label>
-              <input
-                id="nationalId"
-                className="input"
-                inputMode="numeric"
-                maxLength={12}
-                placeholder="12 số trên CCCD"
-                value={form.nationalId}
-                onChange={update("nationalId")}
-              />
-            </div>
-          </div>
-
-          <div className="input-group mt-4">
-            <label className="input-label" htmlFor="email">
-              Email
-            </label>
-            <input id="email" type="email" className="input" value={form.email} onChange={update("email")} />
-          </div>
-
-          <div className="input-group mt-4">
-            <label className="input-label" htmlFor="address">
-              Địa chỉ (hiển thị nhanh)
-            </label>
-            <input id="address" className="input" value={form.address} onChange={update("address")} />
-            <span className="input-hint">
-              Địa chỉ giao hàng chi tiết (Goship) khai báo ở mục bên dưới — dùng khi đặt thuê.
-            </span>
-          </div>
-
-          <div className="input-group mt-4">
-            <label className="input-label" htmlFor="bio">
-              Giới thiệu
-            </label>
-            <textarea id="bio" className="textarea" rows={3} value={form.bio} onChange={update("bio")} />
-          </div>
-        </div>
-
-        <div className="panel mt-6">
-          <div className="panel-header">
-            <div className="flex items-center gap-2">
-              <Truck size={18} className="text-green" />
-              <h2 className="panel-title">Địa chỉ giao hàng (Goship)</h2>
-            </div>
-          </div>
-          <p className="text-sm text-muted mb-4">
-            Địa chỉ này được dùng khi bạn thuê tài sản — shipper giao đến đúng nơi bạn đã lưu.
-          </p>
-          <GoshipAddressForm
-            title="Giao hàng"
-            value={goshipAddress}
-            onChange={(next) => {
-              setGoshipAddress(next);
-              setGoshipErrors({});
-              setSaved(false);
-            }}
-            errors={goshipErrors}
-          />
-        </div>
-
-        <div className="panel mt-6">
-          <div className="panel-header">
-            <div className="flex items-center gap-2">
-              <Landmark size={18} className="text-green" />
-              <h2 className="panel-title">Tài khoản ngân hàng</h2>
-            </div>
-          </div>
-          <BankAccountForm initialAccount={primaryBankAccount} onSaved={handleBankSaved} />
-        </div>
-
-        <div className="panel mt-6">
-          <div className="panel-header">
-            <div className="flex items-center gap-2">
-              <Phone size={18} className="text-green" />
-              <h2 className="panel-title">Liên hệ khẩn cấp</h2>
-            </div>
-          </div>
-
-          {contacts.length > 0 && (
-            <div className="dashboard-contact-list mb-4">
-              {contacts.map((c) => (
-                <div key={c.id} className="dashboard-contact-row">
-                  <div>
-                    <span className="font-semibold text-sm">{c.name}</span>
-                    <span className="text-xs text-muted block">{c.phone}</span>
-                  </div>
-                  <button
-                    type="button"
-                    className="btn btn-ghost btn-icon"
-                    onClick={() => removeContact(c.id)}
-                    aria-label="Xóa liên hệ"
-                  >
-                    <Trash2 size={16} />
-                  </button>
-                </div>
-              ))}
-            </div>
-          )}
-
-          <div className="dashboard-form-row">
-            <input
-              className="input"
-              placeholder="Tên người liên hệ"
-              value={newContact.name}
-              onChange={(e) => setNewContact((c) => ({ ...c, name: e.target.value }))}
-            />
-            <input
-              className="input"
-              placeholder="Số điện thoại"
-              inputMode="numeric"
-              maxLength={10}
-              value={newContact.phone}
-              onChange={(e) => {
-                setContactError("");
-                setNewContact((c) => ({ ...c, phone: sanitizePhoneInput(e.target.value) }));
+        <Link className="btn btn-secondary" href="/dashboard/kyc/verify">
+          <IdCard size={18} />
+          Xác minh căn cước
+        </Link>
+      </header>
+<IdentityNotice profileId={user.id}/>
+      <div className="profile-layout">
+        <nav className="profile-nav" aria-label="Các phần hồ sơ">
+          {SECTIONS.map(([key, label, Icon]) => (
+            <button
+              type="button"
+              key={key}
+              className={section === key ? "active" : ""}
+              aria-current={section === key ? "page" : undefined}
+              onClick={() => {
+                setSection(key);
+                setError("");
+                setSuccess("");
               }}
-            />
-          </div>
-          {contactError && (
-            <span className="input-hint" style={{ color: "var(--danger)" }}>
-              {contactError}
-            </span>
+            >
+              <Icon size={19} />
+              {label}
+            </button>
+          ))}
+        </nav>
+        <div className="profile-content">
+          <LanguageSettingsLink/>
+          {locked && (
+            <p className="ops-error">
+              Tài khoản đang hạn chế chỉnh sửa.{" "}
+              <Link href="/safety">Yêu cầu xem xét</Link>
+            </p>
           )}
-          <button type="button" className="btn btn-secondary btn-sm mt-4" onClick={addContact}>
-            <Plus size={14} /> Thêm liên hệ
-          </button>
-        </div>
-
-        <div className="dashboard-form-actions mt-6">
-          {saved && (
-            <span className="dashboard-save-confirm">
-              <CheckCircle2 size={16} /> Đã lưu thay đổi
-            </span>
+          {error && (
+            <p className="ops-error" role="alert">
+              {error}
+            </p>
           )}
-          <button type="submit" className="btn btn-primary">
-            Lưu thay đổi
-          </button>
+          {success && (
+            <p className="feature-success" role="status">
+              <Check size={17} />
+              {success}
+            </p>
+          )}
+          {loading ? (
+            <p role="status">
+              <LoaderCircle className="spin" size={20} /> Đang tải hồ sơ...
+            </p>
+          ) : (
+            <>
+              {section === "personal" && (
+                <form onSubmit={save}>
+                  <div className="profile-section-heading">
+                    <h2>Thông tin cá nhân</h2>
+                    <span className="profile-tag">
+                      <ShieldCheck size={15} />
+                      {["L2", "L3"].includes(user.kycLevel)
+                        ? "Đã xác minh căn cước"
+                        : "Chưa xác minh căn cước"}
+                    </span>
+                  </div>
+                  <fieldset disabled={locked || busy}>
+                    <label>
+                      Họ và tên
+                      <input
+                        className="input"
+                        required
+                        maxLength={100}
+                        autoComplete="name"
+                        value={form.name}
+                        onChange={(event) =>
+                          setForm({ ...form, name: event.target.value })
+                        }
+                      />
+                    </label>
+                    <div className="profile-grid">
+                      <label>
+                        <span>
+                          <Mail size={16} />
+                          Email cá nhân
+                        </span>
+                        <div className="profile-locked">
+                          <input
+                            className="input"
+                            readOnly
+                            value={user.email || ""}
+                            aria-label="Email đăng ký"
+                          />
+                          <LockKeyhole size={16} />
+                        </div>
+                      </label>
+                      <label>
+                        <span>
+                          <Phone size={16} />
+                          Số điện thoại đăng ký
+                        </span>
+                        <div className="profile-locked">
+                          <input
+                            className="input"
+                            readOnly
+                            value={user.phone || ""}
+                            aria-label="Số điện thoại đăng ký"
+                          />
+                          <LockKeyhole size={16} />
+                        </div>
+                      </label>
+                    </div>
+                    <label>
+                      Giới thiệu
+                      <textarea
+                        className="input"
+                        rows={4}
+                        maxLength={1500}
+                        value={form.bio}
+                        onChange={(event) =>
+                          setForm({ ...form, bio: event.target.value })
+                        }
+                      />
+                    </label>
+                    <button className="btn btn-primary">
+                      <Save size={17} />
+                      Lưu thông tin
+                    </button>
+                  </fieldset>
+                </form>
+              )}
+              {section === "personal"&&<><RentalContinuation/><ResidenceSettings/></>}
+              {section === "address" && (
+                <form onSubmit={save}>
+                  <div className="profile-section-heading">
+                    <h2>Địa chỉ liên hệ</h2>
+                    <MapPin size={22} />
+                  </div>
+                  <fieldset disabled={locked || busy}>
+                    {legacyAddress && !address.province && (
+                      <p className="profile-note">
+                        Địa chỉ đã lưu: {legacyAddress}
+                      </p>
+                    )}
+                    <AddressFields
+                      value={address}
+                      onChange={setAddress}
+                      label=""
+                    />
+                    <fieldset className="profile-address-type">
+                      <legend>Loại địa chỉ</legend>
+                      {[
+                        ["HOME", "Nhà riêng"],
+                        ["OFFICE", "Văn phòng"],
+                      ].map(([key, label]) => (
+                        <label key={key}>
+                          <input
+                            type="radio"
+                            name="address-type"
+                            checked={address.type === key}
+                            onChange={() =>
+                              setAddress({ ...address, type: key })
+                            }
+                          />
+                          {label}
+                        </label>
+                      ))}
+                    </fieldset>
+                    <label>
+                      Ghi chú giao nhận
+                      <textarea
+                        className="input"
+                        rows={3}
+                        maxLength={300}
+                        value={address.note}
+                        onChange={(event) =>
+                          setAddress({ ...address, note: event.target.value })
+                        }
+                      />
+                    </label>
+                    <button className="btn btn-primary">
+                      <Save size={17} />
+                      Lưu địa chỉ
+                    </button>
+                  </fieldset>
+                </form>
+              )}
+              {section === "bank" && (
+                <>
+                  <div className="profile-section-heading">
+                    <h2>Ngân hàng nhận tiền</h2>
+                    <button
+                      className="btn btn-secondary"
+                      type="button"
+                      disabled={locked}
+                      onClick={() => setBankOpen(!bankOpen)}
+                    >
+                      <Plus size={17} />
+                      Thêm ngân hàng
+                    </button>
+                  </div>
+                  {!banks.length && !bankOpen && (
+                    <div className="profile-empty">
+                      <Landmark size={38} />
+                      <h3>Chưa có tài khoản nhận tiền</h3>
+                      <button
+                        type="button"
+                        className="btn btn-primary"
+                        disabled={locked}
+                        onClick={() => setBankOpen(true)}
+                      >
+                        <Plus size={17} />
+                        Thêm ngân hàng
+                      </button>
+                    </div>
+                  )}
+                  <div className="profile-bank-list">
+                    {banks.map((item) => (
+                      <article className="profile-bank" key={item.id}>
+                        <Image unoptimized
+                          src={item.logo}
+                          width={56}
+                          height={40}
+                          alt={item.bank_name}
+                        />
+                        <div>
+                          <strong>{item.bank_name}</strong>
+                          <p>{item.masked_account}</p>
+                          <small>
+                            {item.name_status === "DECLARED_NAME_MATCH"
+                              ? "Tên khai báo khớp căn cước đã xác minh"
+                              : "Chờ đối chiếu tên sau xác minh căn cước"}
+                          </small>
+                        </div>
+                        {item.is_default && (
+                          <span className="profile-tag">Mặc định</span>
+                        )}
+                        <div className="profile-bank-tools">
+                          {!item.is_default && (
+                            <button
+                              className="icon-tool"
+                              type="button"
+                              disabled={locked || busy}
+                              title="Đặt làm ngân hàng mặc định"
+                              aria-label="Đặt làm ngân hàng mặc định"
+                              onClick={() => manageBank(item.id, "DEFAULT")}
+                            >
+                              <Star size={17} />
+                            </button>
+                          )}
+                          <button
+                            className="icon-tool"
+                            type="button"
+                            disabled={locked || busy}
+                            title="Xóa ngân hàng khỏi hồ sơ"
+                            aria-label="Xóa ngân hàng khỏi hồ sơ"
+                            onClick={() => manageBank(item.id, "REMOVE")}
+                          >
+                            <Trash2 size={17} />
+                          </button>
+                        </div>
+                      </article>
+                    ))}
+                  </div>
+                  {bankOpen && (
+                    <form onSubmit={saveBank} className="profile-bank-form">
+                      <h3>Thêm tài khoản ngân hàng</h3>
+                      <fieldset disabled={locked || busy}>
+                        <label>
+                          Ngân hàng
+                          <BankPicker
+                            value={bank.bank}
+                            onChange={(value) =>
+                              setBank({ ...bank, bank: value })
+                            }
+                          />
+                        </label>
+                        <div className="profile-grid">
+                          <label>
+                            Số tài khoản
+                            <input
+                              className="input"
+                              required
+                              inputMode="numeric"
+                              maxLength={19}
+                              value={bank.number}
+                              onChange={(event) =>
+                                setBank({
+                                  ...bank,
+                                  number: event.target.value.replace(/\D/g, ""),
+                                })
+                              }
+                            />
+                          </label>
+                          <label>
+                            Tên chủ tài khoản
+                            <input
+                              className="input"
+                              required
+                              autoComplete="off"
+                              maxLength={100}
+                              value={bank.holder}
+                              onChange={(event) =>
+                                setBank({ ...bank, holder: event.target.value })
+                              }
+                            />
+                          </label>
+                        </div>
+                        <label>
+                          Chi nhánh
+                          <input
+                            className="input"
+                            maxLength={120}
+                            value={bank.branch}
+                            onChange={(event) =>
+                              setBank({ ...bank, branch: event.target.value })
+                            }
+                          />
+                        </label>
+                        <label className="profile-check">
+                          <input
+                            type="checkbox"
+                            checked={bank.isDefault}
+                            onChange={(event) =>
+                              setBank({
+                                ...bank,
+                                isDefault: event.target.checked,
+                              })
+                            }
+                          />
+                          Đặt làm ngân hàng mặc định
+                        </label>
+                        <label className="profile-check">
+                          <input
+                            type="checkbox"
+                            required
+                            checked={bank.consent}
+                            onChange={(event) =>
+                              setBank({
+                                ...bank,
+                                consent: event.target.checked,
+                              })
+                            }
+                          />
+                          Tôi xác nhận đây là tài khoản của mình, tên khớp căn
+                          cước và đồng ý đối chiếu cảnh báo.
+                        </label>
+                        <div className="profile-actions">
+                          <button
+                            className="btn btn-primary"
+                            disabled={!bank.bank || !bank.consent}
+                          >
+                            <Save size={17} />
+                            Lưu ngân hàng
+                          </button>
+                          <button
+                            type="button"
+                            className="btn btn-ghost"
+                            onClick={() => setBankOpen(false)}
+                          >
+                            Hủy
+                          </button>
+                        </div>
+                      </fieldset>
+                    </form>
+                  )}
+                  <p className="profile-note">
+                    Thông tin ngân hàng do bạn khai báo. Kết quả đối chiếu tên
+                    không thay thế xác nhận sở hữu của ngân hàng.
+                  </p>
+                </>
+              )}
+              {section === "security" && (
+                <>
+                  <div className="profile-section-heading">
+                    <h2>Bảo mật & xác minh</h2>
+                    <ShieldCheck size={22} />
+                  </div>
+                  <div className="profile-link-list">
+                    {[
+                      [
+                        "/dashboard/kyc/verify",
+                        "Xác minh căn cước",
+                        "Giấy tờ và đối chiếu khuôn mặt",
+                        IdCard,
+                      ],
+                      [
+                        "/safety",
+                        "Trung tâm an toàn",
+                        "Cảnh báo và yêu cầu xem xét",
+                        ShieldCheck,
+                      ],
+                      [
+                        "/cms/privacy",
+                        "Quyền riêng tư",
+                        "Dữ liệu cá nhân và lựa chọn cookie",
+                        LockKeyhole,
+                      ],
+                    ].map(([href, title, detail, Icon]) => (
+                      <Link key={href} href={href}>
+                        <Icon size={22} />
+                        <span>
+                          <strong>{title}</strong>
+                          <small>{detail}</small>
+                        </span>
+                        <ArrowRight size={18} />
+                      </Link>
+                    ))}
+                    <a
+                      href="https://myaccount.google.com/security"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <LockKeyhole size={22} />
+                      <span>
+                        <strong>Bảo mật tài khoản Google</strong>
+                        <small>Quản lý phương thức đăng nhập Google</small>
+                      </span>
+                      <ArrowRight size={18} />
+                    </a>
+                  </div>
+                  <DeleteAccount />
+                </>
+              )}
+            </>
+          )}
         </div>
-      </form>
+      </div>
     </div>
   );
 }

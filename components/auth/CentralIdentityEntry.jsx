@@ -1,0 +1,5 @@
+import Link from 'next/link';
+import {Logo} from '@/components/brand/Logo';
+import {ShieldCheck,ArrowRight} from 'lucide-react';
+import '@/components/chat-control/chat-control.css';
+export function CentralIdentityEntry({next='/',reason=''}){return <main className="cc-entry"><section className="cc-login"><Logo href="https://crm.reloo.vn" size={29}/><p><ShieldCheck size={17}/> Tài khoản RELOO</p><h1>Một lần đăng nhập.<br/>Kết nối các công cụ.</h1><p>Tiếp tục bằng tài khoản CRM và xác thực hai bước. Phiên CRM còn hiệu lực sẽ được dùng để xác nhận bạn.</p>{reason&&<p className="cc-error" role="alert">{reason==='permission'?'Tài khoản chưa được cấp quyền tại công cụ này. Vui lòng liên hệ quản trị viên.':'Phiên xác nhận đã hết hạn. Vui lòng tiếp tục lại bằng CRM.'}</p>}<Link className="cc-primary cc-login-link" href={'/api/auth/federation/start?next='+encodeURIComponent(next)}>Tiếp tục với CRM <ArrowRight size={18}/></Link><p>Quyền truy cập được quản trị viên cấp riêng cho từng công cụ.</p></section></main>;}

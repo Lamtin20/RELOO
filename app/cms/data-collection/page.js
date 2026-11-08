@@ -1,0 +1,3 @@
+import {MarketplaceShell} from '@/components/layout/MarketplaceShell';import {publicBusiness} from '@/lib/operations/settings';import {securityDb} from '@/lib/security/service';import {DataCollectionPolicy} from '@/components/privacy/DataCollectionPolicy';import './policy.css';
+export const metadata={title:'Chính sách thu thập dữ liệu người dùng | RELOO',description:'Thông tin RELOO thu thập, mục đích xác minh danh tính, lưu trữ, bảo vệ và lựa chọn của bạn.'};
+export default async function DataCollectionPage(){let entity={};try{entity=(await publicBusiness(securityDb())).entity;}catch{}return <MarketplaceShell><DataCollectionPolicy entity={entity}/></MarketplaceShell>;}

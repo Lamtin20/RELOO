@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
 
 import { HERO_DEFAULT_LINE } from "@/lib/hero-rotating-lines";
 
@@ -77,6 +77,7 @@ export function HeroTypewriterLine({ lines, className = "", inline = false }) {
     return () => window.clearTimeout(timer);
   }, [active, text, deleting, currentLine, pool.length]);
 
+  const reducedMotion=useSyncExternalStore(callback=>{const m=window.matchMedia("(prefers-reduced-motion: reduce)");m.addEventListener("change",callback);return()=>m.removeEventListener("change",callback)},()=>window.matchMedia("(prefers-reduced-motion: reduce)").matches,()=>true);
   const rootClass = [
     "hero-typewriter",
     inline ? "hero-typewriter--inline" : "",
@@ -97,7 +98,7 @@ export function HeroTypewriterLine({ lines, className = "", inline = false }) {
         <span
           className={[
             "hero-typewriter__cursor",
-            !reducedMotionRef.current ? "is-active" : "",
+            !reducedMotion ? "is-active" : "",
           ]
             .filter(Boolean)
             .join(" ")}
@@ -122,7 +123,7 @@ export function HeroTypewriterLine({ lines, className = "", inline = false }) {
         <span
           className={[
             "hero-typewriter__cursor",
-            !reducedMotionRef.current ? "is-active" : "",
+            !reducedMotion ? "is-active" : "",
           ]
             .filter(Boolean)
             .join(" ")}

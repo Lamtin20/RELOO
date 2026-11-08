@@ -1,0 +1,59 @@
+name: RELOO Compliance Guardian
+on:
+  pull_request:
+  push:
+    branches: [main, master]
+  schedule:
+    - cron: '17 2 * * 1'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  guardian:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+      - run: node --test tests/compliance-guardian.test.mjs
+      - run: node scripts/check-source-secrets.mjs
+      - name: Field and asset inventory drift
+        run: |
+          node scripts/compliance-inventory.mjs
+          git diff --exit-code -- compliance/field-purposes.json compliance/asset-provenance.json
+      - name: Complete repository test suite
+        # Real bytecode execution uses an isolated, pinned EthereumJS VM toolchain.
+        run: |
+          npm ci --ignore-scripts --prefix tools/verification
+          npm run test:all
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Offline OCR parser and model-boundary fixtures
+        run: |
+          python -m pip install --disable-pip-version-check Pillow==11.3.0
+          mkdir -p output/compliance
+          python tests/vietocr_engine_test.py 2>&1 | tee output/compliance/vietocr-python.txt
+      - name: Collect source-bound checks (failures retained for final gate)
+        continue-on-error: true
+        run: |
+          result=0
+          for check in unit privacy-consent security secrets integration regression dependency dependency-mobile dependency-tooling typecheck lint build; do
+            node compliance/check.mjs --check="$check" || result=1
+          done
+          exit "$result"
+      - name: Source scan and fail-closed release eligibility
+        if: always()
+        run: node compliance/run.mjs --gate --evidence=output/compliance/evidence.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: compliance-${{ github.sha }}-${{ github.run_id }}
+          path: output/compliance/
+          retention-days: 30
+      # No automatic deploy, service stop or restart. Required-check enforcement
+      # and production runtime observations require repository/operator configuration.

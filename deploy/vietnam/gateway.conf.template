@@ -1,0 +1,85 @@
+map_hash_bucket_size 512;
+map $http_apikey $valid_api_key {
+  default 0;
+  "${ANON_KEY}" 1;
+  "${SERVICE_ROLE_KEY}" 1;
+}
+map $http_authorization $reloo_authorization {
+  default $http_authorization;
+  "" "Bearer $http_apikey";
+}
+map $http_apikey $server_api_key {
+  default 0;
+  "${SERVICE_ROLE_KEY}" 1;
+}
+limit_req_zone $http_cf_connecting_ip zone=reloo_auth:10m rate=3r/s;
+map $http_origin $reloo_allowed_origin {
+  default "";
+  "https://reloo.vn" $http_origin;
+  "https://www.reloo.vn" $http_origin;
+  "https://crm.reloo.vn" $http_origin;
+}
+server {
+  listen 80;
+  server_tokens off;
+  client_header_buffer_size 4k;
+  large_client_header_buffers 4 32k;
+  proxy_buffer_size 32k;
+  proxy_buffers 8 32k;
+  proxy_busy_buffers_size 64k;
+  client_max_body_size 8m;
+  access_log off;
+  error_log /dev/null;
+  resolver 127.0.0.11 valid=5s ipv6=off;
+  proxy_hide_header Access-Control-Allow-Origin;
+  proxy_hide_header Access-Control-Allow-Credentials;
+  proxy_hide_header Access-Control-Allow-Headers;
+  proxy_hide_header Access-Control-Allow-Methods;
+  proxy_hide_header Access-Control-Expose-Headers;
+  proxy_hide_header X-Content-Type-Options;
+  proxy_hide_header X-Frame-Options;
+  proxy_hide_header Strict-Transport-Security;
+  proxy_hide_header Referrer-Policy;
+  add_header Access-Control-Allow-Origin $reloo_allowed_origin always;
+  add_header Vary Origin always;
+  add_header Access-Control-Allow-Credentials true always;
+  add_header Access-Control-Allow-Headers 'authorization,apikey,content-type,x-client-info,x-upsert,x-supabase-api-version,range,prefer' always;
+  add_header Access-Control-Allow-Methods 'GET,POST,PUT,PATCH,DELETE,OPTIONS,HEAD' always;
+  add_header Access-Control-Expose-Headers 'content-range,x-total-count' always;
+  add_header X-Content-Type-Options nosniff always;
+  add_header X-Frame-Options DENY always;
+  add_header Strict-Transport-Security 'max-age=31536000' always;
+  add_header Referrer-Policy no-referrer always;
+  limit_req_status 429;
+  if ($request_method = OPTIONS) { return 204; }
+  location = /health { return 200 'reloo-vn-gateway'; }
+  location /auth/v1/ {
+    limit_req zone=reloo_auth burst=30 nodelay;
+    set $auth_backend http://auth:9999;
+    rewrite ^/auth/v1/(.*)$ /$1 break;
+    proxy_pass $auth_backend;
+    proxy_set_header Host $host;
+    proxy_set_header X-Forwarded-Proto https;
+    proxy_set_header X-Forwarded-Host $host;
+    proxy_set_header X-Forwarded-For $http_cf_connecting_ip;
+  }
+  location /rest/v1/ {
+    if ($server_api_key = 0) { return 403; }
+    set $rest_backend http://rest:3000;
+    rewrite ^/rest/v1/(.*)$ /$1 break;
+    proxy_pass $rest_backend;
+    proxy_set_header Authorization $reloo_authorization;
+    proxy_set_header X-Forwarded-Proto https;
+  }
+  location /storage/v1/ {
+    if ($server_api_key = 0) { return 403; }
+    set $storage_backend http://storage:5000;
+    rewrite ^/storage/v1/(.*)$ /$1 break;
+    proxy_pass $storage_backend;
+    proxy_set_header Authorization $http_authorization;
+    proxy_set_header Host $host;
+    proxy_set_header X-Forwarded-Proto https;
+    proxy_set_header X-Forwarded-Prefix /storage/v1;
+  }
+  location / { return 404; }
+}

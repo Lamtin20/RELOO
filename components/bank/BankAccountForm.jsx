@@ -34,7 +34,6 @@ export function BankAccountForm({ initialAccount, onSaved }) {
 
   useEffect(() => {
     let alive = true;
-    setBanksLoading(true);
     fetchBanks()
       .then((data) => alive && setBanks(data))
       .catch((err) => alive && setBanksError(err.message || "Không tải được ngân hàng."))

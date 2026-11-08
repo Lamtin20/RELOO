@@ -1,0 +1,9 @@
+# CRM login — 16/10/2026
+
+New scoped entry layout at app/crm/login/login.css. Desktop shows a quiet brand/instruction panel and a focused Google/MFA form. At 820px and below only the form is shown, with compact branding and two-step progress. Text and spacing change per loading, signed-out, denied and MFA state. Google button minimum height 50px; input text 16px prevents mobile zoom. Consent banner retains its behavior; login reserves bottom space while it is visible.
+
+No changes to GoogleAuthButton, auth API, CRM permissions, cookie flags, MFA verification/enrollment, next-path validation or server session receipts. Password login remains gated by existing server capabilities. QR/secret UI is only shown by the existing enrollment response, not persisted in the browser by this change.
+
+MFA interaction update: account-switch button removed from the MFA step. Typing/pasting six numeric digits immediately submits to the existing VERIFY API. A synchronous ref prevents duplicate submissions before React updates busy state; input is read-only during verification, manual submit shares the same guard. On failure code is cleared and editing/retry restored. On success the existing protected next path is used. Browser mock asserts 5 digits = no request, 6 digits + repeated submits = one request, failure = editable blank input, second valid attempt = redirect. No real user's OTP was submitted during smoke tests.
+
+Validation: 11 existing Auth/CRM/security tests pass, ESLint has no errors (existing image warnings), production app build/health pass. Browser mock checks at 1440/390/320px show no horizontal overflow and correct six-digit filtering/button state; no real MFA enrollment or login was submitted. Production URL https://crm.reloo.vn/crm/login. Screenshots under output/news/crm-login-*.png are development/mock states, not real user sessions.

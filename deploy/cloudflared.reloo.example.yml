@@ -1,0 +1,10 @@
+# Dedicated RELOO config. Do not overwrite an existing tunnel config for another site.
+tunnel: ef0e7f5a-1973-4263-9dc3-aa49a85a8ec3
+# Use this only with the locally managed tunnel's actual credentials file.
+credentials-file: /path/to/reloo-tunnel-credentials.json
+ingress:
+  - hostname: reloo.vn
+    service: http://127.0.0.1:3000
+  - hostname: www.reloo.vn
+    service: http://127.0.0.1:3000
+  - service: http_status:404

@@ -1,0 +1,4 @@
+FROM ollama/ollama:0.40.11
+COPY --chmod=0555 deploy/listing-ai/warm-model.sh /usr/local/bin/reloo-warm-model
+HEALTHCHECK --interval=30s --timeout=5s --start-period=90s CMD /bin/ollama ps | grep -F "${RELOO_LOCAL_MODEL:-qwen3.5:4b}" >/dev/null
+ENTRYPOINT ["/bin/bash","/usr/local/bin/reloo-warm-model"]

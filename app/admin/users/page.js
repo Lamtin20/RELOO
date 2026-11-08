@@ -62,7 +62,7 @@ function UsersPageInner() {
       result = result.filter(
         (u) =>
           u.name.toLowerCase().includes(q) ||
-          u.email.toLowerCase().includes(q) ||
+          String(u.email||'').toLowerCase().includes(q) ||
           u.phone.includes(q)
       );
     }

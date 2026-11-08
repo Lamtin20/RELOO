@@ -6,7 +6,9 @@ import Link from "next/link";
 import { ShieldCheck } from "lucide-react";
 import { useAuth, useListings } from "@/lib/store";
 import { CATEGORIES, LISTING_CONDITIONS, LISTING_STATUS } from "@/lib/constants";
-import { buildEmptySpecs, normalizeSpecs } from "@/lib/category-specs";
+import { buildEmptySpecs, normalizeSpecs, validateSpecs } from "@/lib/category-specs";
+import {RentalDetailsForm} from '@/components/listings/RentalDetailsForm';
+import {normalizeRentalDetails} from '@/lib/listing-rental-details';
 import { CategorySpecForm } from "@/components/listings/CategorySpecFields";
 import { ListingImageUpload } from "@/components/listings/ListingImageUpload";
 import { ListingAddressForm } from "@/components/listings/ListingAddressForm";
@@ -19,21 +21,30 @@ import {
   validateListingAddress,
 } from "@/lib/listing-location";
 
-export default function EditAssetPage() {
+import {useLocale} from '@/components/settings/LocaleProvider';
+import {rentalDetailsCopy} from '@/lib/i18n/rental-details';
+import {mobileExperienceCopy} from '@/lib/i18n/mobile-experience';
+import {RelooLoading} from '@/components/ui/RelooLoading';
+export default function EditAssetPage(){const {id}=useParams(),{user}=useAuth(),{locale}=useLocale(),t=mobileExperienceCopy[locale]||mobileExperienceCopy['vi-VN'],{getListingById,dbLoading,dbError,retryListings}=useListings(),listing=getListingById(id);if(dbLoading&&(!listing||listing.ownerId===user?.id&&listing.ownerDetailsAvailable===false))return <RelooLoading/>;if(dbError&&!listing||listing?.ownerId===user?.id&&listing.ownerDetailsAvailable===false)return <EmptyState title={t.privateRefresh} action={<button className="btn btn-primary" onClick={retryListings}>{t.retry}</button>}/>;return <EditAssetForm key={(user?.id||'guest')+':'+id} initialListing={listing}/>;}
+function EditAssetForm({initialListing}) {
   const { id } = useParams();
   const router = useRouter();
   const { user } = useAuth();
+  const {locale}=useLocale(),rt=rentalDetailsCopy[locale]||rentalDetailsCopy["vi-VN"];
   const { getListingById, updateListing } = useListings();
 
-  const listing = getListingById(id);
+  const listing = getListingById(id)||initialListing;
 
   const [form, setForm] = useState(() =>
     listing
       ? {
           title: listing.title,
+          rentalDetails:listing.rentalDetails||null,
           description: listing.description,
           category: listing.category,
           dailyPrice: listing.dailyPrice,
+          transactionMode:listing.transactionMode||'RENT',
+          salePrice:listing.salePrice||'',
           marketValue: listing.marketValue,
           condition: listing.condition,
           status: listing.status,
@@ -98,9 +109,14 @@ export default function EditAssetPage() {
 
   const validate = () => {
     const next = {};
+    try{normalizeRentalDetails(form.rentalDetails,form.category);}catch{next.rentalDetails=rt.invalid;}
     if (!form.title.trim()) next.title = "Vui lòng nhập tên tài sản";
-    if (!form.dailyPrice || Number(form.dailyPrice) <= 0)
+    if (!CATEGORIES.some((category) => category.id === form.category)) next.category = 'Vui lòng chọn danh mục.';
+    const fields = validateSpecs(form.category, form.specs);
+    if (Object.keys(fields).length) next.specs = fields;
+    if (form.transactionMode!=='SALE'&&(!form.dailyPrice || Number(form.dailyPrice) <= 0))
       next.dailyPrice = "Giá thuê/ngày phải lớn hơn 0";
+    if(form.transactionMode!=='RENT'&&(!Number.isSafeInteger(Number(form.salePrice))||Number(form.salePrice)<1||Number(form.salePrice)>1000000000))next.salePrice='Nhập giá bán hợp lệ.';
     if (!form.marketValue || Number(form.marketValue) <= 0)
       next.marketValue = "Giá trị thị trường phải lớn hơn 0";
     Object.assign(next, validateListingAddress(address));
@@ -108,24 +124,29 @@ export default function EditAssetPage() {
     return Object.keys(next).length === 0;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validate()) return;
 
-    updateListing(listing.id, {
+    try { await updateListing(listing.id, {
+      ownerDetailsAvailable:listing.ownerDetailsAvailable===true,
       title: form.title.trim(),
       description: form.description.trim(),
       category: form.category,
       dailyPrice: Number(form.dailyPrice),
+      transactionMode:form.transactionMode,
+      salePrice:form.salePrice,
       marketValue: Number(form.marketValue),
       ...buildListingLocationPayload(address),
       condition: form.condition,
       status: form.status,
       images: form.images,
       specs: normalizeSpecs(form.category, form.specs),
+      rentalDetails:form.rentalDetails,
     });
 
     router.push("/dashboard/assets");
+    } catch(error) { setErrors(current=>({...current,submit:error.message})); }
   };
 
   return (
@@ -188,16 +209,20 @@ export default function EditAssetPage() {
             </label>
             <select
               id="category"
+              required
+              aria-invalid={Boolean(errors.category)}
               className="select"
               value={form.category}
               onChange={update("category")}
             >
+              <option value="" disabled>Chọn danh mục</option>
               {CATEGORIES.map((cat) => (
                 <option key={cat.id} value={cat.id}>
                   {cat.name}
                 </option>
               ))}
             </select>
+            {errors.category && <p className="owner-field-error" role="alert">{errors.category}</p>}
           </div>
 
           <div className="input-group">
@@ -219,9 +244,14 @@ export default function EditAssetPage() {
           </div>
         </div>
 
+        <label>Loại giao dịch<select className="select" value={form.transactionMode} onChange={update('transactionMode')}><option value="RENT">Cho thuê</option><option value="SALE">Bán</option><option value="BOTH">Cho thuê & bán</option></select></label>
+        {form.transactionMode!=='RENT'&&<label>Giá bán (đ)<input className="input" type="number" min="1" max="1000000000" value={form.salePrice} onChange={update('salePrice')}/>{errors.salePrice&&<p role="alert">{errors.salePrice}</p>}</label>}
+        {form.transactionMode!=='SALE'&&<RentalDetailsForm value={form.rentalDetails} category={form.category} onChange={value=>setForm(f=>({...f,rentalDetails:value}))}/>}
+        {errors.rentalDetails&&<p role="alert">{errors.rentalDetails}</p>}
         <CategorySpecForm
           categoryId={form.category}
           values={form.specs ?? {}}
+          errors={errors.specs || {}}
           onChange={(next) => setForm((f) => ({ ...f, specs: next }))}
         />
 
@@ -308,6 +338,7 @@ export default function EditAssetPage() {
         </div>
 
         <div className="dashboard-form-actions">
+          {errors.submit && <p className="feature-error" role="alert">{errors.submit}</p>}
           <Link href="/dashboard/assets" className="btn btn-ghost">
             Hủy
           </Link>

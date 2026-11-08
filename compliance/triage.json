@@ -1,0 +1,50 @@
+{
+  "version": 1,
+  "records": [
+    {
+      "path": "lib/security/web-policy.js",
+      "sourceSha256": "7b5ecbf0bca1b868ee722e352f09a507a2b99b7cf71798843817ed69f7c99b0c",
+      "decision": "REJECTED_AS_LOAD_EVIDENCE",
+      "reason": "CSP connect-src allowlist does not execute a tracker. Runtime network checks are separate.",
+      "reviewedAt": "2026-10-23",
+      "reviewer": "Codex source review",
+      "note": "Source triage only, no legal approval; scanner retains candidate for traceability"
+    },
+    {
+      "path": "scripts/apply-supabase-schema.mjs",
+      "sourceSha256": "c70a446bc1e1511f87fe2f68630258348a2547c252d7dad682ca34aafdf45cb9",
+      "decision": "REJECTED_AS_CREDENTIAL_DISCLOSURE",
+      "reason": "Matches are literal troubleshooting strings mentioning password variable names, not actual credential interpolation. Other logging paths remain separately reviewable.",
+      "reviewedAt": "2026-10-23",
+      "reviewer": "Codex source review",
+      "note": "Source triage only, no legal approval; scanner retains candidate for traceability"
+    },
+    {
+      "path": "scripts/check-supabase.mjs",
+      "sourceSha256": "fa648d5ece5785c651ea39b084d20935556f0e3f7928de674ab0455fd29de5ff",
+      "decision": "REJECTED_AS_CREDENTIAL_DISCLOSURE",
+      "reason": "Literal instruction names SUPABASE_DB_PASSWORD; no credential value in matched line.",
+      "reviewedAt": "2026-10-23",
+      "reviewer": "Codex source review",
+      "note": "Source triage only, no legal approval; scanner retains candidate for traceability"
+    },
+    {
+      "path": "lib/seed-data.js",
+      "sourceSha256": "e3ea85a6c95891a565de9e63749a83b4af625cf41968dcee3455247b9edfc498",
+      "decision": "CONTENT_REVIEW",
+      "reason": "Future ambition to be number1 in2030 is not current rank proof. Content owner should assess clarity and production exposure.",
+      "reviewedAt": "2026-10-23",
+      "reviewer": "Codex source review",
+      "note": "Source triage only, no legal approval; scanner retains candidate for traceability"
+    },
+    {
+      "path": "supabase/migrations/20261008010000_security_commerce.sql",
+      "sourceSha256": "f415274d9f5b76ffc964ef425c70ef634111c1f0f5d8cc3c8ca50b8b39d8de1b",
+      "decision": "NEEDS_VALIDATION",
+      "reason": "Historical column grant conflicts in isolation; final security-lockdown revokes column/table access and fixture test passes. Actual deployed ACL not observed.",
+      "reviewedAt": "2026-10-23",
+      "reviewer": "Codex source review",
+      "note": "Source triage only, no legal approval; scanner retains candidate for traceability"
+    }
+  ]
+}

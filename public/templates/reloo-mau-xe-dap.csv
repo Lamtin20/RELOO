@@ -1,0 +1,16 @@
+﻿ma_truong,ten_truong,gia_tri,bat_buoc,goi_y
+__format,Định dạng,reloo-listing-v1,,
+title,Tên món đồ,,Có,"Tên sản phẩm, model và phiên bản"
+category,Danh mục,xe-dap,Có,Xe đạp
+condition,Tình trạng,good,Có,new: Mới 100%; like_new: Như mới; good: Tốt; fair: Khá
+description,Mô tả & điều kiện thuê,,Có,Mô tả thực tế và điều kiện giao nhận
+dailyPrice,Giá thuê mỗi ngày,,Có,"Số nguyên VND, ví dụ 180000"
+marketValue,Giá trị tài sản,,Có,"Số nguyên VND, ví dụ 3500000"
+addressDetail,Chi tiết địa chỉ,,Không,"Số nhà, đường hoặc tòa nhà"
+spec.brand,Hãng xe,,Có,"Honda, VinFast..."
+spec.model,Dòng xe / Model,,Có,"Vision, VF e34..."
+spec.year,Năm sản xuất,,Có,2023
+spec.plate,Biển số (4 số cuối),,Không,***1234
+spec.license,Yêu cầu bằng lái,,Có,Không cần; Bằng A1; Bằng A2; Bằng B1; Bằng B2 trở lên
+spec.fuel,Nhiên liệu / Pin,,Có,"Xăng, điện 100km..."
+spec.accessories,Phụ kiện kèm theo,,Có,Liệt kê phụ kiện; nhập Không có nếu không kèm phụ kiện

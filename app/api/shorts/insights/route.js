@@ -1,0 +1,3 @@
+import { requireAccount } from '@/lib/security/authorization';
+import { errorResponse,HttpError } from '@/lib/server/http';
+export async function GET(request){try{const {profile,db}=await requireAccount(request,{active:false}),days=Number(new URL(request.url).searchParams.get('days')||30);if(![7,30,90].includes(days))throw new HttpError(400,'Chọn thống kê 7, 30 hoặc 90 ngày.');const r=await db.rpc('reloo_short_insights',{p_profile:profile.id,p_days:days});if(r.error)throw r.error;return Response.json({ok:true,days,...r.data},{headers:{'Cache-Control':'private,no-store'}});}catch(e){return errorResponse(e);}}

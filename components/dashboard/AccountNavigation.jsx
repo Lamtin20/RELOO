@@ -1,0 +1,22 @@
+'use client';
+import {useNotificationCenter} from '@/components/notifications/NotificationCenter';
+import {useLocale} from '@/components/settings/LocaleProvider';
+import {uiText} from '@/lib/i18n/ui';
+import {useEffect,useRef,useState} from 'react';
+import Link from 'next/link';
+import {usePathname} from 'next/navigation';
+import {LayoutGrid,ChevronDown,Search,X,UserRound,RefreshCw,LogOut,ArrowLeft,ClipboardList,Package,MessageCircle,Wallet,ShieldCheck,CalendarClock} from 'lucide-react';
+import {Logo} from '@/components/brand/Logo';
+import {useAuth} from '@/lib/store';
+import {ACCOUNT_GROUPS,groupTools} from '@/lib/dashboard/workspace';
+import {useAccountCounts,PendingBadge} from './AccountCounts';
+import './account-workspace.css';
+const icons={trade:ClipboardList,assets:Package,connect:MessageCircle,finance:Wallet,safety:ShieldCheck,preferences:CalendarClock};
+export function AccountNavigation(){const {open:openNotifications}=useNotificationCenter();const {locale}=useLocale(),t=v=>uiText(locale,v);const {user}=useAuth(),path=usePathname(),{refresh,error}=useAccountCounts(),[open,setOpen]=useState(false),[group,setGroup]=useState(null),[query,setQuery]=useState(''),root=useRef(null),input=useRef(null),trigger=useRef(null);
+ const active=ACCOUNT_GROUPS.find(g=>g.items.some(([href])=>path===href))||ACCOUNT_GROUPS.find(g=>g.items.some(([href])=>path.startsWith(href+'/'))),groups=groupTools(query).filter(g=>!group||g.id===group);
+ useEffect(()=>{if(!open)return;input.current?.focus();const close=e=>{if(!root.current?.contains(e.target))setOpen(false);},key=e=>{if(e.key==='Escape'){setOpen(false);trigger.current?.focus();}};document.addEventListener('pointerdown',close);document.addEventListener('keydown',key);return()=>{document.removeEventListener('pointerdown',close);document.removeEventListener('keydown',key);};},[open,group]);
+ const show=id=>{setGroup(id);setQuery('');setOpen(v=>open&&group===id?!v:true);};
+ return <header className="aw-navigation" ref={root}><div className="aw-bar"><Logo href="/dashboard" size={28}/><span className="aw-brand-caption">{t('Tài khoản RELOO')}</span><button className="aw-tools" ref={trigger} aria-expanded={open} aria-controls="aw-tools-panel" onClick={()=>show(null)}><LayoutGrid size={18}/><span>{t('Chức năng')}</span><ChevronDown size={14}/></button><nav className="aw-groups" aria-label={t('Nhóm công cụ tài khoản')}>{ACCOUNT_GROUPS.map(g=><button key={g.id} aria-expanded={open&&group===g.id} className={active?.id===g.id?'is-active':''} onClick={()=>show(g.id)}>{t(g.label)}<ChevronDown size={12}/></button>)}</nav><button className="aw-refresh" onClick={refresh} aria-label={t('Làm mới số lượng')}><RefreshCw size={17}/></button><Link href="/dashboard/profile" className="aw-user"><span><UserRound size={20}/></span><div><b>{user?.name}</b><small>{t({renter:'Người thuê',lender:'Chủ đồ',both:'Chủ đồ & người thuê',admin:'Quản trị viên'}[user?.role]||'Thành viên')}</small></div></Link></div><div className="aw-context"><Link href="/dashboard">{t('Tài khoản')}</Link><span>/</span><b>{t(active?.label||'Tổng quan')}</b><span className="aw-counter-note">{t(error?'Chưa tải được số lượng — thử làm mới':'Số trên nhãn: mục đang chờ · cập nhật mỗi 60 giây')}</span><Link href="/" className="aw-market"><ArrowLeft size={13}/>{t('Về trang chợ')}</Link></div>
+ {open&&<section id="aw-tools-panel" className="aw-panel" aria-label={t('Danh mục chức năng tài khoản')}><div className="aw-search"><Search size={19}/><input ref={input} value={query} onChange={e=>{setQuery(e.target.value);setGroup(null);}} placeholder={t('Tìm đơn hàng, tài sản, hộp thư…')} aria-label={t('Tìm chức năng tài khoản')}/>{group&&<button onClick={()=>setGroup(null)}>{t('Tất cả nhóm')}</button>}<button aria-label={t('Đóng menu')} onClick={()=>{setOpen(false);trigger.current?.focus();}}><X size={19}/></button></div><div className="aw-columns">{groups.map(g=>{const Icon=icons[g.id];return <section key={g.id}><h2><Icon size={18}/>{t(g.label)}</h2>{g.items.map(([href,label,count])=><Link key={href} href={href} prefetch={false} aria-current={path===href?'page':undefined} onClick={e=>{if(href==='/?notifications=1'){e.preventDefault();openNotifications();}setOpen(false);}}><span>{t(label)}</span>{count&&<PendingBadge name={count}/>}</Link>)}</section>;})}</div>{!groups.length&&<p className="aw-no-tools">{t('Không tìm thấy công cụ. Thử từ khóa khác.')}</p>}</section>}
+ </header>;
+}

@@ -44,7 +44,7 @@ export default function TicketDetailPage() {
     if (!reply.trim()) return;
     const messages = [
       ...(ticket.messages || []),
-      { id: `msg_${Date.now()}`, sender: "support", text: reply.trim(), createdAt: new Date().toISOString() },
+      { id: `msg_${crypto.randomUUID()}`, sender: "support", text: reply.trim(), createdAt: new Date().toISOString() },
     ];
     actions.updateTicket(ticket.id, { messages, status: ticket.status === "open" ? "in_progress" : ticket.status });
     setReply("");

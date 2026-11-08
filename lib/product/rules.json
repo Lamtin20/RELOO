@@ -1,0 +1,390 @@
+[
+  {
+    "id": "GOV-001",
+    "version": "1.0.0",
+    "status": "IMPLEMENTED",
+    "scope": "all",
+    "description": "Changes maintain linked specifications and mandatory verification",
+    "preconditions": "AGENTS and impacted rules read",
+    "input": "Changed source/rules/docs",
+    "result": "CI validates schema, references, tests and build",
+    "exceptions": "A missing check blocks acceptance",
+    "roles": [
+      "engineer",
+      "reviewer"
+    ],
+    "source": "User master prompt section 3",
+    "verifiedAt": "2026-10-22",
+    "owner": "RELOO product owner (signoff pending for proposals)",
+    "tests": [
+      "tests/superapp.test.mjs"
+    ]
+  },
+  {
+    "id": "UX-001",
+    "version": "1.0.0",
+    "status": "PARTIAL",
+    "scope": "shell",
+    "description": "Expose four services and clear readiness without fabricated inventory",
+    "preconditions": "Supported locale and public browsing",
+    "input": "Domain selection",
+    "result": "Correct existing module route or explicit coming-soon screen",
+    "exceptions": "Unavailable domain is never live success",
+    "roles": [
+      "guest",
+      "account"
+    ],
+    "source": "Master sections4-6",
+    "verifiedAt": "2026-10-22",
+    "owner": "RELOO product owner (signoff pending for proposals)",
+    "tests": [
+      "tests/superapp.test.mjs"
+    ]
+  },
+  {
+    "id": "UX-002",
+    "version": "1.0.0",
+    "status": "IMPLEMENTED",
+    "scope": "search",
+    "description": "Preserve explicit intent and keep prices in their domain",
+    "preconditions": "A known domain or an explicit sector choice",
+    "input": "Text query,domain",
+    "result": "Encoded same-origin module link with correct transaction mode",
+    "exceptions": "Unknown domain rejected; ambiguous queries show choices",
+    "roles": [
+      "guest",
+      "account"
+    ],
+    "source": "Master sections4-5",
+    "verifiedAt": "2026-10-22",
+    "owner": "RELOO product owner (signoff pending for proposals)",
+    "tests": [
+      "tests/superapp.test.mjs"
+    ]
+  },
+  {
+    "id": "UX-003",
+    "version": "1.0.0",
+    "status": "PARTIAL",
+    "scope": "ui",
+    "description": "Use existing locale/tokens, touch targets and native QA boundary",
+    "preconditions": "vi-VN or en-US",
+    "input": "Viewport,keyboard,motion",
+    "result": "Accessible responsive controls and evidence by actual device",
+    "exceptions": "Desktop viewport is not native certification",
+    "roles": [
+      "all"
+    ],
+    "source": "Master sections4,6,16",
+    "verifiedAt": "2026-10-22",
+    "owner": "RELOO product owner (signoff pending for proposals)",
+    "tests": [
+      "tests/superapp.test.mjs",
+      "tests/mobile-navigation.test.mjs"
+    ]
+  },
+  {
+    "id": "AUTH-001",
+    "version": "1.0.0",
+    "status": "IMPLEMENTED",
+    "scope": "identity",
+    "description": "Server derives actor and enforces ownership/role on every protected mutation",
+    "preconditions": "Verified session and required active account status",
+    "input": "Session,operation,resource",
+    "result": "Only permitted resource scope returned or changed",
+    "exceptions": "Account switching/menu visibility never grants authority",
+    "roles": [
+      "account",
+      "partner",
+      "staff",
+      "admin"
+    ],
+    "source": "Existing security baseline + master4,14",
+    "verifiedAt": "2026-10-22",
+    "owner": "RELOO product owner (signoff pending for proposals)",
+    "tests": [
+      "tests/stays-management.test.mjs",
+      "tests/auth-navigation.test.mjs"
+    ]
+  },
+  {
+    "id": "DATA-001",
+    "version": "1.0.0",
+    "status": "IMPLEMENTED",
+    "scope": "database",
+    "description": "Public schema data/RPC access is backend-only",
+    "preconditions": "Migration reviewed and backup prepared",
+    "input": "Schema changes",
+    "result": "Lockdown removes public/anon/authenticated access",
+    "exceptions": "Auth/storage remain specifically scoped; do not grant client RPC",
+    "roles": [
+      "backend",
+      "db_operator"
+    ],
+    "source": "AGENTS security baseline",
+    "verifiedAt": "2026-10-22",
+    "owner": "RELOO product owner (signoff pending for proposals)",
+    "tests": [
+      "tests/security-hardening.test.mjs"
+    ]
+  },
+  {
+    "id": "STAY-001",
+    "version": "1.0.0",
+    "status": "PARTIAL",
+    "scope": "stays",
+    "description": "Reserve unit interval atomically including cleaning buffer and TTL",
+    "preconditions": "Approved source and valid server quote",
+    "input": "Unit type,dates,guests,idempotency",
+    "result": "One hold allocated under database lock; expires explicitly",
+    "exceptions": "No production multi-connection race claim from PGlite",
+    "roles": [
+      "customer",
+      "backend"
+    ],
+    "source": "Master7; booking SQL",
+    "verifiedAt": "2026-10-22",
+    "owner": "RELOO product owner (signoff pending for proposals)",
+    "tests": [
+      "tests/stays.test.mjs"
+    ]
+  },
+  {
+    "id": "STAY-002",
+    "version": "1.0.0",
+    "status": "PARTIAL",
+    "scope": "stays",
+    "description": "Server price and accepted policy snapshot govern booking",
+    "preconditions": "Valid quote/version and policy acceptance",
+    "input": "Quote ID,consent",
+    "result": "Snapshot retained; order/payment/refund separate",
+    "exceptions": "Price changed/expired hold reject; late money enters review",
+    "roles": [
+      "customer",
+      "backend"
+    ],
+    "source": "Master7,12",
+    "verifiedAt": "2026-10-22",
+    "owner": "RELOO product owner (signoff pending for proposals)",
+    "tests": [
+      "tests/stays.test.mjs"
+    ]
+  },
+  {
+    "id": "STAY-003",
+    "version": "1.0.0",
+    "status": "PARTIAL",
+    "scope": "stays_channels",
+    "description": "External event identity scoped to source and unit; errors preserve old occupancy",
+    "preconditions": "Authorized property member; supported iCal text",
+    "input": "UID,start,end,cancelled",
+    "result": "Transactional preview/apply, overlap check and dedupe",
+    "exceptions": "Unsupported recurrence/timezone rejected; absence is not cancellation",
+    "roles": [
+      "partner",
+      "backend"
+    ],
+    "source": "Host research + master7,14",
+    "verifiedAt": "2026-10-22",
+    "owner": "RELOO product owner (signoff pending for proposals)",
+    "tests": [
+      "tests/stays-host.test.mjs"
+    ]
+  },
+  {
+    "id": "PAY-001",
+    "version": "1.0.0",
+    "status": "BLOCKED",
+    "scope": "payment",
+    "description": "Real custody/payout/refund requires approved provider and legal model",
+    "preconditions": "Sandbox mapping and verified callback contract",
+    "input": "Provider event,amount,order",
+    "result": "Idempotent reconciliation; no browser return confirms payment",
+    "exceptions": "No provider means unavailable, not simulated real money",
+    "roles": [
+      "backend",
+      "finance"
+    ],
+    "source": "Master12,15",
+    "verifiedAt": "2026-10-22",
+    "owner": "RELOO product owner (signoff pending for proposals)",
+    "tests": [
+      "tests/stays-api.test.mjs",
+      "tests/stays.test.mjs"
+    ]
+  },
+  {
+    "id": "RENT-001",
+    "version": "1.0.0",
+    "status": "PARTIAL",
+    "scope": "rentals",
+    "description": "Retain rental lifecycle, handover evidence and conflict-free dates",
+    "preconditions": "Eligible account,asset and published terms",
+    "input": "Rental interval,handover,extension",
+    "result": "Server quote and scoped operation with evidence",
+    "exceptions": "No unilateral full-deposit forfeiture or assumed vehicle insurance",
+    "roles": [
+      "renter",
+      "owner",
+      "ops"
+    ],
+    "source": "Master8 + existing rental rules",
+    "verifiedAt": "2026-10-22",
+    "owner": "RELOO product owner (signoff pending for proposals)",
+    "tests": [
+      "tests/rental-selection.test.mjs",
+      "tests/neighborhood.test.mjs"
+    ]
+  },
+  {
+    "id": "SALE-001",
+    "version": "1.0.0",
+    "status": "PROPOSED",
+    "scope": "used",
+    "description": "Accepted offer is neither paid nor sold; stock hold belongs to checkout",
+    "preconditions": "Negotiation enabled,eligible parties,stock",
+    "input": "Positive VND,quantity,parent/version,TTL",
+    "result": "Linked immutable offers, atomic reservation and checkout snapshot",
+    "exceptions": "Self-offer/spam/expired/version conflict rejected",
+    "roles": [
+      "buyer",
+      "seller",
+      "backend"
+    ],
+    "source": "Master10; RELOO proposal not attributed to competitor",
+    "verifiedAt": "2026-10-22",
+    "owner": "RELOO product owner (signoff pending for proposals)",
+    "tests": [
+      "tests/superapp.test.mjs"
+    ]
+  },
+  {
+    "id": "JOB-001",
+    "version": "1.0.0",
+    "status": "PROPOSED",
+    "scope": "jobs",
+    "description": "Separate worker/employer, shift/full-time and forbid job-entry deposits",
+    "preconditions": "Legal model and employer verification approved",
+    "input": "Public job terms,private application,availability",
+    "result": "Scoped application flow with headcount and overlap gates",
+    "exceptions": "No real applications/payment before supported backend/legal release",
+    "roles": [
+      "worker",
+      "employer",
+      "ops"
+    ],
+    "source": "Master9",
+    "verifiedAt": "2026-10-22",
+    "owner": "RELOO product owner (signoff pending for proposals)",
+    "tests": [
+      "tests/superapp.test.mjs"
+    ]
+  },
+  {
+    "id": "ENV-001",
+    "version": "1.0.0",
+    "status": "IMPLEMENTED",
+    "scope": "staging",
+    "description": "Reject production endpoints/credentials/resources and actor simulators in staging",
+    "preconditions": "Dedicated resources independently verified",
+    "input": "Staging env manifest",
+    "result": "Fail-closed startup preflight",
+    "exceptions": "Name labels alone do not prove isolation or outbound firewall",
+    "roles": [
+      "operator",
+      "ci"
+    ],
+    "source": "Master15",
+    "verifiedAt": "2026-10-22",
+    "owner": "RELOO product owner (signoff pending for proposals)",
+    "tests": [
+      "tests/staging-environment.test.mjs"
+    ]
+  },
+  {
+    "id": "ENV-002",
+    "version": "1.0.0",
+    "status": "PARTIAL",
+    "scope": "staging_access",
+    "description": "Protect stage access and indexing; no production release implied",
+    "preconditions": "TLS edge and matching staging access secret",
+    "input": "Request auth/host",
+    "result": "401/503 unless authenticated; noindex headers/banner",
+    "exceptions": "Edge mandatory for static/health; missing hosted infra remains blocked",
+    "roles": [
+      "reviewer",
+      "operator"
+    ],
+    "source": "Master15",
+    "verifiedAt": "2026-10-22",
+    "owner": "RELOO product owner (signoff pending for proposals)",
+    "tests": [
+      "tests/staging-environment.test.mjs"
+    ]
+  },
+  {
+    "id": "OPS-001",
+    "version": "1.0.0",
+    "status": "PROPOSED",
+    "scope": "capacity",
+    "description": "Capacity claims require a defined measured workload",
+    "preconditions": "Isolated staging and performance budget",
+    "input": "VU,RPS,mix,dataset,hardware",
+    "result": "Evidence per scenario and bottleneck; no extrapolated SLA",
+    "exceptions": "Old125VU result is not2000-user new-domain proof",
+    "roles": [
+      "qa",
+      "operator"
+    ],
+    "source": "Master14,16 + SERVER_CAPACITY_20261018.md",
+    "verifiedAt": "2026-10-22",
+    "owner": "RELOO product owner (signoff pending for proposals)",
+    "tests": [
+      "tests/superapp.test.mjs"
+    ]
+  },
+  {
+    "id": "LEGAL-001",
+    "version": "1.0.0",
+    "status": "BLOCKED",
+    "scope": "release",
+    "description": "Unverified legal/provider conditions block related commercial release",
+    "preconditions": "Model-specific article register and legal owner signoff",
+    "input": "Official sources,model,conditions",
+    "result": "NEEDS_LEGAL_REVIEW until confirmed; unrelated dev continues",
+    "exceptions": "Competitor policy and code tests are not legal approval",
+    "roles": [
+      "legal",
+      "product",
+      "release_owner"
+    ],
+    "source": "Master13",
+    "verifiedAt": "2026-10-22",
+    "owner": "RELOO product owner (signoff pending for proposals)",
+    "tests": [
+      "tests/stays-api.test.mjs"
+    ]
+  },
+  {
+    "id": "UX-006",
+    "version": "1.2.0",
+    "status": "PARTIAL",
+    "scope": "mini-app-navigation",
+    "description": "Mini-app context continues through detail/checkout/account/auth; scroll, in-tab drafts and explicit bounded purchase sign-in handoff",
+    "preconditions": "Recognized service route and explicit transaction query",
+    "input": "stays/jobs/rentals/used route; locale; URL tab or role",
+    "result": "Validated route app/returnTo/next keep module and filters; purchase handoff uses a random resume handle, session-only draft,20min expiry and consume on authenticated return; no private field in URL",
+    "exceptions": "No permission derives from context. Real provider/native/deployed acceptance still required; fixture-backed auth return is not real OAuth certification.",
+    "roles": [
+      "guest",
+      "account"
+    ],
+    "source": "User request 2026-10-23: each mini app is a separate world",
+    "verifiedAt": "2026-10-23",
+    "owner": "Product/Frontend",
+    "tests": [
+      "tests/mini-app-navigation.test.mjs",
+      "tests/purchase-resume.test.mjs"
+    ]
+  }
+]

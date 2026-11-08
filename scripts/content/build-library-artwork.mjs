@@ -1,0 +1,24 @@
+import {readFile,writeFile,copyFile} from 'node:fs/promises';
+import {topics} from './news-topics.mjs';
+const pack=JSON.parse(await readFile('output/news/library/articles.json','utf8'));
+const fonts='<link rel="stylesheet" href="fonts.css">';
+const esc=s=>String(s).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+await copyFile('public/mascot/reloop/approved-v3/master.webp','output/news/library/assets/reloop.webp');
+await copyFile('output/news/assets/logo.webp','output/news/library/assets/logo.webp');
+const groups=[...new Set(topics.map(t=>t.group))];
+for(const group of groups)await copyFile(`public/images/categories-refreshed/${group}.webp`,`output/news/library/assets/${group}.webp`);
+const oldChecklists=[['Tìm món và đọc tin','Chọn ngày, gửi yêu cầu','Chốt giá, cọc và giao nhận','Kiểm tra khi nhận và trả'],['Tần suất bạn sẽ dùng','Tổng chi phí thực tế','Thời gian giao nhận','Không gian và bảo quản'],['Ảnh thật và tình trạng','Thông số và phụ kiện','Giá và khu vực giao nhận','Kiểm tra khi bàn giao']];
+for(const [index,article]of pack.entries()){
+ const topic=topics.find(t=>t.slug===article.slug);
+ const checklist=topic?.checklist||oldChecklists[index-15];
+ const group=topic?.group||['camera','camping','default'][index-15];
+ const dark=article.category==='Giao dịch rõ ràng',bg=dark?'#0b4140':article.category==='Dành cho chủ đồ'?'#e7f5ec':'#fff6df',ink=dark?'#f3f7f9':'#173b2d',accent=dark?'#b9ed9e':'#087f5b';
+ const shortTitle=article.title.split(':')[0].replace(/^Trước khi mua thêm một món đồ, hãy thử nghĩ đến việc thuê$/,'Thuê hay mua?');
+ if(topic){
+ const cover=`<!doctype html><html lang="vi"><meta charset="utf-8">${fonts}<style>*{box-sizing:border-box}body{margin:0;font-family:'Be Vietnam Pro',Arial,sans-serif}.cover{width:1200px;height:630px;position:relative;overflow:hidden;background:${bg};color:${ink};padding:45px 50px}.logo{width:160px;height:58px;object-fit:contain;${dark?'background:white;border-radius:12px;padding:7px;':''}}.copy{position:absolute;top:170px;left:50px;width:660px}.category{font-size:15px;letter-spacing:2px;font-weight:700;color:${accent}}h1{font-size:44px;line-height:1.24;letter-spacing:-1px;margin:25px 0}p{font-size:23px;line-height:1.6;margin:0;color:${ink};opacity:.8;max-width:580px}.disc{position:absolute;right:-50px;top:60px;width:510px;height:510px;border-radius:50%;background:${dark?'#155752':'#d7ecd9'}}.mascot{position:absolute;right:40px;bottom:43px;width:350px;height:350px;object-fit:contain}.icon{position:absolute;right:290px;top:80px;width:130px;height:130px;object-fit:contain;background:#ffffffd9;border-radius:26px;padding:14px;transform:rotate(-8deg)}.foot{position:absolute;bottom:40px;left:50px;font-size:14px;letter-spacing:1px;opacity:.7}</style><main class="cover"><span class="disc"></span><img class="logo" src="assets/logo.webp" alt="RELOO"><div class="copy"><span class="category">${esc(article.category.toUpperCase())}</span><h1>${esc(shortTitle)}</h1><p>${esc(article.title.includes(':')?article.title.split(':').slice(1).join(':').trim():'Checklist và câu hỏi giúp bạn bắt đầu rõ ràng hơn')}</p></div><img class="mascot" src="assets/reloop.webp" alt=""><img class="icon" src="assets/${group}.webp" alt=""><div class="foot">RELOO · TIN TỨC & CẨM NANG / ${String(index+4).padStart(2,'0')}</div></main></html>`;
+ await writeFile(`output/news/library/${article.slug}-cover.html`,cover);
+ }
+ const inline=`<!doctype html><html lang="vi"><meta charset="utf-8">${fonts}<style>*{box-sizing:border-box}body{margin:0;font-family:'Be Vietnam Pro',Arial,sans-serif}.art{width:1200px;height:720px;background:#edf8f1;padding:44px 50px;color:#173b2d}small{font-size:15px;letter-spacing:2px;color:#087f5b;font-weight:700}h1{font-size:34px;line-height:1.35;max-width:940px;margin:18px 0 28px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}.item{height:200px;background:#fff;border:1px solid #c9e2d2;border-radius:22px;padding:25px;display:flex;align-items:center;gap:20px}.number{width:54px;height:54px;flex-shrink:0;background:#dff3e6;color:#087f5b;border-radius:50%;display:grid;place-items:center;font-size:24px;font-weight:700}.item p{font-size:25px;line-height:1.45;max-width:400px}.foot{display:flex;justify-content:space-between;align-items:center;margin-top:24px;font-size:15px;color:#536d60}.foot img{width:120px;height:auto}</style><main class="art"><small>GHI NHỚ TRƯỚC KHI BẮT ĐẦU</small><h1>${esc(shortTitle)}</h1><div class="grid">${checklist.map((text,i)=>`<div class="item"><span class="number">${i+1}</span><p>${esc(text)}</p></div>`).join('')}</div><div class="foot"><span>Minh họa checklist · Xác nhận điều kiện với chủ đồ</span><img src="assets/logo.webp" alt="RELOO"></div></main></html>`;
+ await writeFile(`output/news/library/${article.slug}-inline.html`,inline);
+}
+console.log('Prepared 15 cover designs and 18 article checklist illustrations.');

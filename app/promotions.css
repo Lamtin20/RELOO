@@ -1,0 +1,423 @@
+.promo-order-price {
+  border: 1px solid #c9e3d2;
+  border-radius: 12px;
+  padding: 16px;
+  display: grid;
+  gap: 10px;
+  margin: 16px 0;
+  background: white;
+}
+.promo-order-price > div {
+  display: flex;
+  justify-content: space-between;
+  gap: 14px;
+  font-size: 13px;
+}
+.promo-order-price > div:nth-child(3) {
+  border-top: 1px solid #dce8df;
+  padding-top: 12px;
+  color: #058752;
+  font-size: 16px;
+}
+.promo-order-price small {
+  font-size: 11px;
+  color: #6e8175;
+}
+.promo-code-entry {
+  display: flex;
+  align-items: flex-end;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin: 18px 0;
+}
+.promo-code-entry label {
+  display: grid;
+  gap: 8px;
+  font-size: 13px;
+}
+.promo-code-entry input {
+  border: 1px solid #cbdfd2;
+  border-radius: 10px;
+  padding: 12px;
+  font: inherit;
+  min-height: 44px;
+}
+.promo-heading,
+.promo-program-header,
+.promo-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  margin-bottom: 22px;
+}
+.promo-heading h2 {
+  font-size: 28px;
+  margin: 8px 0;
+}
+.promo-heading p,
+.promo-detail p {
+  font-size: 13px;
+  color: #667d71;
+  line-height: 1.8;
+}
+.promo-heading > div:last-child {
+  display: flex;
+  gap: 10px;
+}
+.promo-layout {
+  display: grid;
+  grid-template-columns: 280px minmax(0, 1fr);
+  gap: 24px;
+}
+.promo-programs,
+.promo-detail {
+  background: white;
+  border: 1px solid #dfe9e3;
+  border-radius: 18px;
+  padding: 20px;
+}
+.promo-programs {
+  align-self: start;
+}
+.promo-search {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+.promo-search input {
+  min-width: 0;
+  border: 0;
+  padding: 10px;
+  width: 100%;
+}
+.promo-programs > button {
+  display: flex;
+  text-align: left;
+  align-items: flex-start;
+  gap: 12px;
+  border: 1px solid transparent;
+  border-radius: 12px;
+  background: transparent;
+  width: 100%;
+  padding: 14px;
+  margin-bottom: 8px;
+  color: #244e3a;
+  cursor: pointer;
+}
+.promo-programs > button.selected {
+  background: #eaf7ef;
+  border-color: #aedac0;
+}
+.promo-programs strong,
+.promo-programs small,
+.promo-programs em {
+  display: block;
+}
+.promo-programs strong {
+  font-size: 14px;
+}
+.promo-programs small {
+  font-size: 11px;
+  color: #718879;
+  margin: 5px 0;
+}
+.promo-programs em {
+  font-style: normal;
+  font-size: 10px;
+  color: #098453;
+}
+.promo-program-header h3 {
+  font-size: 23px;
+}
+.promo-scopes {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.promo-scopes span {
+  background: #f2f8f5;
+  border: 1px solid #dae9e0;
+  border-radius: 20px;
+  padding: 7px 11px;
+  font-size: 11px;
+  color: #207e56;
+}
+.promo-metrics {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+  margin: 24px 0;
+}
+.promo-metrics > div {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  border: 1px solid #e0ebe4;
+  border-radius: 14px;
+  padding: 16px;
+  color: #17845d;
+}
+.promo-metrics span {
+  font-size: 11px;
+  color: #74877c;
+}
+.promo-metrics strong {
+  font-size: 18px;
+}
+.promo-coupon-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+.promo-coupon {
+  background: linear-gradient(130deg, #f1faf4, #fff);
+  border: 1px dashed #9acbb0;
+  border-radius: 16px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+}
+.promo-coupon > div {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  color: #169768;
+}
+.promo-coupon > div span {
+  font-size: 11px;
+}
+.promo-coupon h4 {
+  font-size: 17px;
+  letter-spacing: 1px;
+}
+.promo-coupon > strong {
+  font-size: 32px;
+  color: #078955;
+}
+.promo-coupon p {
+  font-size: 12px;
+  margin: 0;
+}
+.promo-coupon small {
+  font-size: 11px;
+}
+.promo-coupon .btn {
+  margin-top: 10px;
+}
+.promo-empty {
+  padding: 32px;
+  text-align: center;
+  display: grid;
+  justify-items: center;
+  gap: 12px;
+  color: #67816f;
+}
+.promo-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  border-bottom: 1px solid #dfe9e3;
+  padding-bottom: 14px;
+  margin: 20px 0;
+}
+.promo-tabs button {
+  padding: 10px 14px;
+  border: 1px solid #dce8df;
+  border-radius: 10px;
+  font-size: 13px;
+  color: #476151;
+  background: #fff;
+}
+.promo-tabs button.active {
+  color: #007b4e;
+  background: #eaf6ef;
+  border-color: #afdac0;
+  font-weight: 600;
+}
+.promo-empty p {
+  font-size: 13px;
+  line-height: 1.8;
+}
+.promo-editor {
+  background: #f4faf6;
+  border: 1px solid #bedeca;
+  border-radius: 18px;
+  padding: 24px;
+  margin-top: 25px;
+}
+.promo-editor > form > header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+.promo-editor h3 {
+  font-size: 23px;
+}
+.promotion-manager input:not([type="checkbox"]),
+.promotion-manager select,
+.promotion-manager textarea {
+  border: 1px solid #d7e6dc;
+  background: #fff;
+  border-radius: 10px;
+  padding: 12px;
+  font: inherit;
+  font-size: 13px;
+  min-width: 0;
+  width: 100%;
+  color: #224635;
+}
+.promo-editor label,
+.promo-funding label {
+  display: grid;
+  gap: 8px;
+  font-size: 13px;
+}
+.promo-editor textarea {
+  width: 100%;
+}
+.promo-editor select[multiple] {
+  min-height: 130px;
+  margin: 8px 0;
+}
+.promo-services {
+  border: 1px solid #d8e8de;
+  border-radius: 12px;
+  padding: 14px;
+  margin: 20px 0;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+.promo-services legend {
+  font-size: 13px;
+  font-weight: 600;
+  padding: 0 6px;
+}
+.promo-services label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.promo-services input {
+  accent-color: #078550;
+}
+.promo-editor .profile-check {
+  display: flex;
+  margin: 16px 0;
+}
+.promo-editor .profile-check input {
+  width: 16px;
+}
+.promo-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 20px;
+}
+.promo-inline {
+  display: flex;
+  gap: 12px;
+  margin: 20px 0;
+}
+.promo-participant {
+  display: flex;
+  justify-content: space-between;
+  gap: 15px;
+  padding: 14px 0;
+  border-bottom: 1px solid #e2eae5;
+  font-size: 13px;
+}
+.promo-funding {
+  display: grid;
+  gap: 16px;
+  max-width: 600px;
+  margin: 20px 0;
+}
+.promo-funding .profile-check {
+  display: flex;
+}
+.promo-terms {
+  margin-top: 25px;
+  border-top: 1px solid #dfebe3;
+  padding-top: 18px;
+}
+.promo-terms summary {
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.promo-terms p {
+  white-space: pre-wrap;
+}
+.promo-simulator {
+  display: grid;
+  grid-template-columns: 1fr 1fr auto;
+  gap: 12px;
+  padding: 20px;
+  border-radius: 14px;
+  background: #f3f8f5;
+  margin-top: 25px;
+}
+.promo-simulator h4,
+.promo-simulator small,
+.promo-simulator strong {
+  grid-column: 1/-1;
+}
+.promo-simulator small {
+  font-size: 11px;
+  color: #6c7d72;
+}
+.promo-simulator strong {
+  color: #078752;
+  font-size: 14px;
+}
+@media (max-width: 1050px) {
+  .promo-layout {
+    grid-template-columns: 1fr;
+  }
+  .promo-programs {
+    max-height: 280px;
+    overflow: auto;
+  }
+  .promo-metrics {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (max-width: 600px) {
+  .promo-heading,
+  .promo-program-header,
+  .promo-toolbar {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+  .promo-heading h2 {
+    font-size: 23px;
+  }
+  .promo-detail,
+  .promo-programs,
+  .promo-editor {
+    padding: 16px;
+  }
+  .promo-coupon-grid,
+  .promo-services {
+    grid-template-columns: 1fr;
+  }
+  .promo-simulator {
+    grid-template-columns: 1fr;
+  }
+  .promo-metrics > div {
+    padding: 12px;
+  }
+  .promo-metrics strong {
+    font-size: 16px;
+  }
+  .promo-inline {
+    flex-direction: column;
+  }
+}

@@ -1,0 +1,14 @@
+﻿ma_truong,ten_truong,gia_tri,bat_buoc,goi_y
+__format,Định dạng,reloo-listing-v1,,
+title,Tên món đồ,,Có,"Tên sản phẩm, model và phiên bản"
+category,Danh mục,su-kien,Có,Sự kiện & Tiệc
+condition,Tình trạng,good,Có,new: Mới 100%; like_new: Như mới; good: Tốt; fair: Khá
+description,Mô tả & điều kiện thuê,,Có,Mô tả thực tế và điều kiện giao nhận
+dailyPrice,Giá thuê mỗi ngày,,Có,"Số nguyên VND, ví dụ 180000"
+marketValue,Giá trị tài sản,,Có,"Số nguyên VND, ví dụ 3500000"
+addressDetail,Chi tiết địa chỉ,,Không,"Số nhà, đường hoặc tòa nhà"
+spec.type,Loại thiết bị,,Có,"Backdrop, bàn ghế, đèn..."
+spec.quantity,Số lượng / Quy mô,,Có,"10 bộ bàn ghế, 50m²..."
+spec.setup,Lắp đặt,,Có,Tự lắp; Chủ đồ hỗ trợ lắp; Có phí lắp đặt; Không cần lắp
+spec.transport,Vận chuyển,,Có,Tự đến lấy; Giao trong nội thành; Giao toàn quốc; Thương lượng
+spec.accessories,Phụ kiện kèm theo,,Có,Liệt kê phụ kiện; nhập Không có nếu không kèm phụ kiện

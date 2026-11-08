@@ -1,22 +1,24 @@
 "use client";
 
-import { Suspense, useEffect, useMemo, useState } from "react";
+import {useLocale} from '@/components/settings/LocaleProvider';
+import {text as rentalText} from '@/lib/neighborhood/content';
+import {Neighborhood} from '@/components/neighborhood/Neighborhood';
+import {RelooLoading} from '@/components/ui/RelooLoading';
+import {OrderWorkspace,OrderScopeTabs} from "@/components/dashboard/OrderWorkspace";
+import {useAccountCounts} from "@/components/dashboard/AccountCounts";
+import {ORDER_BUCKETS} from "@/lib/dashboard/workspace";
+import { Suspense, useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useAuth, useOrders } from "@/lib/store";
-import { Money, EmptyState } from "@/components/ui";
+import { useAuth } from "@/lib/store";
+import { Money, EmptyState, Badge } from "@/components/ui";
 import { StatusBadge } from "@/components/dashboard/StatusBadge";
 import { formatDate } from "@/lib/utils";
-import {
-  ORDER_TABS,
-  countOrdersByTab,
-  filterOrdersByTab,
-  isValidOrderTab,
-} from "@/lib/order-tabs";
+
 
 const EMPTY_COPY = {
   all: {
-    title: "Không có đơn hàng",
+    title: "Chưa có đơn trong bộ lọc này",
     description: "Các đơn thuê và cho thuê của bạn sẽ hiển thị tại đây.",
   },
   active: {
@@ -34,34 +36,25 @@ const EMPTY_COPY = {
 };
 
 function OrdersPageInner() {
+  const {locale}=useLocale();
   const router = useRouter();
   const searchParams = useSearchParams();
   const paramTab = searchParams.get("tab");
-  const initialTab = isValidOrderTab(paramTab) ? paramTab : "all";
-
   const { user, users } = useAuth();
-  const { orders, getOrderListing } = useOrders({ userId: user?.id });
-  const [tab, setTab] = useState(initialTab);
 
-  useEffect(() => {
-    if (isValidOrderTab(paramTab) && paramTab !== tab) {
-      setTab(paramTab);
-    }
-  }, [paramTab, tab]);
-
-  const activeTab = isValidOrderTab(tab) ? tab : "all";
-
-  const tabCounts = useMemo(() => countOrdersByTab(orders), [orders]);
-
-  const filtered = useMemo(
-    () => filterOrdersByTab(orders, activeTab),
-    [orders, activeTab],
-  );
+  const {loading:countLoading,counts:globalCounts,error:countsError}=useAccountCounts();
+  const activeTab=ORDER_BUCKETS.some(([id])=>id===paramTab)?paramTab:'all';
+  const tabCounts=Object.fromEntries(ORDER_BUCKETS.map(([id])=>[id,globalCounts["orders."+id]]));
+  const page=Number(searchParams.get('page')||1),actor=user?.id;
+  const [result,setResult]=useState({actor:null,orders:[],loading:true,error:'',hasMore:false}),[reload,setReload]=useState(0);
+  useEffect(()=>{if(!actor)return;const c=new AbortController();const timer=setTimeout(async()=>{setResult(r=>({...r,actor,loading:true,error:''}));try{const response=await fetch('/api/dashboard/orders?'+new URLSearchParams({tab:activeTab,page:String(page)}),{cache:'no-store',signal:AbortSignal.any([c.signal,AbortSignal.timeout(12000)])});const d=await response.json();if(!response.ok)throw Error(d.error||'Chưa tải được đơn.');if(!c.signal.aborted)setResult({...d,actor,loading:false,error:''});}catch(e){if(!c.signal.aborted)setResult({actor,orders:[],loading:false,error:e.message,hasMore:false});}},0);return()=>{clearTimeout(timer);c.abort();};},[actor,activeTab,page,reload]);
+  const filtered=result.actor===actor?result.orders:[],getOrderListing=order=>order.listing;
+  const listLoading=result.actor!==actor||result.loading;
 
   if (!user) return null;
+  if(searchParams.get("order"))return <><OrderWorkspace/><Neighborhood key={searchParams.get("order")} initialTab="orders" workspace embedded/></>;
 
   function selectTab(nextTab) {
-    setTab(nextTab);
     const qs = nextTab === "all" ? "" : `?tab=${nextTab}`;
     router.replace(`/dashboard/orders${qs}`, { scroll: false });
   }
@@ -76,36 +69,10 @@ function OrdersPageInner() {
 
   return (
     <div className="dashboard-page animate-fade-up">
-      <div className="dashboard-page-header">
-        <div>
-          <h1>Đơn hàng</h1>
-          <p className="text-muted mt-2">
-            Theo dõi các đơn thuê và cho thuê của bạn trên RELOO
-          </p>
-        </div>
-      </div>
-
-      <div className="tabs tabs--orders mt-6" role="tablist" aria-label="Lọc đơn hàng">
-        {ORDER_TABS.map((t) => {
-          const count = tabCounts[t.id] ?? 0;
-          const isActive = activeTab === t.id;
-          return (
-            <button
-              key={t.id}
-              type="button"
-              role="tab"
-              aria-selected={isActive}
-              className={`tab ${isActive ? "tab--active" : ""}`}
-              onClick={() => selectTab(t.id)}
-            >
-              {t.label}
-              <span className="tab__count">{count}</span>
-            </button>
-          );
-        })}
-      </div>
-
-      {filtered.length === 0 ? (
+      <OrderWorkspace/>
+      <div className="aw-orders-toolbar"><h2>Tất cả đơn thuê</h2><span>Tổng số: {countLoading?'…':globalCounts.ordersTotal??'—'}</span></div>
+      <OrderScopeTabs tabs={ORDER_BUCKETS} active={activeTab} onChange={selectTab} counts={tabCounts} loading={countLoading}/>
+      {listLoading?<RelooLoading/>:result.error?<div className="aw-count-error" role="alert">{result.error}<button onClick={()=>setReload(n=>n+1)}>Thử lại</button></div>:filtered.length === 0 ? (
         <div className="panel mt-6">
           <EmptyState
             icon="ClipboardX"
@@ -120,8 +87,8 @@ function OrdersPageInner() {
             const role = order.renterId === user.id ? "Thuê từ" : "Cho thuê tới";
             return (
               <Link
-                key={order.id}
-                href={`/dashboard/orders/${order.id}`}
+                key={(order.source||"standard")+order.id}
+                href={order.source==="scheduled"?`/dashboard/orders?order=${encodeURIComponent(order.id)}`:`/dashboard/orders/${order.id}`}
                 className="panel dashboard-order-card panel-interactive"
               >
                 <div
@@ -137,7 +104,7 @@ function OrdersPageInner() {
                     <span className="font-semibold dashboard-order-card__title">
                       {listing?.title ?? order.id}
                     </span>
-                    <StatusBadge status={order.status} />
+                    {order.source==="scheduled"?<Badge variant={order.overdue?"danger":"muted"}>{rentalText(locale,order.overdue?"overdue":order.status)}</Badge>:<StatusBadge status={order.status} />}
                   </div>
                   <p className="text-xs text-muted mt-1 dashboard-order-card__meta">
                     <span className="dashboard-order-card__id">{order.id}</span>
@@ -157,6 +124,7 @@ function OrdersPageInner() {
           })}
         </div>
       )}
+      {!listLoading&&!result.error&&<div className="aw-pagination"><button disabled={page<=1} onClick={()=>router.replace('/dashboard/orders?'+new URLSearchParams({tab:activeTab,page:String(page-1)}))}>Trang trước</button><span>Trang {page} · tối đa 30 đơn / trang</span><button disabled={!result.hasMore} onClick={()=>router.replace('/dashboard/orders?'+new URLSearchParams({tab:activeTab,page:String(page+1)}))}>Trang tiếp</button></div>}
     </div>
   );
 }

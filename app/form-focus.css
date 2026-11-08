@@ -1,0 +1,21 @@
+/* A field's own border indicates focus; do not draw a second rectangle. */
+html body :is(input:not([type=checkbox]):not([type=radio]):not([type=range]):not([type=button]):not([type=submit]), select, textarea):focus {
+  outline: none;
+  border-color: #6b9b82;
+  box-shadow: inset 0 0 0 1px #6b9b8233;
+}
+html body :is(.aw-search, .crm-nav__search):focus-within {
+  outline: none;
+  border-color: #6b9b82;
+}
+html body .aw-navigation .aw-search input:focus,
+html body .crm-nav .crm-nav__search input:focus {
+  box-shadow: none;
+}
+html body :is(.aw-navigation, .nk-page, .nk-modal) :is(button, a):focus-visible {
+  outline: 2px solid #6b9b82;
+  outline-offset: 2px;
+}
+html body :is(.aw-navigation, .nk-page, .nk-modal) :is(button, a):focus:not(:focus-visible) {
+  outline: none;
+}

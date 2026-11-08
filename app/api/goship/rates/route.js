@@ -1,8 +1,10 @@
 import { NextResponse } from "next/server";
 import { fetchGoshipRates } from "@/lib/goship/client";
 import { isGoshipConfigured } from "@/lib/goship/env";
+import { branding } from "@/lib/content/branding";
 
 export async function POST(request) {
+  if (!(await branding()).shippingEnabled) return NextResponse.json({ok:false,error:"Tính phí giao hàng đang tạm ngừng.",code:"SHIPPING_DISABLED"},{status:409});
   if (!isGoshipConfigured()) {
     return NextResponse.json({ ok: false, error: "Goship chưa được cấu hình" }, { status: 503 });
   }

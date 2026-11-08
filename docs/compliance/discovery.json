@@ -1,0 +1,5584 @@
+{
+  "at": "2026-10-23",
+  "method": "Bounded static candidate inventory; line references only, no values or source snippets. Not semantic proof.",
+  "filesExamined": 1196,
+  "categories": {
+    "forms": [
+      {
+        "path": "app/admin/cms/[id]/page.js",
+        "lines": [
+          87,
+          95,
+          104,
+          117
+        ]
+      },
+      {
+        "path": "app/admin/cms/page.js",
+        "lines": [
+          39,
+          48
+        ]
+      },
+      {
+        "path": "app/admin/faq/page.js",
+        "lines": [
+          60,
+          63,
+          72,
+          124,
+          134
+        ]
+      },
+      {
+        "path": "app/admin/leads/page.js",
+        "lines": [
+          127,
+          130,
+          135,
+          150,
+          155,
+          163,
+          167
+        ]
+      },
+      {
+        "path": "app/admin/listings/page.js",
+        "lines": [
+          53,
+          60,
+          66
+        ]
+      },
+      {
+        "path": "app/admin/market-data/page.js",
+        "lines": [
+          120,
+          128,
+          143,
+          157,
+          176,
+          185,
+          198,
+          219,
+          229,
+          242,
+          255,
+          268,
+          278,
+          299,
+          323
+        ]
+      },
+      {
+        "path": "app/admin/orders/[id]/page.js",
+        "lines": [
+          75,
+          297
+        ]
+      },
+      {
+        "path": "app/admin/orders/page.js",
+        "lines": [
+          57,
+          64,
+          107
+        ]
+      },
+      {
+        "path": "app/admin/risk/page.js",
+        "lines": [
+          247,
+          250,
+          263,
+          274,
+          285,
+          298,
+          318,
+          336,
+          348,
+          358,
+          396,
+          399,
+          410,
+          428,
+          439,
+          450
+        ]
+      },
+      {
+        "path": "app/admin/settings/page.js",
+        "lines": [
+          71,
+          83,
+          93,
+          104,
+          123,
+          133,
+          152,
+          160,
+          176
+        ]
+      },
+      {
+        "path": "app/admin/tickets/[id]/page.js",
+        "lines": [
+          94,
+          95,
+          130,
+          142
+        ]
+      },
+      {
+        "path": "app/admin/tickets/page.js",
+        "lines": [
+          85,
+          92,
+          98,
+          147,
+          150,
+          161,
+          169,
+          179,
+          187,
+          197
+        ]
+      },
+      {
+        "path": "app/admin/users/page.js",
+        "lines": [
+          106,
+          113,
+          119
+        ]
+      },
+      {
+        "path": "app/auth/complete/page.js",
+        "lines": [
+          14
+        ]
+      },
+      {
+        "path": "app/auth/page.js",
+        "lines": [
+          101,
+          105
+        ]
+      },
+      {
+        "path": "app/auth/recover/page.js",
+        "lines": [
+          78,
+          82
+        ]
+      },
+      {
+        "path": "app/auth/register/page.js",
+        "lines": [
+          17
+        ]
+      },
+      {
+        "path": "app/auth/reset/page.js",
+        "lines": [
+          73
+        ]
+      },
+      {
+        "path": "app/cashback/page.js",
+        "lines": [
+          314,
+          316,
+          490,
+          499,
+          501
+        ]
+      },
+      {
+        "path": "app/crm/login/page.js",
+        "lines": [
+          38,
+          42,
+          43
+        ]
+      },
+      {
+        "path": "app/dashboard/ads/page.js",
+        "lines": [
+          108
+        ]
+      },
+      {
+        "path": "app/dashboard/assets/[id]/edit/page.js",
+        "lines": [
+          178,
+          183,
+          196,
+          210,
+          232,
+          247,
+          248,
+          263,
+          280,
+          318
+        ]
+      },
+      {
+        "path": "app/dashboard/audit/[orderId]/page.js",
+        "lines": [
+          300,
+          318
+        ]
+      },
+      {
+        "path": "app/dashboard/cashflow/page.js",
+        "lines": [
+          697,
+          713,
+          733,
+          750
+        ]
+      },
+      {
+        "path": "app/dashboard/messages/MessagesClient.jsx",
+        "lines": [
+          592,
+          851,
+          852,
+          862,
+          945
+        ]
+      },
+      {
+        "path": "app/dashboard/orders/[id]/page.js",
+        "lines": [
+          529
+        ]
+      },
+      {
+        "path": "app/dashboard/profile/page.js",
+        "lines": [
+          237,
+          250,
+          268,
+          283,
+          295,
+          314,
+          337,
+          351,
+          446,
+          461,
+          477,
+          491,
+          501,
+          514
+        ]
+      },
+      {
+        "path": "app/dashboard/promotions/page.js",
+        "lines": [
+          81
+        ]
+      },
+      {
+        "path": "app/dashboard/shorts/page.js",
+        "lines": [
+          19
+        ]
+      },
+      {
+        "path": "app/purchase/[id]/page.js",
+        "lines": [
+          6
+        ]
+      },
+      {
+        "path": "app/safety/page.js",
+        "lines": [
+          223,
+          226,
+          237
+        ]
+      },
+      {
+        "path": "app/user/[id]/page.js",
+        "lines": [
+          211,
+          271
+        ]
+      },
+      {
+        "path": "components/admin/RelooCareCmsPanel.jsx",
+        "lines": [
+          40,
+          49,
+          60,
+          75,
+          90
+        ]
+      },
+      {
+        "path": "components/analytics/AnalyticsDashboard.jsx",
+        "lines": [
+          20,
+          27
+        ]
+      },
+      {
+        "path": "components/auth/AccountIntentPicker.jsx",
+        "lines": [
+          14
+        ]
+      },
+      {
+        "path": "components/auth/CodeInput.jsx",
+        "lines": [
+          9
+        ]
+      },
+      {
+        "path": "components/auth/PasswordInput.jsx",
+        "lines": [
+          12
+        ]
+      },
+      {
+        "path": "components/bank/BankAccountForm.jsx",
+        "lines": [
+          105
+        ]
+      },
+      {
+        "path": "components/bank/BankPicker.jsx",
+        "lines": [
+          121
+        ]
+      },
+      {
+        "path": "components/booking/RentalRequest.jsx",
+        "lines": [
+          27
+        ]
+      },
+      {
+        "path": "components/booking/RentalSelection.jsx",
+        "lines": [
+          19
+        ]
+      },
+      {
+        "path": "components/cashflow/RentalPayment.jsx",
+        "lines": [
+          84,
+          112
+        ]
+      },
+      {
+        "path": "components/cashflow/WithdrawRequest.jsx",
+        "lines": [
+          164,
+          167,
+          188,
+          212
+        ]
+      },
+      {
+        "path": "components/chat/ChatLocationSheet.jsx",
+        "lines": [
+          166
+        ]
+      },
+      {
+        "path": "components/content/NewsHub.jsx",
+        "lines": [
+          19
+        ]
+      },
+      {
+        "path": "components/dashboard/AccountNavigation.jsx",
+        "lines": [
+          20
+        ]
+      },
+      {
+        "path": "components/design/DesignPreview.jsx",
+        "lines": [
+          4
+        ]
+      },
+      {
+        "path": "components/home/HomeBookingCard.jsx",
+        "lines": [
+          57,
+          76
+        ]
+      },
+      {
+        "path": "components/layout/Header.jsx",
+        "lines": [
+          122,
+          124
+        ]
+      },
+      {
+        "path": "components/listings/CategorySpecFields.jsx",
+        "lines": [
+          29,
+          49,
+          70
+        ]
+      },
+      {
+        "path": "components/listings/ListingAddressForm.jsx",
+        "lines": [
+          38,
+          57
+        ]
+      },
+      {
+        "path": "components/listings/ListingImageUpload.jsx",
+        "lines": [
+          183,
+          204
+        ]
+      },
+      {
+        "path": "components/listings/NearbyNeedDetail.jsx",
+        "lines": [
+          10
+        ]
+      },
+      {
+        "path": "components/listings/NearbyNeeds.jsx",
+        "lines": [
+          23,
+          24,
+          25,
+          26
+        ]
+      },
+      {
+        "path": "components/listings/RentalDetailsForm.jsx",
+        "lines": [
+          6,
+          9
+        ]
+      },
+      {
+        "path": "components/location/AddressFields.jsx",
+        "lines": [
+          19,
+          30
+        ]
+      },
+      {
+        "path": "components/location/ExploreLocationSheet.jsx",
+        "lines": [
+          283,
+          327,
+          380
+        ]
+      },
+      {
+        "path": "components/location/LocationPicker.jsx",
+        "lines": [
+          191,
+          244,
+          284
+        ]
+      },
+      {
+        "path": "components/mobile/AppHeader.jsx",
+        "lines": [
+          154,
+          156
+        ]
+      },
+      {
+        "path": "components/mobile/MarketHome.jsx",
+        "lines": [
+          105
+        ]
+      },
+      {
+        "path": "components/neighborhood/Neighborhood.jsx",
+        "lines": [
+          561,
+          579,
+          596,
+          624,
+          648,
+          682,
+          778,
+          798,
+          807,
+          814,
+          835,
+          848,
+          861,
+          874,
+          886,
+          894,
+          1416,
+          1517,
+          1531,
+          1543,
+          1630,
+          1639,
+          1663,
+          1672,
+          1687,
+          1717,
+          1734,
+          1736,
+          1765,
+          1791,
+          1804,
+          1817,
+          1831,
+          1845,
+          1855,
+          1858,
+          1896,
+          1944,
+          1978,
+          1990,
+          2007,
+          2035,
+          2044,
+          2057,
+          2064,
+          2073,
+          2080,
+          2090,
+          2098,
+          2417,
+          2456,
+          2464,
+          2473,
+          2486,
+          2494,
+          2513,
+          2530,
+          2539,
+          2548,
+          2551,
+          2563,
+          2573,
+          2664
+        ]
+      },
+      {
+        "path": "components/neighborhood/NeighborhoodAdmin.jsx",
+        "lines": [
+          506,
+          522,
+          534,
+          537,
+          560,
+          567,
+          583,
+          607,
+          620,
+          637,
+          645,
+          648,
+          663,
+          666,
+          673,
+          679,
+          685,
+          704,
+          722,
+          725,
+          737,
+          756,
+          777,
+          780,
+          786,
+          793,
+          801,
+          808,
+          817,
+          826,
+          843,
+          865,
+          868,
+          871,
+          874,
+          877,
+          881
+        ]
+      },
+      {
+        "path": "components/neighborhood/QuickRentalQuote.jsx",
+        "lines": [
+          11
+        ]
+      },
+      {
+        "path": "components/neighborhood/ResidenceSettings.jsx",
+        "lines": [
+          18
+        ]
+      },
+      {
+        "path": "components/owner/ApiCatalog.jsx",
+        "lines": [
+          43,
+          54,
+          69,
+          80
+        ]
+      },
+      {
+        "path": "components/owner/BannerManager.jsx",
+        "lines": [
+          137,
+          142,
+          151,
+          176,
+          193,
+          202,
+          211,
+          222,
+          233,
+          244
+        ]
+      },
+      {
+        "path": "components/owner/BrandSettings.jsx",
+        "lines": [
+          58,
+          87,
+          101,
+          111,
+          151
+        ]
+      },
+      {
+        "path": "components/owner/BusinessSettings.jsx",
+        "lines": [
+          142,
+          159,
+          171,
+          222,
+          233,
+          260,
+          326
+        ]
+      },
+      {
+        "path": "components/owner/CashflowSources.jsx",
+        "lines": [
+          52,
+          56,
+          73,
+          86
+        ]
+      },
+      {
+        "path": "components/owner/ControlCenter.jsx",
+        "lines": [
+          46
+        ]
+      },
+      {
+        "path": "components/owner/CrmNavigation.jsx",
+        "lines": [
+          17
+        ]
+      },
+      {
+        "path": "components/owner/CrmWorkspace.jsx",
+        "lines": [
+          426,
+          793,
+          798,
+          810,
+          842,
+          856,
+          896,
+          905,
+          923,
+          925,
+          944,
+          962,
+          973,
+          990,
+          1007
+        ]
+      },
+      {
+        "path": "components/owner/CustomerManager.jsx",
+        "lines": [
+          57,
+          245,
+          270,
+          291
+        ]
+      },
+      {
+        "path": "components/owner/FinanceWorkspace.jsx",
+        "lines": [
+          343,
+          353,
+          372,
+          387,
+          410,
+          424,
+          438
+        ]
+      },
+      {
+        "path": "components/owner/IntegrityWorkspace.jsx",
+        "lines": [
+          108,
+          111
+        ]
+      },
+      {
+        "path": "components/owner/LegalRegistry.jsx",
+        "lines": [
+          73,
+          117,
+          119
+        ]
+      },
+      {
+        "path": "components/owner/ListingComposer.jsx",
+        "lines": [
+          69,
+          370,
+          400,
+          416,
+          435,
+          452,
+          482,
+          483,
+          499,
+          519
+        ]
+      },
+      {
+        "path": "components/owner/ListingFileTools.jsx",
+        "lines": [
+          35
+        ]
+      },
+      {
+        "path": "components/owner/LocalBrandManager.jsx",
+        "lines": [
+          61,
+          70,
+          80,
+          95
+        ]
+      },
+      {
+        "path": "components/owner/NewsAutopilot.jsx",
+        "lines": [
+          22,
+          28
+        ]
+      },
+      {
+        "path": "components/owner/NewsManager.jsx",
+        "lines": [
+          102,
+          171,
+          176,
+          192,
+          201,
+          209,
+          218,
+          234,
+          242,
+          252,
+          260,
+          273,
+          282,
+          291,
+          304
+        ]
+      },
+      {
+        "path": "components/owner/NewsPerformance.jsx",
+        "lines": [
+          18,
+          26,
+          29
+        ]
+      },
+      {
+        "path": "components/owner/NotificationRules.jsx",
+        "lines": [
+          3
+        ]
+      },
+      {
+        "path": "components/owner/PayoutManager.jsx",
+        "lines": [
+          74,
+          96,
+          115,
+          129,
+          144,
+          233,
+          247,
+          277,
+          292,
+          302
+        ]
+      },
+      {
+        "path": "components/owner/PromotionManager.jsx",
+        "lines": [
+          231,
+          398,
+          424,
+          443,
+          481,
+          495,
+          552,
+          578,
+          595,
+          609,
+          616,
+          627,
+          714,
+          756,
+          766,
+          779,
+          793,
+          804,
+          817,
+          829,
+          847,
+          860,
+          874,
+          887,
+          902,
+          911,
+          920,
+          938,
+          956,
+          970,
+          980,
+          989
+        ]
+      },
+      {
+        "path": "components/owner/RentalAgreements.jsx",
+        "lines": [
+          128,
+          144,
+          156,
+          169,
+          184,
+          197
+        ]
+      },
+      {
+        "path": "components/owner/SePayWorkspace.jsx",
+        "lines": [
+          90,
+          157,
+          167,
+          185,
+          194,
+          212,
+          226,
+          238,
+          252,
+          296,
+          305,
+          323
+        ]
+      },
+      {
+        "path": "components/owner/ShortReview.jsx",
+        "lines": [
+          97
+        ]
+      },
+      {
+        "path": "components/owner/StaffManager.jsx",
+        "lines": [
+          16,
+          18,
+          19,
+          22,
+          24,
+          25
+        ]
+      },
+      {
+        "path": "components/owner/VirtualAccounts.jsx",
+        "lines": [
+          56,
+          65
+        ]
+      },
+      {
+        "path": "components/pricing/PricingEstimator.jsx",
+        "lines": [
+          111,
+          120,
+          129,
+          138,
+          153,
+          168,
+          179,
+          191
+        ]
+      },
+      {
+        "path": "components/privacy/CookieConsent.jsx",
+        "lines": [
+          17
+        ]
+      },
+      {
+        "path": "components/profile/AccountProfileEditor.jsx",
+        "lines": [
+          24
+        ]
+      },
+      {
+        "path": "components/profile/BankPicker.jsx",
+        "lines": [
+          77
+        ]
+      },
+      {
+        "path": "components/profile/DeleteAccount.jsx",
+        "lines": [
+          51
+        ]
+      },
+      {
+        "path": "components/profile/IdentityConsent.jsx",
+        "lines": [
+          29,
+          34
+        ]
+      },
+      {
+        "path": "components/rent/RentWaitlistForm.jsx",
+        "lines": [
+          110,
+          164
+        ]
+      },
+      {
+        "path": "components/rental-care/CareSettings.jsx",
+        "lines": [
+          232,
+          344,
+          372,
+          382,
+          425,
+          478,
+          492,
+          521,
+          541,
+          555
+        ]
+      },
+      {
+        "path": "components/rental-care/ExperienceSetup.jsx",
+        "lines": [
+          33
+        ]
+      },
+      {
+        "path": "components/search/DiscoveryIntent.jsx",
+        "lines": [
+          14
+        ]
+      },
+      {
+        "path": "components/search/ExploreFilters.jsx",
+        "lines": [
+          11,
+          12,
+          15,
+          16
+        ]
+      },
+      {
+        "path": "components/search/HomeDiscoveryHero.jsx",
+        "lines": [
+          25,
+          28
+        ]
+      },
+      {
+        "path": "components/search/HomeRentalSearch.jsx",
+        "lines": [
+          40,
+          63,
+          80,
+          93
+        ]
+      },
+      {
+        "path": "components/search/SearchBox.jsx",
+        "lines": [
+          166,
+          173
+        ]
+      },
+      {
+        "path": "components/security/EmailExposure.jsx",
+        "lines": [
+          14
+        ]
+      },
+      {
+        "path": "components/security/LoginSecurityPanel.jsx",
+        "lines": [
+          60
+        ]
+      },
+      {
+        "path": "components/security/NotificationPreferences.jsx",
+        "lines": [
+          4
+        ]
+      },
+      {
+        "path": "components/settings/LanguageSettings.jsx",
+        "lines": [
+          13
+        ]
+      },
+      {
+        "path": "components/shipping/GhtkEstimate.jsx",
+        "lines": [
+          80,
+          115,
+          126,
+          136
+        ]
+      },
+      {
+        "path": "components/shipping/GoshipAddressForm.jsx",
+        "lines": [
+          132,
+          147,
+          162,
+          183,
+          206,
+          227
+        ]
+      },
+      {
+        "path": "components/shorts/ShortComposer.jsx",
+        "lines": [
+          37,
+          38,
+          39,
+          43,
+          47
+        ]
+      },
+      {
+        "path": "components/shorts/ShortFeed.jsx",
+        "lines": [
+          345,
+          348,
+          358
+        ]
+      },
+      {
+        "path": "components/stays/HostOperations.jsx",
+        "lines": [
+          33,
+          36,
+          39,
+          41,
+          42,
+          44
+        ]
+      },
+      {
+        "path": "components/stays/Stays.jsx",
+        "lines": [
+          49,
+          50,
+          51,
+          52,
+          53,
+          65,
+          75
+        ]
+      },
+      {
+        "path": "components/stays/StayWorkspace.jsx",
+        "lines": [
+          20,
+          21,
+          22,
+          23,
+          27
+        ]
+      },
+      {
+        "path": "components/superapp/ServicePages.jsx",
+        "lines": [
+          20
+        ]
+      },
+      {
+        "path": "components/superapp/SuperAppEntry.jsx",
+        "lines": [
+          30
+        ]
+      },
+      {
+        "path": "components/support/SupportChat.jsx",
+        "lines": [
+          12
+        ]
+      },
+      {
+        "path": "components/ui/DateField.jsx",
+        "lines": [
+          7
+        ]
+      },
+      {
+        "path": "components/ui/TimeField.jsx",
+        "lines": [
+          2
+        ]
+      }
+    ],
+    "storage": [
+      {
+        "path": "app/cashback/page.js",
+        "lines": [
+          58,
+          166
+        ]
+      },
+      {
+        "path": "app/welcome/page.js",
+        "lines": [
+          116
+        ]
+      },
+      {
+        "path": "components/analytics/ProductAnalytics.jsx",
+        "lines": [
+          30,
+          40
+        ]
+      },
+      {
+        "path": "components/booking/RentalRequest.jsx",
+        "lines": [
+          16,
+          23,
+          24
+        ]
+      },
+      {
+        "path": "components/cashflow/WithdrawRequest.jsx",
+        "lines": [
+          70,
+          79,
+          101
+        ]
+      },
+      {
+        "path": "components/content/NewsEngagementTracker.jsx",
+        "lines": [
+          11,
+          17
+        ]
+      },
+      {
+        "path": "components/listings/RecommendedCategories.jsx",
+        "lines": [
+          9
+        ]
+      },
+      {
+        "path": "components/mobile/NativeBridge.jsx",
+        "lines": [
+          44,
+          64
+        ]
+      },
+      {
+        "path": "components/mobile/RuntimeSync.jsx",
+        "lines": [
+          26,
+          29
+        ]
+      },
+      {
+        "path": "components/neighborhood/RentalBrowseMemory.jsx",
+        "lines": [
+          14,
+          15,
+          16,
+          17,
+          18,
+          20
+        ]
+      },
+      {
+        "path": "components/owner/ListingComposer.jsx",
+        "lines": [
+          67,
+          69,
+          84,
+          137,
+          147,
+          207,
+          238
+        ]
+      },
+      {
+        "path": "components/privacy/JourneyMeasurement.jsx",
+        "lines": [
+          14
+        ]
+      },
+      {
+        "path": "components/profile/IdentityAccess.jsx",
+        "lines": [
+          23,
+          26,
+          32
+        ]
+      },
+      {
+        "path": "components/rental-care/ExperienceSetup.jsx",
+        "lines": [
+          15,
+          16,
+          20,
+          25,
+          26
+        ]
+      },
+      {
+        "path": "components/rental-care/PersonalizationProvider.jsx",
+        "lines": [
+          49,
+          99,
+          108,
+          119
+        ]
+      },
+      {
+        "path": "components/security/NetworkGuard.jsx",
+        "lines": [
+          11
+        ]
+      },
+      {
+        "path": "components/settings/LocaleProvider.jsx",
+        "lines": [
+          8,
+          22,
+          30
+        ]
+      },
+      {
+        "path": "lib/analytics/browser-context.js",
+        "lines": [
+          3,
+          4,
+          6,
+          8,
+          9
+        ]
+      },
+      {
+        "path": "lib/bank/client.js",
+        "lines": [
+          10,
+          22
+        ]
+      },
+      {
+        "path": "lib/cookie-consent.js",
+        "lines": [
+          21,
+          23,
+          52,
+          53,
+          57,
+          60,
+          67,
+          74,
+          78,
+          79
+        ]
+      },
+      {
+        "path": "lib/hooks/useMarketplaceFollows.js",
+        "lines": [
+          33,
+          57,
+          74,
+          93
+        ]
+      },
+      {
+        "path": "lib/mobile/client.js",
+        "lines": [
+          48
+        ]
+      },
+      {
+        "path": "lib/rent-draft.js",
+        "lines": [
+          9,
+          21,
+          33
+        ]
+      },
+      {
+        "path": "lib/search-history.js",
+        "lines": [
+          40,
+          45,
+          56,
+          123,
+          134
+        ]
+      },
+      {
+        "path": "lib/store.js",
+        "lines": [
+          5,
+          1032,
+          1043
+        ]
+      },
+      {
+        "path": "lib/trust-platform/behavior-logger.js",
+        "lines": [
+          75,
+          78,
+          89,
+          92
+        ]
+      },
+      {
+        "path": "lib/user-preferences.js",
+        "lines": [
+          71,
+          81
+        ]
+      },
+      {
+        "path": "lib/vn-address.js",
+        "lines": [
+          20,
+          34,
+          90
+        ]
+      },
+      {
+        "path": "scripts/design-system-browser-check.js",
+        "lines": [
+          7,
+          39
+        ]
+      },
+      {
+        "path": "scripts/stays-browser-check.js",
+        "lines": [
+          52,
+          56
+        ]
+      },
+      {
+        "path": "scripts/superapp-browser-check.js",
+        "lines": [
+          8,
+          31,
+          34
+        ]
+      }
+    ],
+    "tracking": [
+      {
+        "path": "app/api/crm/media/route.js",
+        "lines": [
+          8
+        ]
+      },
+      {
+        "path": "app/api/crm/traffic-control/route.js",
+        "lines": [
+          1,
+          2,
+          5,
+          6,
+          7,
+          8
+        ]
+      },
+      {
+        "path": "app/api/journey/route.js",
+        "lines": [
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          12,
+          15,
+          16,
+          22
+        ]
+      },
+      {
+        "path": "app/api/kyc/preview/route.js",
+        "lines": [
+          37
+        ]
+      },
+      {
+        "path": "app/api/kyc/route.js",
+        "lines": [
+          188
+        ]
+      },
+      {
+        "path": "app/api/news-events/route.js",
+        "lines": [
+          4,
+          6
+        ]
+      },
+      {
+        "path": "app/api/rental/agreements/route.js",
+        "lines": [
+          2
+        ]
+      },
+      {
+        "path": "app/api/seller/analytics/route.js",
+        "lines": [
+          1,
+          2,
+          4,
+          5,
+          8,
+          9,
+          14
+        ]
+      },
+      {
+        "path": "app/dashboard/analytics/page.js",
+        "lines": [
+          1,
+          3
+        ]
+      },
+      {
+        "path": "app/dashboard/assets/page.js",
+        "lines": [
+          47
+        ]
+      },
+      {
+        "path": "app/layout.js",
+        "lines": [
+          20,
+          107,
+          121
+        ]
+      },
+      {
+        "path": "app/product/[id]/page.js",
+        "lines": [
+          4
+        ]
+      },
+      {
+        "path": "app/product/[id]/ProductClient.jsx",
+        "lines": [
+          16,
+          68,
+          88,
+          108
+        ]
+      },
+      {
+        "path": "components/analytics/AnalyticsDashboard.jsx",
+        "lines": [
+          6,
+          7,
+          8,
+          11,
+          14
+        ]
+      },
+      {
+        "path": "components/analytics/ProductAnalytics.jsx",
+        "lines": [
+          6,
+          7,
+          8,
+          9,
+          14,
+          16,
+          21,
+          23,
+          27,
+          29,
+          30,
+          35,
+          39
+        ]
+      },
+      {
+        "path": "components/analytics/SellerAnalytics.jsx",
+        "lines": [
+          3,
+          4
+        ]
+      },
+      {
+        "path": "components/content/NewsEngagementTracker.jsx",
+        "lines": [
+          8,
+          28
+        ]
+      },
+      {
+        "path": "components/listings/ListingCard.jsx",
+        "lines": [
+          43,
+          125
+        ]
+      },
+      {
+        "path": "components/listings/ProductGallery.jsx",
+        "lines": [
+          12,
+          16
+        ]
+      },
+      {
+        "path": "components/neighborhood/Neighborhood.jsx",
+        "lines": [
+          921
+        ]
+      },
+      {
+        "path": "components/neighborhood/RentalMeasurement.jsx",
+        "lines": [
+          3,
+          4
+        ]
+      },
+      {
+        "path": "components/owner/CrmWorkspace.jsx",
+        "lines": [
+          33,
+          62,
+          165,
+          298
+        ]
+      },
+      {
+        "path": "components/privacy/CookieConsent.jsx",
+        "lines": [
+          12,
+          13,
+          17
+        ]
+      },
+      {
+        "path": "components/privacy/JourneyMeasurement.jsx",
+        "lines": [
+          2,
+          7,
+          8,
+          12,
+          13,
+          14,
+          20
+        ]
+      },
+      {
+        "path": "components/rental-care/Recommendations.jsx",
+        "lines": [
+          131
+        ]
+      },
+      {
+        "path": "components/shorts/ShortPlayer.jsx",
+        "lines": [
+          20,
+          21
+        ]
+      },
+      {
+        "path": "components/ui/Icon.jsx",
+        "lines": [
+          17,
+          21
+        ]
+      },
+      {
+        "path": "deploy/vietnam/news-vietnam-sources.sql",
+        "lines": [
+          15
+        ]
+      },
+      {
+        "path": "deploy/vietnam/traffic-seller-analytics.sql",
+        "lines": [
+          11,
+          15,
+          19,
+          20,
+          21,
+          22,
+          23,
+          24,
+          30,
+          32,
+          36,
+          37,
+          68,
+          69,
+          70,
+          73,
+          78,
+          87,
+          90,
+          92,
+          93,
+          95,
+          97,
+          98,
+          100
+        ]
+      },
+      {
+        "path": "lib/analytics/access.js",
+        "lines": [
+          3,
+          4
+        ]
+      },
+      {
+        "path": "lib/analytics/browser-context.js",
+        "lines": [
+          2,
+          3,
+          6,
+          8,
+          9
+        ]
+      },
+      {
+        "path": "lib/analytics/collection.js",
+        "lines": [
+          7,
+          10
+        ]
+      },
+      {
+        "path": "lib/analytics/errors.js",
+        "lines": [
+          2
+        ]
+      },
+      {
+        "path": "lib/analytics/google-browser.js",
+        "lines": [
+          2,
+          5,
+          6,
+          7,
+          8,
+          9,
+          13,
+          15
+        ]
+      },
+      {
+        "path": "lib/analytics/order-link.js",
+        "lines": [
+          3,
+          10,
+          16,
+          18
+        ]
+      },
+      {
+        "path": "lib/analytics/test-runtime.js",
+        "lines": [
+          3,
+          4,
+          6,
+          13
+        ]
+      },
+      {
+        "path": "lib/catalog/public-apis.json",
+        "lines": [
+          1
+        ]
+      },
+      {
+        "path": "lib/content/news-measurement.js",
+        "lines": [
+          3,
+          5,
+          6
+        ]
+      },
+      {
+        "path": "lib/cookie-consent.js",
+        "lines": [
+          3,
+          11,
+          44,
+          45,
+          48,
+          66,
+          69,
+          72,
+          78
+        ]
+      },
+      {
+        "path": "lib/dashboard/workspace.js",
+        "lines": [
+          4
+        ]
+      },
+      {
+        "path": "lib/i18n/privacy-experience.js",
+        "lines": [
+          2,
+          3
+        ]
+      },
+      {
+        "path": "lib/i18n/ui.js",
+        "lines": [
+          6
+        ]
+      },
+      {
+        "path": "lib/images/webp.js",
+        "lines": [
+          6
+        ]
+      },
+      {
+        "path": "lib/kyc/document-frame.js",
+        "lines": [
+          1,
+          36,
+          37
+        ]
+      },
+      {
+        "path": "lib/location-tools.js",
+        "lines": [
+          17,
+          18
+        ]
+      },
+      {
+        "path": "lib/neighborhood/server.js",
+        "lines": [
+          5
+        ]
+      },
+      {
+        "path": "lib/news-autopilot/sources.js",
+        "lines": [
+          10
+        ]
+      },
+      {
+        "path": "lib/operations/access.js",
+        "lines": [
+          30
+        ]
+      },
+      {
+        "path": "lib/operations/control-content.js",
+        "lines": [
+          140,
+          141
+        ]
+      },
+      {
+        "path": "lib/operations/live-observations.js",
+        "lines": [
+          14
+        ]
+      },
+      {
+        "path": "lib/operations/navigation.js",
+        "lines": [
+          7
+        ]
+      },
+      {
+        "path": "lib/privacy/data-collection.js",
+        "lines": [
+          14,
+          30
+        ]
+      },
+      {
+        "path": "lib/security/web-policy.js",
+        "lines": [
+          2
+        ]
+      },
+      {
+        "path": "lib/shorts/encoding.js",
+        "lines": [
+          24
+        ]
+      },
+      {
+        "path": "lib/shorts/media.js",
+        "lines": [
+          100
+        ]
+      },
+      {
+        "path": "lib/trust-platform/schema.js",
+        "lines": [
+          3,
+          143
+        ]
+      },
+      {
+        "path": "scripts/analytics-test.mjs",
+        "lines": [
+          1,
+          2,
+          3,
+          4
+        ]
+      },
+      {
+        "path": "scripts/banner/package-deliverables.mjs",
+        "lines": [
+          24
+        ]
+      },
+      {
+        "path": "scripts/operations-worker.mjs",
+        "lines": [
+          194
+        ]
+      },
+      {
+        "path": "scripts/prepare-home-artwork.mjs",
+        "lines": [
+          19
+        ]
+      }
+    ],
+    "permissions": [
+      {
+        "path": "app/dashboard/messages/MessagesClient.jsx",
+        "lines": [
+          372,
+          379
+        ]
+      },
+      {
+        "path": "app/explore/page.js",
+        "lines": [
+          25,
+          63
+        ]
+      },
+      {
+        "path": "app/identity-capture.css",
+        "lines": [
+          94,
+          255
+        ]
+      },
+      {
+        "path": "components/chat/ChatLocationSheet.jsx",
+        "lines": [
+          57,
+          58
+        ]
+      },
+      {
+        "path": "components/listings/ListingImageUpload.jsx",
+        "lines": [
+          44,
+          119,
+          127,
+          141
+        ]
+      },
+      {
+        "path": "components/listings/NearbyNeeds.jsx",
+        "lines": [
+          16
+        ]
+      },
+      {
+        "path": "components/location/ExploreLocationSheet.jsx",
+        "lines": [
+          16,
+          68
+        ]
+      },
+      {
+        "path": "components/location/LocationChip.jsx",
+        "lines": [
+          9,
+          23
+        ]
+      },
+      {
+        "path": "components/location/LocationPicker.jsx",
+        "lines": [
+          6,
+          55
+        ]
+      },
+      {
+        "path": "components/owner/ControlCenter.jsx",
+        "lines": [
+          53,
+          55
+        ]
+      },
+      {
+        "path": "components/profile/identity-capture-reference.css",
+        "lines": [
+          14,
+          17,
+          20,
+          46
+        ]
+      },
+      {
+        "path": "components/profile/IdentityCapture.jsx",
+        "lines": [
+          130,
+          152,
+          274
+        ]
+      },
+      {
+        "path": "components/profile/LiveFaceCapture.jsx",
+        "lines": [
+          58,
+          68
+        ]
+      },
+      {
+        "path": "components/profile/LivePhotoCapture.jsx",
+        "lines": [
+          50,
+          54,
+          87
+        ]
+      },
+      {
+        "path": "components/rental-care/CareSettings.jsx",
+        "lines": [
+          192
+        ]
+      },
+      {
+        "path": "components/rental-care/ExperienceSetup.jsx",
+        "lines": [
+          29
+        ]
+      },
+      {
+        "path": "components/shorts/ShortRecorder.jsx",
+        "lines": [
+          40,
+          43,
+          175
+        ]
+      },
+      {
+        "path": "lib/catalog/public-apis.json",
+        "lines": [
+          1
+        ]
+      },
+      {
+        "path": "lib/hooks/useGeolocation.js",
+        "lines": [
+          11
+        ]
+      },
+      {
+        "path": "lib/mobile/client.js",
+        "lines": [
+          10,
+          15
+        ]
+      },
+      {
+        "path": "lib/mobile/location.js",
+        "lines": [
+          6,
+          7
+        ]
+      },
+      {
+        "path": "lib/push-notifications.js",
+        "lines": [
+          89
+        ]
+      },
+      {
+        "path": "lib/security/web-policy.js",
+        "lines": [
+          16
+        ]
+      },
+      {
+        "path": "mobile/android/app/src/main/AndroidManifest.xml",
+        "lines": [
+          59
+        ]
+      },
+      {
+        "path": "mobile/android/app/src/main/assets/capacitor.plugins.json",
+        "lines": [
+          20
+        ]
+      }
+    ],
+    "sensitive": [
+      {
+        "path": ".github/workflows/ios-simulator.yml",
+        "lines": [
+          25
+        ]
+      },
+      {
+        "path": "app/admin/ads/page.js",
+        "lines": [
+          4,
+          52
+        ]
+      },
+      {
+        "path": "app/admin/cms/page.js",
+        "lines": [
+          4,
+          27
+        ]
+      },
+      {
+        "path": "app/admin/finance/page.js",
+        "lines": [
+          44,
+          80,
+          284
+        ]
+      },
+      {
+        "path": "app/admin/leads/page.js",
+        "lines": [
+          4,
+          10,
+          18,
+          39,
+          40,
+          46,
+          83,
+          140,
+          143
+        ]
+      },
+      {
+        "path": "app/admin/risk/page.js",
+        "lines": [
+          29,
+          188,
+          193,
+          197,
+          402,
+          404
+        ]
+      },
+      {
+        "path": "app/admin/settings/page.js",
+        "lines": [
+          4,
+          147
+        ]
+      },
+      {
+        "path": "app/admin/users/[id]/page.js",
+        "lines": [
+          85,
+          143
+        ]
+      },
+      {
+        "path": "app/admin/users/page.js",
+        "lines": [
+          66
+        ]
+      },
+      {
+        "path": "app/api/auth/complete/route.js",
+        "lines": [
+          1,
+          35
+        ]
+      },
+      {
+        "path": "app/api/auth/login/route.js",
+        "lines": [
+          1
+        ]
+      },
+      {
+        "path": "app/api/auth/phone/resend/route.js",
+        "lines": [
+          2,
+          4
+        ]
+      },
+      {
+        "path": "app/api/auth/phone/verify/route.js",
+        "lines": [
+          2,
+          4
+        ]
+      },
+      {
+        "path": "app/api/auth/register/route.js",
+        "lines": [
+          5,
+          8
+        ]
+      },
+      {
+        "path": "app/api/crm/cases/route.js",
+        "lines": [
+          8
+        ]
+      },
+      {
+        "path": "app/api/crm/customers/route.js",
+        "lines": [
+          9,
+          21,
+          140,
+          156,
+          157,
+          158,
+          159,
+          163,
+          171,
+          182
+        ]
+      },
+      {
+        "path": "app/api/crm/overview/route.js",
+        "lines": [
+          12
+        ]
+      },
+      {
+        "path": "app/api/mobile/auth/complete/route.js",
+        "lines": [
+          22
+        ]
+      },
+      {
+        "path": "app/api/nearby-requests/route.js",
+        "lines": [
+          32,
+          40
+        ]
+      },
+      {
+        "path": "app/api/polygon/passport/route.js",
+        "lines": [
+          2,
+          4,
+          7
+        ]
+      },
+      {
+        "path": "app/api/security/admin/cases/route.js",
+        "lines": [
+          14
+        ]
+      },
+      {
+        "path": "app/api/security/admin/signals/route.js",
+        "lines": [
+          2,
+          13,
+          15,
+          36,
+          38
+        ]
+      },
+      {
+        "path": "app/api/security/profile/route.js",
+        "lines": [
+          9,
+          23,
+          24,
+          25,
+          26,
+          27,
+          30,
+          31,
+          34,
+          41,
+          42
+        ]
+      },
+      {
+        "path": "app/api/security/recheck/route.js",
+        "lines": [
+          10,
+          11
+        ]
+      },
+      {
+        "path": "app/auth/complete/page.js",
+        "lines": [
+          8,
+          12,
+          14
+        ]
+      },
+      {
+        "path": "app/auth/page.js",
+        "lines": [
+          4,
+          31
+        ]
+      },
+      {
+        "path": "app/auth/register/page.js",
+        "lines": [
+          12,
+          15,
+          17
+        ]
+      },
+      {
+        "path": "app/cms/privacy/page.js",
+        "lines": [
+          10
+        ]
+      },
+      {
+        "path": "app/dashboard/ads/page.js",
+        "lines": [
+          215
+        ]
+      },
+      {
+        "path": "app/dashboard/assets/[id]/edit/page.js",
+        "lines": [
+          161,
+          168,
+          171,
+          172
+        ]
+      },
+      {
+        "path": "app/dashboard/kyc/page.js",
+        "lines": [
+          23,
+          24,
+          42,
+          97,
+          111
+        ]
+      },
+      {
+        "path": "app/dashboard/messages/MessagesClient.jsx",
+        "lines": [
+          429
+        ]
+      },
+      {
+        "path": "app/dashboard/profile/page.js",
+        "lines": [
+          18,
+          279,
+          286
+        ]
+      },
+      {
+        "path": "app/globals.css",
+        "lines": [
+          5849,
+          5860,
+          5872,
+          5879,
+          5886,
+          5899,
+          5904,
+          5909,
+          5914,
+          5920,
+          5929,
+          5939,
+          5943,
+          5948,
+          5956,
+          5970,
+          5985,
+          5997,
+          6005,
+          6015,
+          6020,
+          6024,
+          6724,
+          6733,
+          6741,
+          6747,
+          6752,
+          6760,
+          6771,
+          6776,
+          6781,
+          6786,
+          6793,
+          6797,
+          6801,
+          6805,
+          6806,
+          6810,
+          6816,
+          6826,
+          6830,
+          6834,
+          6838,
+          6846,
+          6860,
+          7032,
+          7044,
+          7051,
+          7074,
+          7081,
+          7088,
+          18208,
+          18216,
+          18519
+        ]
+      },
+      {
+        "path": "app/help/page.js",
+        "lines": [
+          4,
+          54
+        ]
+      },
+      {
+        "path": "app/layout.js",
+        "lines": [
+          3
+        ]
+      },
+      {
+        "path": "app/phone-account.css",
+        "lines": [
+          1,
+          2,
+          3,
+          6,
+          7
+        ]
+      },
+      {
+        "path": "components/care/RelooCarePlanDetailModal.jsx",
+        "lines": [
+          3,
+          63
+        ]
+      },
+      {
+        "path": "components/chat/ChatLocationSheet.jsx",
+        "lines": [
+          59
+        ]
+      },
+      {
+        "path": "components/layout/AdminSidebar.jsx",
+        "lines": [
+          21,
+          104
+        ]
+      },
+      {
+        "path": "components/layout/BottomNav.jsx",
+        "lines": [
+          19,
+          140
+        ]
+      },
+      {
+        "path": "components/layout/DashboardSidebar.jsx",
+        "lines": [
+          14,
+          51
+        ]
+      },
+      {
+        "path": "components/layout/EntityDetails.jsx",
+        "lines": [
+          23,
+          25
+        ]
+      },
+      {
+        "path": "components/listings/BlockchainPassportModal.jsx",
+        "lines": [
+          26,
+          28,
+          31,
+          43,
+          46,
+          47,
+          55,
+          64,
+          72,
+          80,
+          82,
+          85,
+          103,
+          104,
+          105,
+          109,
+          112,
+          115,
+          136,
+          137,
+          138,
+          142,
+          143,
+          145,
+          150,
+          159,
+          163,
+          173,
+          175,
+          179,
+          180,
+          182,
+          187,
+          193,
+          208
+        ]
+      },
+      {
+        "path": "components/listings/NearbyNeeds.jsx",
+        "lines": [
+          16
+        ]
+      },
+      {
+        "path": "components/listings/NftPassportCard.jsx",
+        "lines": [
+          25,
+          27,
+          34,
+          37,
+          38,
+          47,
+          55,
+          64,
+          73,
+          75,
+          77,
+          78,
+          84,
+          96,
+          97,
+          98,
+          101,
+          102,
+          107,
+          128,
+          131,
+          133,
+          137,
+          138,
+          147,
+          149,
+          153,
+          155,
+          160,
+          169,
+          171,
+          175,
+          180,
+          195
+        ]
+      },
+      {
+        "path": "components/listings/NftPassportCompact.jsx",
+        "lines": [
+          10,
+          15,
+          16,
+          25,
+          28,
+          29,
+          35,
+          41,
+          49,
+          51,
+          94,
+          97
+        ]
+      },
+      {
+        "path": "components/location/LocationMap.jsx",
+        "lines": [
+          8
+        ]
+      },
+      {
+        "path": "components/mobile/AccountHub.jsx",
+        "lines": [
+          8,
+          54
+        ]
+      },
+      {
+        "path": "components/neighborhood/Neighborhood.jsx",
+        "lines": [
+          534
+        ]
+      },
+      {
+        "path": "components/neighborhood/ResidenceSettings.jsx",
+        "lines": [
+          17
+        ]
+      },
+      {
+        "path": "components/owner/CrmWorkspace.jsx",
+        "lines": [
+          605,
+          1042,
+          1050
+        ]
+      },
+      {
+        "path": "components/owner/CustomerManager.jsx",
+        "lines": [
+          50,
+          87,
+          131,
+          173,
+          262
+        ]
+      },
+      {
+        "path": "components/owner/SePayWorkspace.jsx",
+        "lines": [
+          264
+        ]
+      },
+      {
+        "path": "components/pricing/PricingEstimator.jsx",
+        "lines": [
+          124
+        ]
+      },
+      {
+        "path": "components/profile/AccountProfileEditor.jsx",
+        "lines": [
+          22
+        ]
+      },
+      {
+        "path": "components/profile/IdentityConsent.jsx",
+        "lines": [
+          38
+        ]
+      },
+      {
+        "path": "components/rental-care/CareSettings.jsx",
+        "lines": [
+          318
+        ]
+      },
+      {
+        "path": "components/security/DeviceConfirmation.jsx",
+        "lines": [
+          10,
+          11,
+          14
+        ]
+      },
+      {
+        "path": "components/shipping/GoshipAddressForm.jsx",
+        "lines": [
+          4,
+          144,
+          145,
+          148,
+          149,
+          150,
+          151,
+          155
+        ]
+      },
+      {
+        "path": "components/shipping/ReadonlyAddressCard.jsx",
+        "lines": [
+          3,
+          12,
+          29,
+          36,
+          38
+        ]
+      },
+      {
+        "path": "components/shorts/ShortRecorder.jsx",
+        "lines": [
+          143
+        ]
+      },
+      {
+        "path": "deploy/vietnam/assurance.sql",
+        "lines": [
+          47,
+          49,
+          52,
+          53
+        ]
+      },
+      {
+        "path": "deploy/vietnam/crm-upgrade.sql",
+        "lines": [
+          13,
+          16,
+          18,
+          24,
+          26,
+          28,
+          29,
+          30,
+          32,
+          74
+        ]
+      },
+      {
+        "path": "deploy/vietnam/identity-ocr-auto.sql",
+        "lines": [
+          19,
+          34
+        ]
+      },
+      {
+        "path": "deploy/vietnam/identity-operation-policy.sql",
+        "lines": [
+          8
+        ]
+      },
+      {
+        "path": "deploy/vietnam/identity-qr-auto.sql",
+        "lines": [
+          21,
+          27
+        ]
+      },
+      {
+        "path": "deploy/vietnam/identity-qr-unique.sql",
+        "lines": [
+          4,
+          42,
+          43,
+          47,
+          48,
+          51
+        ]
+      },
+      {
+        "path": "deploy/vietnam/identity-retention.sql",
+        "lines": [
+          9,
+          46
+        ]
+      },
+      {
+        "path": "deploy/vietnam/nearby-requests.sql",
+        "lines": [
+          5,
+          13,
+          42,
+          43,
+          52
+        ]
+      },
+      {
+        "path": "deploy/vietnam/permissions.sql",
+        "lines": [
+          8
+        ]
+      },
+      {
+        "path": "deploy/vietnam/phone-clearance.sql",
+        "lines": [
+          1,
+          5,
+          6,
+          8,
+          9,
+          15,
+          17,
+          21,
+          22,
+          30,
+          33,
+          36,
+          37,
+          40,
+          41
+        ]
+      },
+      {
+        "path": "deploy/vietnam/phone-onboarding.sql",
+        "lines": [
+          1,
+          5,
+          9,
+          11,
+          13,
+          14,
+          15,
+          17
+        ]
+      },
+      {
+        "path": "lib/auth/capabilities.js",
+        "lines": [
+          17,
+          39,
+          49
+        ]
+      },
+      {
+        "path": "lib/auth/duplicates.js",
+        "lines": [
+          3
+        ]
+      },
+      {
+        "path": "lib/auth/identity.js",
+        "lines": [
+          6,
+          61,
+          71
+        ]
+      },
+      {
+        "path": "lib/auth/phone-credentials.js",
+        "lines": [
+          1,
+          4,
+          5,
+          6,
+          7,
+          9
+        ]
+      },
+      {
+        "path": "lib/auth/profile-contact.js",
+        "lines": [
+          1,
+          3,
+          5
+        ]
+      },
+      {
+        "path": "lib/auth/provision.js",
+        "lines": [
+          1,
+          9,
+          32,
+          39,
+          40,
+          47,
+          67
+        ]
+      },
+      {
+        "path": "lib/auth/validation.js",
+        "lines": [
+          1,
+          22,
+          23,
+          24
+        ]
+      },
+      {
+        "path": "lib/catalog/public-apis.json",
+        "lines": [
+          1
+        ]
+      },
+      {
+        "path": "lib/catalog/public-listing.js",
+        "lines": [
+          2,
+          11,
+          13
+        ]
+      },
+      {
+        "path": "lib/category-specs.js",
+        "lines": [
+          20
+        ]
+      },
+      {
+        "path": "lib/constants.js",
+        "lines": [
+          85,
+          86,
+          480,
+          483,
+          696,
+          719
+        ]
+      },
+      {
+        "path": "lib/customer/privacy.js",
+        "lines": [
+          34,
+          35
+        ]
+      },
+      {
+        "path": "lib/customer/store-helpers.js",
+        "lines": [
+          2,
+          24
+        ]
+      },
+      {
+        "path": "lib/db/index.js",
+        "lines": [
+          6
+        ]
+      },
+      {
+        "path": "lib/db/listings.js",
+        "lines": [
+          31,
+          37,
+          43,
+          49,
+          52,
+          75,
+          93,
+          94,
+          101
+        ]
+      },
+      {
+        "path": "lib/db/map-from-db.js",
+        "lines": [
+          12,
+          21,
+          37,
+          39,
+          40,
+          41,
+          42,
+          43,
+          45
+        ]
+      },
+      {
+        "path": "lib/db/seed-mappers.js",
+        "lines": [
+          21,
+          33,
+          51,
+          52,
+          53,
+          89,
+          116,
+          118,
+          120,
+          121,
+          122,
+          123,
+          124,
+          125,
+          226
+        ]
+      },
+      {
+        "path": "lib/goship/listing-pickup.js",
+        "lines": [
+          17,
+          39
+        ]
+      },
+      {
+        "path": "lib/home-mioto-content.js",
+        "lines": [
+          51
+        ]
+      },
+      {
+        "path": "lib/hooks/useGeolocation.js",
+        "lines": [
+          31
+        ]
+      },
+      {
+        "path": "lib/i18n/account-experience.js",
+        "lines": [
+          1
+        ]
+      },
+      {
+        "path": "lib/i18n/identity-flow.js",
+        "lines": [
+          16,
+          20
+        ]
+      },
+      {
+        "path": "lib/i18n/phone-account.js",
+        "lines": [
+          1,
+          2,
+          3,
+          5,
+          6,
+          7,
+          8
+        ]
+      },
+      {
+        "path": "lib/i18n/privacy-experience.js",
+        "lines": [
+          3
+        ]
+      },
+      {
+        "path": "lib/i18n/setup.js",
+        "lines": [
+          3,
+          5
+        ]
+      },
+      {
+        "path": "lib/kyc/ocr-decision.js",
+        "lines": [
+          12
+        ]
+      },
+      {
+        "path": "lib/kyc/qr-review.js",
+        "lines": [
+          22
+        ]
+      },
+      {
+        "path": "lib/kyc/qr.js",
+        "lines": [
+          8,
+          10
+        ]
+      },
+      {
+        "path": "lib/legal/documents.js",
+        "lines": [
+          100
+        ]
+      },
+      {
+        "path": "lib/listing-rentals.js",
+        "lines": [
+          15,
+          33,
+          41,
+          42
+        ]
+      },
+      {
+        "path": "lib/location-tools.js",
+        "lines": [
+          18
+        ]
+      },
+      {
+        "path": "lib/mascot/registry.ts",
+        "lines": [
+          3,
+          72
+        ]
+      },
+      {
+        "path": "lib/mobile/location.js",
+        "lines": [
+          7
+        ]
+      },
+      {
+        "path": "lib/nearby-requests/worker.js",
+        "lines": [
+          19
+        ]
+      },
+      {
+        "path": "lib/neighborhood/content.js",
+        "lines": [
+          140,
+          775
+        ]
+      },
+      {
+        "path": "lib/news-autopilot/sources.js",
+        "lines": [
+          8,
+          10
+        ]
+      },
+      {
+        "path": "lib/notifications.js",
+        "lines": [
+          4,
+          31,
+          38
+        ]
+      },
+      {
+        "path": "lib/operations/entity-fields.js",
+        "lines": [
+          8
+        ]
+      },
+      {
+        "path": "lib/operations/modules.js",
+        "lines": [
+          7,
+          15
+        ]
+      },
+      {
+        "path": "lib/personalization/domain.js",
+        "lines": [
+          24
+        ]
+      },
+      {
+        "path": "lib/phone.js",
+        "lines": [
+          1,
+          3,
+          6,
+          15,
+          31
+        ]
+      },
+      {
+        "path": "lib/polygon-api.js",
+        "lines": [
+          125,
+          126,
+          132,
+          136,
+          145,
+          157,
+          171,
+          181,
+          191
+        ]
+      },
+      {
+        "path": "lib/polygon.js",
+        "lines": [
+          2
+        ]
+      },
+      {
+        "path": "lib/pricing/sources.js",
+        "lines": [
+          27,
+          28,
+          29
+        ]
+      },
+      {
+        "path": "lib/push-notifications.js",
+        "lines": [
+          20
+        ]
+      },
+      {
+        "path": "lib/reloop/expression-registry.js",
+        "lines": [
+          53,
+          72,
+          112
+        ]
+      },
+      {
+        "path": "lib/reloop/face-builder.js",
+        "lines": [
+          184,
+          185,
+          186
+        ]
+      },
+      {
+        "path": "lib/rent-draft.js",
+        "lines": [
+          39,
+          62
+        ]
+      },
+      {
+        "path": "lib/rental-care/content.js",
+        "lines": [
+          37,
+          158,
+          179,
+          180
+        ]
+      },
+      {
+        "path": "lib/rental-operation-policy.js",
+        "lines": [
+          27,
+          47,
+          48
+        ]
+      },
+      {
+        "path": "lib/security/account-credentials.js",
+        "lines": [
+          18
+        ]
+      },
+      {
+        "path": "lib/security/authorization.js",
+        "lines": [
+          63,
+          81,
+          138,
+          149
+        ]
+      },
+      {
+        "path": "lib/security/identifiers.js",
+        "lines": [
+          1,
+          8
+        ]
+      },
+      {
+        "path": "lib/security/rules.js",
+        "lines": [
+          9
+        ]
+      },
+      {
+        "path": "lib/security/service.js",
+        "lines": [
+          3,
+          28,
+          29,
+          30,
+          34,
+          37,
+          39,
+          79
+        ]
+      },
+      {
+        "path": "lib/security/source-results.js",
+        "lines": [
+          18,
+          23,
+          29
+        ]
+      },
+      {
+        "path": "lib/security/web-policy.js",
+        "lines": [
+          16
+        ]
+      },
+      {
+        "path": "lib/seed-data.js",
+        "lines": [
+          25,
+          52,
+          80,
+          103,
+          124,
+          150,
+          171,
+          219,
+          261,
+          299,
+          330,
+          361,
+          391,
+          422,
+          460,
+          490,
+          520,
+          556,
+          586,
+          616,
+          865,
+          900,
+          910,
+          911,
+          950,
+          973,
+          1003,
+          1021,
+          1053,
+          1065,
+          1077
+        ]
+      },
+      {
+        "path": "lib/store.js",
+        "lines": [
+          195,
+          247,
+          303,
+          381,
+          540,
+          541,
+          542,
+          579,
+          580,
+          612
+        ]
+      },
+      {
+        "path": "lib/trust-behavior.js",
+        "lines": [
+          23,
+          69
+        ]
+      },
+      {
+        "path": "lib/trust-platform/behavior-logger.js",
+        "lines": [
+          47,
+          48
+        ]
+      },
+      {
+        "path": "lib/trust-platform/constants.js",
+        "lines": [
+          23,
+          24,
+          25
+        ]
+      },
+      {
+        "path": "lib/trust-platform/decision-engine.js",
+        "lines": [
+          8,
+          24,
+          26,
+          34
+        ]
+      },
+      {
+        "path": "lib/trust-platform/fraud-engine.js",
+        "lines": [
+          19,
+          21,
+          27,
+          29
+        ]
+      },
+      {
+        "path": "lib/trust-platform/identity-engine.js",
+        "lines": [
+          48,
+          52,
+          53,
+          54,
+          64,
+          65,
+          73,
+          76,
+          77,
+          81
+        ]
+      },
+      {
+        "path": "lib/trust-platform/rule-engine.js",
+        "lines": [
+          7,
+          32,
+          35,
+          46,
+          48,
+          54
+        ]
+      },
+      {
+        "path": "lib/trust-platform/rules.js",
+        "lines": [
+          10,
+          12,
+          16,
+          18
+        ]
+      },
+      {
+        "path": "lib/trust-platform/schema.js",
+        "lines": [
+          11,
+          20,
+          21,
+          25,
+          39,
+          40
+        ]
+      },
+      {
+        "path": "lib/utils.js",
+        "lines": [
+          14,
+          17,
+          18,
+          20,
+          21,
+          431
+        ]
+      },
+      {
+        "path": "mobile/ios/App/App/Info.plist",
+        "lines": [
+          10,
+          34
+        ]
+      },
+      {
+        "path": "scripts/diagnose-auth.mjs",
+        "lines": [
+          70,
+          71
+        ]
+      },
+      {
+        "path": "scripts/finalize-rental-care-handover.mjs",
+        "lines": [
+          173
+        ]
+      },
+      {
+        "path": "scripts/list-supabase-tables.mjs",
+        "lines": [
+          25
+        ]
+      },
+      {
+        "path": "scripts/operations-worker.mjs",
+        "lines": [
+          76,
+          121,
+          125,
+          126,
+          127,
+          220
+        ]
+      },
+      {
+        "path": "scripts/queue-existing-identifiers.mjs",
+        "lines": [
+          6,
+          8
+        ]
+      },
+      {
+        "path": "scripts/seed-supabase.mjs",
+        "lines": [
+          104,
+          108,
+          112,
+          115
+        ]
+      },
+      {
+        "path": "scripts/verify-feature-schema.mjs",
+        "lines": [
+          3,
+          10,
+          43,
+          44,
+          52,
+          53,
+          56,
+          57,
+          67,
+          68,
+          69,
+          73,
+          88,
+          97,
+          103,
+          109,
+          111,
+          138,
+          149,
+          245,
+          254,
+          255,
+          299,
+          301,
+          328,
+          383,
+          426,
+          429,
+          431,
+          432,
+          433,
+          437,
+          442,
+          445,
+          448,
+          451,
+          454,
+          457,
+          459,
+          461
+        ]
+      },
+      {
+        "path": "scripts/verify-production-sync.mjs",
+        "lines": [
+          4
+        ]
+      },
+      {
+        "path": "scripts/verify-production.mjs",
+        "lines": [
+          107,
+          113
+        ]
+      },
+      {
+        "path": "scripts/verify-rental-care-api.mjs",
+        "lines": [
+          122,
+          320
+        ]
+      }
+    ],
+    "network": [
+      {
+        "path": "app/admin/market-data/page.js",
+        "lines": [
+          32,
+          42,
+          63
+        ]
+      },
+      {
+        "path": "app/admin/risk/page.js",
+        "lines": [
+          39,
+          58,
+          76
+        ]
+      },
+      {
+        "path": "app/api/crm/analysis/route.js",
+        "lines": [
+          16
+        ]
+      },
+      {
+        "path": "app/api/crm/gmail/callback/route.js",
+        "lines": [
+          10,
+          11,
+          12
+        ]
+      },
+      {
+        "path": "app/api/crm/gmail/connect/route.js",
+        "lines": [
+          10,
+          11,
+          12
+        ]
+      },
+      {
+        "path": "app/api/crm/news-performance/route.js",
+        "lines": [
+          24
+        ]
+      },
+      {
+        "path": "app/api/dmca/badge/route.js",
+        "lines": [
+          19,
+          20,
+          22
+        ]
+      },
+      {
+        "path": "app/api/goship/tracking/[orderId]/route.js",
+        "lines": [
+          23,
+          35,
+          47
+        ]
+      },
+      {
+        "path": "app/api/mobile/auth/start/route.js",
+        "lines": [
+          38
+        ]
+      },
+      {
+        "path": "app/api/mobile/releases/latest/route.js",
+        "lines": [
+          2
+        ]
+      },
+      {
+        "path": "app/api/rental/payments/route.js",
+        "lines": [
+          295,
+          303
+        ]
+      },
+      {
+        "path": "app/api/rental-care/google/callback/route.js",
+        "lines": [
+          13,
+          54,
+          73,
+          77,
+          78
+        ]
+      },
+      {
+        "path": "app/api/rental-care/google/connect/route.js",
+        "lines": [
+          34
+        ]
+      },
+      {
+        "path": "app/api/security/admin/cases/route.js",
+        "lines": [
+          79
+        ]
+      },
+      {
+        "path": "app/api/security/admin/signals/route.js",
+        "lines": [
+          23
+        ]
+      },
+      {
+        "path": "app/api/security/appeals/route.js",
+        "lines": [
+          31
+        ]
+      },
+      {
+        "path": "app/api/support/route.js",
+        "lines": [
+          30
+        ]
+      },
+      {
+        "path": "app/api/weather/route.js",
+        "lines": [
+          13
+        ]
+      },
+      {
+        "path": "app/auth/complete/page.js",
+        "lines": [
+          14
+        ]
+      },
+      {
+        "path": "app/auth/page.js",
+        "lines": [
+          51
+        ]
+      },
+      {
+        "path": "app/auth/recover/page.js",
+        "lines": [
+          32
+        ]
+      },
+      {
+        "path": "app/auth/register/page.js",
+        "lines": [
+          17
+        ]
+      },
+      {
+        "path": "app/auth/reset/page.js",
+        "lines": [
+          34
+        ]
+      },
+      {
+        "path": "app/cashback/page.js",
+        "lines": [
+          84,
+          97,
+          150,
+          187,
+          226
+        ]
+      },
+      {
+        "path": "app/crm/login/page.js",
+        "lines": [
+          11,
+          17,
+          20,
+          31,
+          32,
+          47
+        ]
+      },
+      {
+        "path": "app/crm/news-preview/[id]/page.js",
+        "lines": [
+          11
+        ]
+      },
+      {
+        "path": "app/crm/page.js",
+        "lines": [
+          10,
+          12,
+          17
+        ]
+      },
+      {
+        "path": "app/dashboard/cashflow/page.js",
+        "lines": [
+          159,
+          373
+        ]
+      },
+      {
+        "path": "app/dashboard/kyc/verify/page.js",
+        "lines": [
+          35,
+          62,
+          82,
+          105,
+          108
+        ]
+      },
+      {
+        "path": "app/dashboard/messages/MessagesClient.jsx",
+        "lines": [
+          121
+        ]
+      },
+      {
+        "path": "app/dashboard/orders/page.js",
+        "lines": [
+          50
+        ]
+      },
+      {
+        "path": "app/dashboard/profile/page.js",
+        "lines": [
+          55,
+          590
+        ]
+      },
+      {
+        "path": "app/dashboard/promotions/page.js",
+        "lines": [
+          12,
+          103,
+          132
+        ]
+      },
+      {
+        "path": "app/dashboard/purchases/page.js",
+        "lines": [
+          8
+        ]
+      },
+      {
+        "path": "app/dashboard/shorts/page.js",
+        "lines": [
+          11,
+          15
+        ]
+      },
+      {
+        "path": "app/layout.js",
+        "lines": [
+          76
+        ]
+      },
+      {
+        "path": "app/news/[id]/page.js",
+        "lines": [
+          10,
+          19,
+          21,
+          23
+        ]
+      },
+      {
+        "path": "app/news/chu-de/[slug]/page.js",
+        "lines": [
+          11
+        ]
+      },
+      {
+        "path": "app/news/page.js",
+        "lines": [
+          7
+        ]
+      },
+      {
+        "path": "app/product/[id]/page.js",
+        "lines": [
+          6,
+          7
+        ]
+      },
+      {
+        "path": "app/purchase/[id]/page.js",
+        "lines": [
+          5
+        ]
+      },
+      {
+        "path": "app/robots.js",
+        "lines": [
+          9
+        ]
+      },
+      {
+        "path": "app/safety/page.js",
+        "lines": [
+          38,
+          51,
+          76,
+          92,
+          202,
+          282,
+          289
+        ]
+      },
+      {
+        "path": "app/sitemap.js",
+        "lines": [
+          4
+        ]
+      },
+      {
+        "path": "components/analytics/AnalyticsDashboard.jsx",
+        "lines": [
+          15,
+          18
+        ]
+      },
+      {
+        "path": "components/analytics/ProductAnalytics.jsx",
+        "lines": [
+          12,
+          19
+        ]
+      },
+      {
+        "path": "components/auth/AppleAuthButton.jsx",
+        "lines": [
+          6
+        ]
+      },
+      {
+        "path": "components/auth/GoogleAuthButton.jsx",
+        "lines": [
+          46
+        ]
+      },
+      {
+        "path": "components/auth/PasskeyLoginButton.jsx",
+        "lines": [
+          6
+        ]
+      },
+      {
+        "path": "components/booking/RentalRequest.jsx",
+        "lines": [
+          9
+        ]
+      },
+      {
+        "path": "components/brand/BrandSync.jsx",
+        "lines": [
+          7
+        ]
+      },
+      {
+        "path": "components/brand/Logo.jsx",
+        "lines": [
+          20
+        ]
+      },
+      {
+        "path": "components/cashflow/RentalPayment.jsx",
+        "lines": [
+          17,
+          91,
+          154,
+          165
+        ]
+      },
+      {
+        "path": "components/cashflow/WithdrawRequest.jsx",
+        "lines": [
+          22,
+          83
+        ]
+      },
+      {
+        "path": "components/chat/ChatLocationSheet.jsx",
+        "lines": [
+          10,
+          11,
+          26,
+          27,
+          93
+        ]
+      },
+      {
+        "path": "components/content/BannerPlacement.jsx",
+        "lines": [
+          3
+        ]
+      },
+      {
+        "path": "components/content/NewsEngagementTracker.jsx",
+        "lines": [
+          14
+        ]
+      },
+      {
+        "path": "components/content/NewsHubSchema.jsx",
+        "lines": [
+          4,
+          5
+        ]
+      },
+      {
+        "path": "components/dashboard/AccountCounts.jsx",
+        "lines": [
+          9
+        ]
+      },
+      {
+        "path": "components/layout/EntityDetails.jsx",
+        "lines": [
+          7
+        ]
+      },
+      {
+        "path": "components/layout/HeaderWeather.jsx",
+        "lines": [
+          9,
+          14
+        ]
+      },
+      {
+        "path": "components/listings/BlockchainPassportModal.jsx",
+        "lines": [
+          64
+        ]
+      },
+      {
+        "path": "components/listings/NearbyNeedDetail.jsx",
+        "lines": [
+          7,
+          8
+        ]
+      },
+      {
+        "path": "components/listings/NearbyNeeds.jsx",
+        "lines": [
+          8
+        ]
+      },
+      {
+        "path": "components/listings/NftPassportCard.jsx",
+        "lines": [
+          55
+        ]
+      },
+      {
+        "path": "components/listings/NftPassportCompact.jsx",
+        "lines": [
+          41
+        ]
+      },
+      {
+        "path": "components/listings/PartnerFeed.jsx",
+        "lines": [
+          9
+        ]
+      },
+      {
+        "path": "components/listings/PublishedContent.jsx",
+        "lines": [
+          7
+        ]
+      },
+      {
+        "path": "components/listings/RentalHistory.jsx",
+        "lines": [
+          6
+        ]
+      },
+      {
+        "path": "components/mobile/AppUpdateNotice.jsx",
+        "lines": [
+          3
+        ]
+      },
+      {
+        "path": "components/mobile/MobileAuthReturn.jsx",
+        "lines": [
+          19,
+          24
+        ]
+      },
+      {
+        "path": "components/mobile/NativeBridge.jsx",
+        "lines": [
+          54
+        ]
+      },
+      {
+        "path": "components/mobile/RuntimeSync.jsx",
+        "lines": [
+          23
+        ]
+      },
+      {
+        "path": "components/neighborhood/Neighborhood.jsx",
+        "lines": [
+          67,
+          291,
+          538
+        ]
+      },
+      {
+        "path": "components/neighborhood/ResidenceSettings.jsx",
+        "lines": [
+          14,
+          16
+        ]
+      },
+      {
+        "path": "components/owner/ApiCatalog.jsx",
+        "lines": [
+          22
+        ]
+      },
+      {
+        "path": "components/owner/BannerManager.jsx",
+        "lines": [
+          23,
+          41,
+          57
+        ]
+      },
+      {
+        "path": "components/owner/BrandSettings.jsx",
+        "lines": [
+          14,
+          31,
+          36,
+          64
+        ]
+      },
+      {
+        "path": "components/owner/BusinessSettings.jsx",
+        "lines": [
+          45,
+          304
+        ]
+      },
+      {
+        "path": "components/owner/CashflowSources.jsx",
+        "lines": [
+          11,
+          23
+        ]
+      },
+      {
+        "path": "components/owner/ControlCenter.jsx",
+        "lines": [
+          33
+        ]
+      },
+      {
+        "path": "components/owner/CrmNavigation.jsx",
+        "lines": [
+          18
+        ]
+      },
+      {
+        "path": "components/owner/CrmWorkspace.jsx",
+        "lines": [
+          99
+        ]
+      },
+      {
+        "path": "components/owner/CustomerManager.jsx",
+        "lines": [
+          18,
+          28,
+          218
+        ]
+      },
+      {
+        "path": "components/owner/EmailPreview.jsx",
+        "lines": [
+          4
+        ]
+      },
+      {
+        "path": "components/owner/FinanceWorkspace.jsx",
+        "lines": [
+          47,
+          64,
+          491
+        ]
+      },
+      {
+        "path": "components/owner/IntegrityWorkspace.jsx",
+        "lines": [
+          10,
+          26
+        ]
+      },
+      {
+        "path": "components/owner/LegalRegistry.jsx",
+        "lines": [
+          12,
+          29,
+          50,
+          83
+        ]
+      },
+      {
+        "path": "components/owner/LocalBrandManager.jsx",
+        "lines": [
+          18,
+          33
+        ]
+      },
+      {
+        "path": "components/owner/NewsAutopilot.jsx",
+        "lines": [
+          10,
+          11,
+          13,
+          14
+        ]
+      },
+      {
+        "path": "components/owner/NewsManager.jsx",
+        "lines": [
+          38,
+          56,
+          72,
+          91,
+          141
+        ]
+      },
+      {
+        "path": "components/owner/NewsPerformance.jsx",
+        "lines": [
+          10,
+          13,
+          26
+        ]
+      },
+      {
+        "path": "components/owner/NotificationRules.jsx",
+        "lines": [
+          3
+        ]
+      },
+      {
+        "path": "components/owner/PayoutManager.jsx",
+        "lines": [
+          28,
+          41
+        ]
+      },
+      {
+        "path": "components/owner/PromotionManager.jsx",
+        "lines": [
+          51
+        ]
+      },
+      {
+        "path": "components/owner/PurchaseSupport.jsx",
+        "lines": [
+          3
+        ]
+      },
+      {
+        "path": "components/owner/RentalAgreements.jsx",
+        "lines": [
+          51,
+          73
+        ]
+      },
+      {
+        "path": "components/owner/SePayWorkspace.jsx",
+        "lines": [
+          20,
+          40,
+          65,
+          116
+        ]
+      },
+      {
+        "path": "components/owner/ShortReview.jsx",
+        "lines": [
+          9,
+          21,
+          58,
+          77
+        ]
+      },
+      {
+        "path": "components/owner/StaffManager.jsx",
+        "lines": [
+          6
+        ]
+      },
+      {
+        "path": "components/owner/VirtualAccounts.jsx",
+        "lines": [
+          10,
+          27
+        ]
+      },
+      {
+        "path": "components/pricing/PricingEstimator.jsx",
+        "lines": [
+          46
+        ]
+      },
+      {
+        "path": "components/privacy/DataCollectionPolicy.jsx",
+        "lines": [
+          4
+        ]
+      },
+      {
+        "path": "components/privacy/JourneyMeasurement.jsx",
+        "lines": [
+          16
+        ]
+      },
+      {
+        "path": "components/privacy/LegalDocument.jsx",
+        "lines": [
+          9
+        ]
+      },
+      {
+        "path": "components/profile/AccountProfileEditor.jsx",
+        "lines": [
+          14,
+          15
+        ]
+      },
+      {
+        "path": "components/profile/DeleteAccount.jsx",
+        "lines": [
+          13,
+          57
+        ]
+      },
+      {
+        "path": "components/profile/IdentityCapture.jsx",
+        "lines": [
+          136,
+          268
+        ]
+      },
+      {
+        "path": "components/profile/IdentityNotice.jsx",
+        "lines": [
+          3
+        ]
+      },
+      {
+        "path": "components/profile/LiveFaceCapture.jsx",
+        "lines": [
+          64
+        ]
+      },
+      {
+        "path": "components/profile/LivePhotoCapture.jsx",
+        "lines": [
+          69
+        ]
+      },
+      {
+        "path": "components/promotions/CustomerOffers.jsx",
+        "lines": [
+          14
+        ]
+      },
+      {
+        "path": "components/rental-care/CareSettings.jsx",
+        "lines": [
+          85,
+          86,
+          149,
+          241
+        ]
+      },
+      {
+        "path": "components/rental-care/ExperienceSetup.jsx",
+        "lines": [
+          18,
+          25,
+          26,
+          29,
+          31
+        ]
+      },
+      {
+        "path": "components/rental-care/PersonalizationProvider.jsx",
+        "lines": [
+          21,
+          22,
+          60,
+          145
+        ]
+      },
+      {
+        "path": "components/rental-care/RecommendationControls.jsx",
+        "lines": [
+          25
+        ]
+      },
+      {
+        "path": "components/rental-care/Recommendations.jsx",
+        "lines": [
+          41
+        ]
+      },
+      {
+        "path": "components/rental-care/RentalCareBridge.jsx",
+        "lines": [
+          31,
+          35,
+          57,
+          65,
+          86
+        ]
+      },
+      {
+        "path": "components/security/DeviceConfirmation.jsx",
+        "lines": [
+          6,
+          11
+        ]
+      },
+      {
+        "path": "components/security/EmailExposure.jsx",
+        "lines": [
+          6,
+          9,
+          13
+        ]
+      },
+      {
+        "path": "components/security/IdentityExpiryNotice.jsx",
+        "lines": [
+          14
+        ]
+      },
+      {
+        "path": "components/security/LoginSecurityPanel.jsx",
+        "lines": [
+          18
+        ]
+      },
+      {
+        "path": "components/security/NetworkGuard.jsx",
+        "lines": [
+          11
+        ]
+      },
+      {
+        "path": "components/security/NotificationPreferences.jsx",
+        "lines": [
+          4
+        ]
+      },
+      {
+        "path": "components/security/SmartKeyPanel.jsx",
+        "lines": [
+          7,
+          8
+        ]
+      },
+      {
+        "path": "components/settings/LocaleProvider.jsx",
+        "lines": [
+          25,
+          28,
+          38
+        ]
+      },
+      {
+        "path": "components/shipping/GhtkEstimate.jsx",
+        "lines": [
+          48
+        ]
+      },
+      {
+        "path": "components/shipping/GoshipAddressForm.jsx",
+        "lines": [
+          29,
+          52,
+          73
+        ]
+      },
+      {
+        "path": "components/shipping/GoshipTrackingPanel.jsx",
+        "lines": [
+          28,
+          144
+        ]
+      },
+      {
+        "path": "components/shorts/ShortComposer.jsx",
+        "lines": [
+          18,
+          29
+        ]
+      },
+      {
+        "path": "components/shorts/ShortFeed.jsx",
+        "lines": [
+          123,
+          144,
+          167
+        ]
+      },
+      {
+        "path": "components/stays/HostOperations.jsx",
+        "lines": [
+          14,
+          16,
+          42
+        ]
+      },
+      {
+        "path": "components/stays/Stays.jsx",
+        "lines": [
+          20,
+          28
+        ]
+      },
+      {
+        "path": "components/stays/StayWorkspace.jsx",
+        "lines": [
+          11,
+          14
+        ]
+      },
+      {
+        "path": "components/support/SupportChat.jsx",
+        "lines": [
+          10,
+          11
+        ]
+      },
+      {
+        "path": "deploy/browser/service.mjs",
+        "lines": [
+          30
+        ]
+      },
+      {
+        "path": "deploy/kubernetes/prepare.mjs",
+        "lines": [
+          13
+        ]
+      },
+      {
+        "path": "deploy/recover-website.ps1",
+        "lines": [
+          20
+        ]
+      },
+      {
+        "path": "deploy/security/compose.auth.yml",
+        "lines": [
+          10
+        ]
+      },
+      {
+        "path": "deploy/testing/capacity-origin.mjs",
+        "lines": [
+          10
+        ]
+      },
+      {
+        "path": "deploy/vietnam/compose.yml",
+        "lines": [
+          30,
+          33,
+          34,
+          40,
+          55,
+          59,
+          63,
+          102
+        ]
+      },
+      {
+        "path": "deploy/vietnam/phone-clearance.sql",
+        "lines": [
+          16
+        ]
+      },
+      {
+        "path": "deploy/vietnam/short-videos.sql",
+        "lines": [
+          22
+        ]
+      },
+      {
+        "path": "deploy/vietnam/staff-review.sql",
+        "lines": [
+          11
+        ]
+      },
+      {
+        "path": "lib/affiliate/provider.js",
+        "lines": [
+          110
+        ]
+      },
+      {
+        "path": "lib/analytics/google-browser.js",
+        "lines": [
+          8,
+          9,
+          13,
+          15
+        ]
+      },
+      {
+        "path": "lib/analytics/public-product.js",
+        "lines": [
+          11
+        ]
+      },
+      {
+        "path": "lib/analytics/seo.js",
+        "lines": [
+          8,
+          11
+        ]
+      },
+      {
+        "path": "lib/auth/callback-origin.js",
+        "lines": [
+          7,
+          9
+        ]
+      },
+      {
+        "path": "lib/auth/capabilities.js",
+        "lines": [
+          26
+        ]
+      },
+      {
+        "path": "lib/auth/provision.js",
+        "lines": [
+          52
+        ]
+      },
+      {
+        "path": "lib/auth-navigation.js",
+        "lines": [
+          26
+        ]
+      },
+      {
+        "path": "lib/bank/client.js",
+        "lines": [
+          34
+        ]
+      },
+      {
+        "path": "lib/bank/vietqr-server.js",
+        "lines": [
+          1,
+          12
+        ]
+      },
+      {
+        "path": "lib/catalog/public-apis.json",
+        "lines": [
+          1
+        ]
+      },
+      {
+        "path": "lib/content/dmca.js",
+        "lines": [
+          3,
+          7
+        ]
+      },
+      {
+        "path": "lib/email/gmail.js",
+        "lines": [
+          5,
+          9
+        ]
+      },
+      {
+        "path": "lib/email/otp-template.js",
+        "lines": [
+          4,
+          5
+        ]
+      },
+      {
+        "path": "lib/email/templates.js",
+        "lines": [
+          16,
+          21,
+          22,
+          23,
+          25
+        ]
+      },
+      {
+        "path": "lib/finance/einvoice.js",
+        "lines": [
+          2,
+          5
+        ]
+      },
+      {
+        "path": "lib/finance/sepay-v2.js",
+        "lines": [
+          47
+        ]
+      },
+      {
+        "path": "lib/finance/sepay.js",
+        "lines": [
+          3,
+          72
+        ]
+      },
+      {
+        "path": "lib/ghtk/client.js",
+        "lines": [
+          4,
+          5,
+          95
+        ]
+      },
+      {
+        "path": "lib/goship/client.js",
+        "lines": [
+          27,
+          75
+        ]
+      },
+      {
+        "path": "lib/goship/env.js",
+        "lines": [
+          18
+        ]
+      },
+      {
+        "path": "lib/goship/webhook-verify.js",
+        "lines": [
+          5
+        ]
+      },
+      {
+        "path": "lib/hooks/useChatSocket.js",
+        "lines": [
+          40
+        ]
+      },
+      {
+        "path": "lib/hooks/useMarketplaceFollows.js",
+        "lines": [
+          46,
+          81
+        ]
+      },
+      {
+        "path": "lib/hooks/useServerNotifications.js",
+        "lines": [
+          9,
+          14
+        ]
+      },
+      {
+        "path": "lib/image-optimize.js",
+        "lines": [
+          75
+        ]
+      },
+      {
+        "path": "lib/images/import-source.js",
+        "lines": [
+          36
+        ]
+      },
+      {
+        "path": "lib/kyc/read-document.js",
+        "lines": [
+          6
+        ]
+      },
+      {
+        "path": "lib/kyc/vnpt.js",
+        "lines": [
+          3,
+          38
+        ]
+      },
+      {
+        "path": "lib/legacy-listing-images.js",
+        "lines": [
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          19,
+          20,
+          21,
+          22,
+          23,
+          24,
+          25,
+          26
+        ]
+      },
+      {
+        "path": "lib/legal/documents.js",
+        "lines": [
+          6,
+          13,
+          20,
+          27,
+          34,
+          41,
+          48,
+          55,
+          62,
+          69,
+          76,
+          83,
+          90
+        ]
+      },
+      {
+        "path": "lib/listing-location.js",
+        "lines": [
+          58,
+          59
+        ]
+      },
+      {
+        "path": "lib/location-tools.js",
+        "lines": [
+          5,
+          11,
+          15
+        ]
+      },
+      {
+        "path": "lib/mobile/client.js",
+        "lines": [
+          15,
+          20,
+          41
+        ]
+      },
+      {
+        "path": "lib/mobile/device.js",
+        "lines": [
+          6
+        ]
+      },
+      {
+        "path": "lib/mobile/navigation-warm.js",
+        "lines": [
+          4
+        ]
+      },
+      {
+        "path": "lib/news-autopilot/ai.js",
+        "lines": [
+          11
+        ]
+      },
+      {
+        "path": "lib/news-autopilot/billing.js",
+        "lines": [
+          9,
+          17
+        ]
+      },
+      {
+        "path": "lib/news-autopilot/sources.js",
+        "lines": [
+          8,
+          9,
+          10,
+          11,
+          12,
+          15,
+          18
+        ]
+      },
+      {
+        "path": "lib/news-autopilot/vibi.js",
+        "lines": [
+          7,
+          33
+        ]
+      },
+      {
+        "path": "lib/news-autopilot/vietnam-sources.js",
+        "lines": [
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ]
+      },
+      {
+        "path": "lib/operations/access.js",
+        "lines": [
+          51,
+          52
+        ]
+      },
+      {
+        "path": "lib/polygon-api.js",
+        "lines": [
+          3,
+          6,
+          30
+        ]
+      },
+      {
+        "path": "lib/polygon.js",
+        "lines": [
+          11,
+          12
+        ]
+      },
+      {
+        "path": "lib/product/modules.js",
+        "lines": [
+          11
+        ]
+      },
+      {
+        "path": "lib/profile/address-server.js",
+        "lines": [
+          5
+        ]
+      },
+      {
+        "path": "lib/rental-care/calendar.js",
+        "lines": [
+          5,
+          6,
+          66,
+          204
+        ]
+      },
+      {
+        "path": "lib/runtime/staging.js",
+        "lines": [
+          5,
+          6,
+          16
+        ]
+      },
+      {
+        "path": "lib/security/identifiers.js",
+        "lines": [
+          19,
+          20
+        ]
+      },
+      {
+        "path": "lib/security/service.js",
+        "lines": [
+          55,
+          62
+        ]
+      },
+      {
+        "path": "lib/security/web-policy.js",
+        "lines": [
+          1,
+          2,
+          8
+        ]
+      },
+      {
+        "path": "lib/seed-data.js",
+        "lines": [
+          27,
+          54,
+          82,
+          105,
+          126,
+          152,
+          173,
+          206,
+          207,
+          208,
+          250,
+          292,
+          293,
+          323,
+          324,
+          354,
+          355,
+          385,
+          415,
+          416,
+          453,
+          454,
+          484,
+          514,
+          544,
+          545,
+          580,
+          610
+        ]
+      },
+      {
+        "path": "lib/shorts/metrics-client.js",
+        "lines": [
+          9,
+          15
+        ]
+      },
+      {
+        "path": "lib/store.js",
+        "lines": [
+          197,
+          1072,
+          1074,
+          1085,
+          1104,
+          1135,
+          1137,
+          1141,
+          1149,
+          1162,
+          1167,
+          1222,
+          1229
+        ]
+      },
+      {
+        "path": "lib/supabase/fetch.js",
+        "lines": [
+          1,
+          8
+        ]
+      },
+      {
+        "path": "lib/vn-address.js",
+        "lines": [
+          3,
+          53,
+          72
+        ]
+      },
+      {
+        "path": "mobile/android/app/src/main/assets/capacitor.config.json",
+        "lines": [
+          6
+        ]
+      },
+      {
+        "path": "mobile/capacitor.config.json",
+        "lines": [
+          6
+        ]
+      },
+      {
+        "path": "mobile/ios/App/App/capacitor.config.json",
+        "lines": [
+          6
+        ]
+      },
+      {
+        "path": "mobile/package-lock.json",
+        "lines": [
+          28,
+          37,
+          46,
+          55,
+          64,
+          98,
+          107,
+          116,
+          125,
+          134,
+          143,
+          152,
+          167,
+          181,
+          197,
+          213,
+          227,
+          245,
+          259,
+          279,
+          300,
+          313,
+          323,
+          333,
+          340,
+          350,
+          360,
+          371,
+          376,
+          386,
+          396,
+          406,
+          412,
+          416,
+          420,
+          427,
+          437,
+          447,
+          460,
+          473,
+          483,
+          493,
+          506,
+          513,
+          523,
+          538,
+          556,
+          566,
+          579,
+          586,
+          596,
+          606,
+          621,
+          634,
+          639,
+          646,
+          653,
+          663,
+          674,
+          679,
+          689,
+          702,
+          709,
+          722,
+          732,
+          742,
+          753,
+          758,
+          768,
+          781,
+          788,
+          814,
+          827,
+          832,
+          839,
+          849,
+          861,
+          866,
+          873,
+          888,
+          902,
+          912,
+          927,
+          942,
+          947,
+          953,
+          957,
+          961,
+          968,
+          975,
+          988,
+          1001,
+          1011,
+          1018,
+          1030,
+          1043,
+          1050,
+          1063,
+          1068,
+          1078,
+          1088,
+          1098,
+          1113,
+          1126,
+          1143,
+          1153,
+          1163,
+          1169,
+          1176,
+          1186,
+          1196,
+          1203,
+          1214,
+          1230,
+          1243,
+          1248,
+          1262,
+          1276,
+          1286,
+          1296,
+          1306
+        ]
+      },
+      {
+        "path": "scripts/audit-domain.mjs",
+        "lines": [
+          7,
+          18
+        ]
+      },
+      {
+        "path": "scripts/banner/package-deliverables.mjs",
+        "lines": [
+          20
+        ]
+      },
+      {
+        "path": "scripts/banner/vibi-images.mjs",
+        "lines": [
+          16
+        ]
+      },
+      {
+        "path": "scripts/build-api-catalog.mjs",
+        "lines": [
+          67
+        ]
+      },
+      {
+        "path": "scripts/capacity-chat-test.mjs",
+        "lines": [
+          7
+        ]
+      },
+      {
+        "path": "scripts/capacity-public-test.mjs",
+        "lines": [
+          3,
+          4,
+          6
+        ]
+      },
+      {
+        "path": "scripts/capacity-test.mjs",
+        "lines": [
+          23
+        ]
+      },
+      {
+        "path": "scripts/check-homelab.mjs",
+        "lines": [
+          42,
+          45,
+          56,
+          79
+        ]
+      },
+      {
+        "path": "scripts/check-polygon-api.mjs",
+        "lines": [
+          30,
+          36
+        ]
+      },
+      {
+        "path": "scripts/collect-prices.mjs",
+        "lines": [
+          18
+        ]
+      },
+      {
+        "path": "scripts/content/build-seo-library.mjs",
+        "lines": [
+          47
+        ]
+      },
+      {
+        "path": "scripts/content/save-seo-library.mjs",
+        "lines": [
+          61
+        ]
+      },
+      {
+        "path": "scripts/deploy-github.ps1",
+        "lines": [
+          21,
+          32,
+          35,
+          38
+        ]
+      },
+      {
+        "path": "scripts/diagnose-auth.mjs",
+        "lines": [
+          35,
+          47,
+          65
+        ]
+      },
+      {
+        "path": "scripts/operations-worker.mjs",
+        "lines": [
+          26,
+          29,
+          58,
+          62,
+          91,
+          93,
+          139,
+          171,
+          185
+        ]
+      },
+      {
+        "path": "scripts/prepare-mobile-assets.mjs",
+        "lines": [
+          9
+        ]
+      },
+      {
+        "path": "scripts/setup-mobile-tools.ps1",
+        "lines": [
+          9,
+          14
+        ]
+      },
+      {
+        "path": "scripts/stays-host-browser-check.js",
+        "lines": [
+          24
+        ]
+      },
+      {
+        "path": "scripts/sync-affiliate-catalog.mjs",
+        "lines": [
+          18,
+          42
+        ]
+      },
+      {
+        "path": "scripts/verify-feature-api.mjs",
+        "lines": [
+          14,
+          35,
+          42
+        ]
+      },
+      {
+        "path": "scripts/verify-feature-schema.mjs",
+        "lines": [
+          102,
+          138,
+          161,
+          245,
+          297,
+          330,
+          351,
+          394,
+          429
+        ]
+      },
+      {
+        "path": "scripts/verify-neighborhood-api.mjs",
+        "lines": [
+          17,
+          26,
+          41,
+          100,
+          209,
+          214,
+          220,
+          225,
+          281,
+          288,
+          291
+        ]
+      },
+      {
+        "path": "scripts/verify-neighborhood-production.mjs",
+        "lines": [
+          54,
+          71,
+          79
+        ]
+      },
+      {
+        "path": "scripts/verify-production-sync.mjs",
+        "lines": [
+          8,
+          10
+        ]
+      },
+      {
+        "path": "scripts/verify-production.mjs",
+        "lines": [
+          9,
+          35,
+          65,
+          91,
+          92,
+          98,
+          116,
+          124,
+          130,
+          136,
+          138,
+          142
+        ]
+      },
+      {
+        "path": "scripts/verify-rental-care-api.mjs",
+        "lines": [
+          12,
+          22,
+          28,
+          295,
+          298
+        ]
+      },
+      {
+        "path": "scripts/verify-rental-care-production.mjs",
+        "lines": [
+          54,
+          72,
+          87,
+          105
+        ]
+      },
+      {
+        "path": "scripts/watch-android-release.mjs",
+        "lines": [
+          4
+        ]
+      }
+    ],
+    "assets": [
+      {
+        "path": "app/admin/market-data/page.js",
+        "lines": [
+          29,
+          325,
+          326,
+          333,
+          338
+        ]
+      },
+      {
+        "path": "app/api/admin/market-data/route.js",
+        "lines": [
+          116
+        ]
+      },
+      {
+        "path": "deploy/vietnam/listing-required.sql",
+        "lines": [
+          4
+        ]
+      },
+      {
+        "path": "lib/catalog/public-apis.json",
+        "lines": [
+          1
+        ]
+      },
+      {
+        "path": "lib/catalog/test-catalog-20261021.js",
+        "lines": [
+          21,
+          22,
+          31
+        ]
+      },
+      {
+        "path": "lib/category-specs.js",
+        "lines": [
+          77
+        ]
+      },
+      {
+        "path": "lib/legacy-listing-images.js",
+        "lines": [
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          19,
+          20,
+          21,
+          22,
+          23,
+          24,
+          25,
+          26
+        ]
+      },
+      {
+        "path": "lib/seed-data.js",
+        "lines": [
+          27,
+          54,
+          82,
+          105,
+          126,
+          152,
+          173,
+          206,
+          207,
+          208,
+          250,
+          292,
+          293,
+          323,
+          324,
+          354,
+          355,
+          385,
+          415,
+          416,
+          453,
+          454,
+          484,
+          514,
+          544,
+          545,
+          580,
+          610
+        ]
+      },
+      {
+        "path": "mobile/package-lock.json",
+        "lines": [
+          30,
+          39,
+          48,
+          57,
+          67,
+          100,
+          109,
+          118,
+          127,
+          136,
+          145,
+          155,
+          170,
+          184,
+          200,
+          216,
+          230,
+          248,
+          262,
+          282,
+          303,
+          316,
+          326,
+          336,
+          343,
+          353,
+          363,
+          379,
+          389,
+          399,
+          423,
+          430,
+          440,
+          450,
+          463,
+          476,
+          486,
+          496,
+          509,
+          516,
+          526,
+          541,
+          559,
+          569,
+          582,
+          589,
+          599,
+          609,
+          624,
+          642,
+          649,
+          656,
+          666,
+          682,
+          692,
+          705,
+          712,
+          725,
+          735,
+          745,
+          761,
+          771,
+          784,
+          791,
+          817,
+          835,
+          842,
+          852,
+          869,
+          876,
+          891,
+          905,
+          915,
+          930,
+          964,
+          971,
+          978,
+          991,
+          1004,
+          1014,
+          1021,
+          1033,
+          1046,
+          1053,
+          1071,
+          1081,
+          1091,
+          1101,
+          1116,
+          1129,
+          1146,
+          1156,
+          1165,
+          1172,
+          1179,
+          1189,
+          1199,
+          1207,
+          1217,
+          1233,
+          1251,
+          1265,
+          1279,
+          1289,
+          1299,
+          1309
+        ]
+      },
+      {
+        "path": "scripts/banner/package-deliverables.mjs",
+        "lines": [
+          26
+        ]
+      },
+      {
+        "path": "scripts/build-api-catalog.mjs",
+        "lines": [
+          74,
+          75
+        ]
+      }
+    ]
+  }
+}

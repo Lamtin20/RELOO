@@ -1,0 +1,103 @@
+{
+  "version": "live-map-v1",
+  "status": "NEEDS_LEGAL_REVIEW",
+  "purpose": "User-initiated location discovery and optional publishing-location selection with public approximate listing positions",
+  "publicProjection": {
+    "fields": [
+      "listing ID",
+      "public title/category/price/image",
+      "ward/province label",
+      "stable approximate area center",
+      "revision"
+    ],
+    "approximation": "0.01-degree stable cell center; conservative 1600m public area label; no exact house/coordinate or private neighborhood membership data"
+  },
+  "privateLocation": {
+    "storage": "Existing private asset location_details only",
+    "newBackgroundTracking": false,
+    "gpsTrigger": "Explicit current-location button only",
+    "routingTrigger": "Separate explicit route-preview action; chosen origin stays transient client state until that request",
+    "geocodingTrigger": "User types a place or explicitly requests reverse lookup; request body, not query logging"
+  },
+  "providers": {
+    "status": "FREE_SELF_HOSTED_STACK_PREPARED_NOT_DEPLOYED",
+    "selection": [
+      "Martin/tilemaker regional OSM vectors",
+      "Photon1.3.0 with Vietnam OSM country dataset",
+      "OSRM regional driving"
+    ],
+    "billing": "No paid API/account/key; existing local CPU/RAM/storage required",
+    "activation": "Reviewed regional data, container scans, private-network staging/preflight and allowlists required; local Photon import and forward/reverse reads verified",
+    "forbiddenProductionDefaults": [
+      "public OSM raster tile servers",
+      "public Nominatim",
+      "public OSRM demo",
+      "MapLibre demo tiles",
+      "public Photon demo as unrestricted production infrastructure"
+    ],
+    "attribution": "OpenStreetMap contributors plus source/software notices; ODbL applicability requires accountable review",
+    "cache": "Private browser resource caching at most five minutes; confirm data/derivative rights before activation"
+  },
+  "events": {
+    "payload": "Public approximate projection only, versioned IDs and deltas",
+    "retention": "Proposed 24-hour replay window; backend timer checks prune hourly while service is running; cursor gaps force reconciliation. Not activated on production and requires accountable policy review",
+    "privateGPS": false,
+    "publicClientPrivileges": false
+  },
+  "softwareAsset": {
+    "name": "maplibre-gl",
+    "version": "6.16.0",
+    "license": "BSD-3-Clause",
+    "source": "Pinned npm dependency; unmodified worker copied to public/maps, byte identity test retained",
+    "licenseFile": "public/maps/MAPLIBRE-LICENSE.txt",
+    "newRasterAssets": false
+  },
+  "reviewOwners": [
+    "Product",
+    "Security",
+    "Privacy/Legal",
+    "Provider contract owner"
+  ],
+  "authority": {
+    "automaticPublication": false,
+    "payment": false,
+    "bookingAvailabilityGuarantee": false,
+    "legalCertification": false
+  },
+  "releaseStatus": "BLOCKED_PENDING_PROVIDER_DOMAIN_STAGING_AND_ACCOUNTABLE_REVIEWS",
+  "proposedPreciseLocation": {
+    "status": "IMPLEMENTED_NOT_DEPLOYED_NEEDS_LEGAL_REVIEW",
+    "purpose": "Private reusable home/entrance reference and explicit rental handover sharing",
+    "fields": [
+      "pin coordinates",
+      "source",
+      "confirmation/consent",
+      "device-reported GPS sample and timestamp",
+      "entrance instructions",
+      "owner-only WebP photo reference"
+    ],
+    "gpsTrigger": "Explicit allow-and-locate button; no background or mount-triggered GPS",
+    "operationCondition": "New listings and rental inquiries require fresh (<5 minutes) device-reported GPS accuracy strictly below20m and confirmed pin; not a surveyed/anti-spoof guarantee",
+    "sharing": "Public projections exclude all precise fields; inquiry handover pin/instructions only after separate sharing acknowledgement; photos remain owner-only",
+    "retention": "Default/profile and private listing metadata follow existing account/transaction retention review; photo removal via authenticated DELETE and account-deletion worker cleanup; unsaved files capped at10 perowner; orphan retention and backup cycle require review",
+    "rules": [
+      "RULE-006",
+      "RULE-010",
+      "RULE-015",
+      "RULE-016",
+      "RULE-017",
+      "RULE-020"
+    ],
+    "newPaidProvider": false,
+    "ownerRevision": {
+      "requiredAddressFields": [
+        "street",
+        "house number or recognizable address"
+      ],
+      "pinConfirmationCheckbox": false,
+      "newEntrancePhotoCollection": false,
+      "legacyPhotos": "Owner-only access/removal and deletion cleanup retained",
+      "status": "IMPLEMENTED_NOT_DEPLOYED"
+    }
+  }
+}

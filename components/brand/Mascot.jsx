@@ -1,13 +1,12 @@
 "use client";
 
-/** RELOOP RG-01 — 3D hero lock (100% master artwork fidelity) */
-const HERO_SRC = "/brand/reloop-hero-ui.png";
+import {Reloop} from '@/components/mascot/Reloop';
 
 const SIZE_PRESETS = { xs: 72, sm: 120, md: 200, lg: 280, xl: 360 };
 
 /**
- * Linh vật RELOOP — render trực tiếp từ golden master 3D.
- * @source RELOOP_CHARACTER_MASTER/reference/master-hero-lock.png
+ * Linh vật RELOOP — artwork raster từ ảnh chuẩn Character Lock v1.0.
+ * @source public/mascot/reloop/approved-v2/reference.png
  */
 export function Mascot({
   size = "md",
@@ -16,23 +15,5 @@ export function Mascot({
 }) {
   const px = typeof size === "number" ? size : SIZE_PRESETS[size] ?? SIZE_PRESETS.md;
 
-  return (
-    <div
-      className={["mascot", "reloop-mascot", className].filter(Boolean).join(" ")}
-      style={{ width: px, maxWidth: "100%" }}
-      title={title}
-    >
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img
-        src={HERO_SRC}
-        alt=""
-        className="reloop-mascot__img"
-        width={px}
-        height={px}
-        draggable={false}
-        decoding="async"
-        aria-hidden={!title}
-      />
-    </div>
-  );
+  return <Reloop size={px} animated={false} label={title} className={className}/>;
 }

@@ -1,23 +1,18 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { usePathname } from "next/navigation";
+import {useStorageSnapshot,notifyLocalDataChange} from "@/lib/hooks/useStorageSnapshot";
+
 import { Clock, X } from "lucide-react";
 import { getRecentSearches, removeRecentSearch } from "@/lib/search-history";
 
 export function HeaderRecentChips({ onSelect }) {
-  const pathname = usePathname();
-  const [recent, setRecent] = useState([]);
-
-  useEffect(() => {
-    setRecent(getRecentSearches().slice(0, 6));
-  }, [pathname]);
+  const recent=useStorageSnapshot(()=>getRecentSearches().slice(0,6));
 
   if (recent.length === 0) return null;
 
   function handleRemove(e, term) {
     e.stopPropagation();
-    setRecent(removeRecentSearch(term).slice(0, 6));
+    removeRecentSearch(term);notifyLocalDataChange();
   }
 
   return (

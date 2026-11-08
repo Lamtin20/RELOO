@@ -1,0 +1,9 @@
+[Unit]
+Description=Refresh RELOO Kubernetes release and observed health
+[Timer]
+OnBootSec=90s
+OnUnitInactiveSec=60s
+AccuracySec=5s
+Persistent=true
+[Install]
+WantedBy=timers.target

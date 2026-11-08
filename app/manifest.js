@@ -1,0 +1,2 @@
+export const dynamic='force-dynamic';
+export default function manifest(){return {name:'RELOO',short_name:'RELOO',description:'Thuê và cho thuê đồ cùng cộng đồng RELOO',lang:'vi',start_url:'/',display:'standalone',background_color:'#ffffff',theme_color:'#08784c',icons:[{src:'/api/brand/icon?kind=app',sizes:'512x512',type:'image/png',purpose:'any'},{src:'/api/brand/icon?kind=apple',sizes:'180x180',type:'image/png',purpose:'any'}]};}

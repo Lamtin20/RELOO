@@ -1,0 +1,190 @@
+.workspace-tools {
+  display: flex;
+  gap: 18px;
+  flex-wrap: wrap;
+  padding: 18px 0;
+  border-bottom: 1px solid #dce6df;
+  margin-bottom: 20px;
+}
+.workspace-tools a {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #347250;
+  font-size: 13px;
+  min-height: 38px;
+}
+.chat-agreement-tool {
+  background: #f6f8f7;
+  border-bottom: 1px solid #dfe7e2;
+}
+.chat-agreement-tool > summary {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  cursor: pointer;
+  padding: 11px 16px;
+  font-size: 12px;
+  color: #315d43;
+}
+.rental-agreements {
+  min-width: 0;
+}
+.rental-agreements h2 {
+  display: flex;
+  gap: 9px;
+  align-items: center;
+  font-size: 21px;
+}
+.rental-proposal {
+  border-top: 1px solid #dce6df;
+  border-bottom: 1px solid #dce6df;
+  padding: 24px 0;
+  margin: 20px 0;
+}
+.rental-proposal label {
+  display: flex;
+  flex-direction: column;
+  font-size: 13px;
+  gap: 9px;
+  margin-bottom: 18px;
+}
+.rental-proposal .profile-check {
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 9px;
+  line-height: 1.8;
+}
+.rental-proposal .input {
+  width: 100%;
+}
+.rental-empty {
+  padding: 32px 16px;
+  text-align: center;
+  border-top: 1px solid #dce6df;
+}
+.rental-empty svg {
+  color: #76957f;
+}
+.rental-empty p {
+  font-size: 14px;
+  color: #65816d;
+}
+.rental-empty a {
+  color: #167b4c;
+  font-size: 13px;
+}
+.rental-list {
+  display: grid;
+  gap: 18px;
+}
+.rental-item {
+  border: 1px solid #d6e3db;
+  border-radius: 8px;
+  padding: 22px;
+  background: #fff;
+  min-width: 0;
+}
+.rental-item header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+.rental-item header strong {
+  font-size: 16px;
+}
+.rental-item header p {
+  font-size: 12px;
+  color: #6f8274;
+  margin: 8px 0 0;
+}
+.rental-item dl {
+  display: flex;
+  gap: 24px;
+  flex-wrap: wrap;
+  margin: 20px 0;
+}
+.rental-item dt {
+  font-size: 12px;
+  color: #6f8274;
+}
+.rental-item dd {
+  font-size: 13px;
+  margin: 6px 0 0;
+}
+.rental-terms {
+  font-size: 13px;
+  line-height: 1.8;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.rental-integrity {
+  display: flex;
+  gap: 7px;
+  align-items: center;
+  font-size: 12px;
+  color: #2a7750;
+  line-height: 1.7;
+  margin: 18px 0;
+}
+.rental-timeline {
+  margin-top: 22px;
+  border-top: 1px solid #e1e9e4;
+  padding-top: 16px;
+}
+.rental-timeline summary {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  cursor: pointer;
+}
+.rental-timeline > div {
+  border-left: 2px solid #dce8df;
+  margin: 14px 0 0 7px;
+  padding: 2px 0 2px 16px;
+  font-size: 13px;
+}
+.rental-timeline small {
+  display: block;
+  color: #7a897e;
+  font-size: 11px;
+  margin: 6px 0;
+}
+.rental-timeline p {
+  font-size: 11px;
+  color: #6b7d70;
+  overflow-wrap: anywhere;
+  margin: 8px 0;
+}
+.rental-agreements--compact {
+  padding: 18px 16px;
+  border-bottom: 1px solid #dce6df;
+}
+.rental-agreements--compact h2 {
+  font-size: 16px;
+}
+.rental-agreements--compact .profile-section-heading {
+  margin-bottom: 12px;
+}
+.rental-agreements--compact > .profile-note {
+  font-size: 12px;
+  margin: 8px 0;
+}
+.rental-agreements--compact .rental-item {
+  padding: 14px;
+}
+@media (max-width: 600px) {
+  .rental-item {
+    padding: 16px;
+  }
+  .rental-item .profile-actions > .btn {
+    width: 100%;
+    justify-content: center;
+  }
+  .rental-agreements h2 {
+    font-size: 18px;
+  }
+}

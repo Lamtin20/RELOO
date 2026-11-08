@@ -1,0 +1,37 @@
+/* Shared listing cards: one continuous surface and a consistent content inset. */
+.app-shell .lc.lc--polished{border:1px solid #dfe8e2;border-radius:16px;background:#fff;overflow:hidden;min-width:0;height:100%;box-shadow:0 2px 8px #183c2910;text-decoration:none}
+.app-shell .lc.lc--polished:hover{border-color:#a9cbb9;box-shadow:0 8px 22px #183c2915}
+.app-shell .lc.lc--polished:focus-visible{outline:3px solid #008665;outline-offset:3px}
+.app-shell .lc--polished .lc__media{border-radius:0;aspect-ratio:4/3;flex-shrink:0;background:#f0f4f1}
+.app-shell .lc--polished .lc__body{padding:14px;gap:8px;flex:1;min-width:0}
+.app-shell .lc--polished .market-card-labels{display:flex;gap:6px;flex-wrap:wrap;min-width:0}
+.app-shell .lc--polished .market-label{font-size:11px;line-height:1.5;padding:3px 8px;border-radius:6px;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.app-shell .lc--polished .lc__price-row{gap:5px;flex-wrap:wrap;line-height:1.3;min-width:0}
+.app-shell .lc--polished .lc__price{font-size:20px;letter-spacing:-.4px}
+.app-shell .lc--polished .lc__price-unit{font-size:12px;white-space:nowrap}
+.app-shell .lc--polished .lc__title{font-size:14px;font-weight:600;line-height:1.5;min-height:42px;margin:0;overflow-wrap:anywhere}
+.app-shell .lc--polished .lc__location{margin-top:auto;padding-top:4px;font-size:12px;gap:5px;min-width:0;line-height:1.5}
+.app-shell .lc--polished .lc__location svg{flex-shrink:0}
+.app-shell .lc--polished .lc__meta{font-size:12px;gap:5px;line-height:1.5}
+.app-shell .lc--polished .lc__like{width:40px;height:40px;top:10px;right:10px;box-shadow:0 2px 8px #172e2420}
+.app-shell .lc--polished .lc__like svg{width:18px;height:18px}
+.app-shell .lc--polished .lc__distance{font-size:11px;padding:5px 8px;bottom:10px;left:10px}
+.app-shell .lc--polished .r-image-empty{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;color:#788c81;font-size:12px;background:linear-gradient(145deg,#f1f5f2,#e7eeea)}
+.market-explore-category{display:grid;gap:12px;padding-top:0;padding-bottom:12px;min-width:0}
+.market-explore-category__heading{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.market-explore-category__heading>strong{font-size:14px;color:#244d3e}
+.market-explore-category__heading .market-category-trigger{padding:8px 14px;border:1px solid #d8e4dd;border-radius:9px;background:#fff;color:#146348;min-height:44px;flex-shrink:0}
+.market-explore-category__heading .market-category-trigger:hover{background:#eaf5ee;border-color:#a9cbb9}
+.market-explore-category__heading .market-category-trigger:focus-visible{outline:2px solid #008665;outline-offset:2px}
+.market-explore-category .cat-pills-wrap{min-width:0;width:100%}
+@media(max-width:600px){
+ .app-shell .lc--polished .lc__body{padding:11px;gap:7px}
+ .app-shell .lc--polished .lc__price{font-size:17px}
+ .app-shell .lc--polished .lc__price-unit{font-size:11px}
+ .app-shell .lc--polished .lc__title{font-size:13px;line-height:1.5;min-height:39px}
+ .app-shell .lc--polished .lc__location,.app-shell .lc--polished .lc__meta{font-size:11px}
+ .app-shell .lc--polished .lc__like{width:36px;height:36px;top:8px;right:8px}
+ .app-shell .lc--polished .lc__distance{bottom:8px;left:8px;font-size:10px}
+ .market-explore-category__heading>strong{font-size:13px}
+}
+.lc--polished{position:relative}.lc--polished .lc__open{position:absolute;inset:0;border-radius:inherit;z-index:1}.lc--polished .lc__open:focus-visible{outline:2px solid #087f5b;outline-offset:-3px}.app-shell .lc--polished>.lc__like{position:absolute;z-index:2}.lc__unrated{color:#7c8d81;font-size:11px}

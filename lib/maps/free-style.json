@@ -1,0 +1,18 @@
+{
+  "version": 8,
+  "name": "RELOO OpenMapTiles",
+  "metadata": {"author": "RELOO", "schema": "OpenMapTiles", "license": "Original RELOO style; OSM data retains ODbL attribution"},
+  "sources": {"osm": {"type": "vector", "tiles": ["https://maps.reloo.internal/tiles/{z}/{x}/{y}.pbf"], "minzoom": 0, "maxzoom": 14, "attribution": "© OpenStreetMap contributors"}},
+  "glyphs": "https://maps.reloo.internal/fonts/{fontstack}/{range}.pbf",
+  "layers": [
+    {"id":"background","type":"background","paint":{"background-color":"#f3f5ef"}},
+    {"id":"landcover","type":"fill","source":"osm","source-layer":"landcover","paint":{"fill-color":"#dce8d5","fill-opacity":0.6}},
+    {"id":"water","type":"fill","source":"osm","source-layer":"water","paint":{"fill-color":"#bfdce9"}},
+    {"id":"waterways","type":"line","source":"osm","source-layer":"waterway","paint":{"line-color":"#bfdce9","line-width":1.5}},
+    {"id":"roads-outline","type":"line","source":"osm","source-layer":"transportation","paint":{"line-color":"#d3d5cc","line-width":["interpolate",["linear"],["zoom"],7,1,15,7]}},
+    {"id":"roads","type":"line","source":"osm","source-layer":"transportation","paint":{"line-color":"#ffffff","line-width":["interpolate",["linear"],["zoom"],7,0.5,15,5]}},
+    {"id":"boundaries","type":"line","source":"osm","source-layer":"boundary","paint":{"line-color":"#839b8d","line-width":1,"line-dasharray":[3,3]}},
+    {"id":"building","type":"fill","source":"osm","source-layer":"building","minzoom":13,"paint":{"fill-color":"#d6ded3","fill-outline-color":"#c0cbbd"}},
+    {"id":"places","type":"symbol","source":"osm","source-layer":"place","layout":{"text-field":["coalesce",["get","name:vi"],["get","name"]],"text-font":["Noto Sans Regular"],"text-size":["interpolate",["linear"],["zoom"],5,11,12,15]},"paint":{"text-color":"#345444","text-halo-color":"#ffffff","text-halo-width":1.5}}
+  ]
+}

@@ -1,0 +1,9 @@
+'use client';
+import Link from 'next/link';
+import {usePathname,useSearchParams} from 'next/navigation';
+import {ClipboardList,Building2,ShoppingBag,FileCheck2,Clock3} from 'lucide-react';
+import {PendingBadge,useAccountCounts} from './AccountCounts';
+import './account-workspace.css';
+const sections=[['/dashboard/orders','Thuê & cho thuê','orders',ClipboardList,'Tất cả đơn thuê của bạn'],['/dashboard/purchases','Mua & bán','purchases',ShoppingBag,'Xác nhận và bàn giao'],['/dashboard/agreements','Thỏa thuận thuê','agreements',FileCheck2,'Điều kiện hai bên']];
+export function OrderWorkspace(){const path=usePathname(),{error,refresh}=useAccountCounts();return <section className="aw-order-overview"><div className="aw-order-heading"><div><span>KHÔNG GIAN GIAO DỊCH</span><h1>Đơn hàng của tôi</h1><p>Chọn loại giao dịch. Nhãn cam cho biết số mục đang chờ; tổng số nằm bên dưới.</p></div><Link className="aw-help" href="/help">Cần hỗ trợ?</Link></div><nav className="aw-order-types" aria-label="Loại đơn hàng">{sections.map(([href,label,key,Icon,description])=><Link key={key} href={href} aria-current={path===href?'page':undefined}><div className="aw-order-type-top"><Icon size={23}/><span className="aw-pending-label"><PendingBadge name={key}/><small>đang chờ</small></span></div><h2>{label}</h2><p>{description}</p><div className="aw-order-type-total"><span>Tổng số</span><PendingBadge name={key} total/></div></Link>)}</nav>{error&&<p className="aw-count-error" role="status">Chưa đọc được số lượng. Danh sách vẫn giữ nguyên; <button onClick={refresh}>thử lại</button>.</p>}</section>;}
+export function OrderScopeTabs({tabs,active,onChange,label='Trạng thái đơn',counts,loading=false}){return <nav className="aw-status-tabs" aria-label={label}>{tabs.map(([id,name])=><button type="button" key={id} aria-current={active===id?'page':undefined} onClick={()=>onChange(id)}><span>{name}</span><b>{loading?'…':counts[id]??'—'}</b></button>)}</nav>;}

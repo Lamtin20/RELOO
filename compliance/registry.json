@@ -1,0 +1,749 @@
+{
+  "version": 1,
+  "effectiveAt": "2026-10-23",
+  "statement": "Technical controls do not certify legal compliance",
+  "references": {
+    "VN-DATA": {
+      "kind": "LEGAL_CANDIDATE",
+      "url": "https://vanban.chinhphu.vn/?pageid=27160&docid=214590",
+      "title": "91/2025/QH15 ? repository reference; verify current text/effectiveness/transition",
+      "verification": "NOT_VERIFIED",
+      "checkedAt": "2026-10-23",
+      "reason": "Direct HTTPS official page metadata retrieved; complete law, amendments and transition not reviewed",
+      "metadataVerification": "OFFICIAL_PAGE_READ",
+      "effectiveDateFromMetadata": "2026-01-01",
+      "applicability": "NEEDS_LEGAL_REVIEW",
+      "transitionAndAmendments": "NOT_VERIFIED"
+    },
+    "VN-CONSUMER": {
+      "kind": "LEGAL_CANDIDATE",
+      "url": "https://vanban.chinhphu.vn/?pageid=27160&docid=208363",
+      "title": "19/2023/QH15 ? consumer protection candidate",
+      "verification": "NOT_VERIFIED",
+      "checkedAt": "2026-10-23",
+      "metadataVerification": "OFFICIAL_PAGE_READ",
+      "effectiveDateFromMetadata": "2024-07-01",
+      "applicability": "NEEDS_LEGAL_REVIEW",
+      "transitionAndAmendments": "NOT_VERIFIED",
+      "reason": "Direct HTTPS official page metadata retrieved; complete law, amendments and transition not reviewed"
+    },
+    "VN-ECOMMERCE": {
+      "kind": "LEGAL_CANDIDATE",
+      "url": "https://vanban.chinhphu.vn/",
+      "title": "E-commerce instruments and amendments: counsel must resolve current consolidated regime",
+      "verification": "NOT_VERIFIED",
+      "checkedAt": "2026-10-23"
+    },
+    "WCAG22": {
+      "kind": "TECHNICAL_STANDARD",
+      "url": "https://www.w3.org/TR/WCAG22/",
+      "title": "WCAG 2.2 AA internal target, not legal certification",
+      "verification": "REFERENCE_ONLY",
+      "checkedAt": "2026-10-23"
+    },
+    "RELOO": {
+      "kind": "INTERNAL_POLICY",
+      "url": "AGENTS.md",
+      "title": "RELOO security, truthful UI and release evidence baseline",
+      "verification": "SOURCE_READ",
+      "checkedAt": "2026-10-23"
+    }
+  },
+  "rules": [
+    {
+      "id": "RULE-001",
+      "description": "Privacy Policy",
+      "scope": [
+        "Real",
+        "Admin",
+        "API",
+        "PWA",
+        "Mobile",
+        "World when implemented",
+        "future modules"
+      ],
+      "category": "LEGAL_REVIEW_REQUIRED",
+      "references": [
+        "RELOO",
+        "VN-DATA"
+      ],
+      "severity": "HIGH",
+      "method": "Review published document, effective date, hash/version and links from collection forms",
+      "evidenceRequired": [
+        "source-bound test artifacts",
+        "manual review where not mechanically decidable"
+      ],
+      "remediation": "Resolve with the listed owner, preserve user rights and attach current evidence; do not edit binding policy without approval.",
+      "status": "NOT_TESTED",
+      "owner": "Legal/Product",
+      "releaseRequired": true
+    },
+    {
+      "id": "RULE-002",
+      "description": "Terms of Service",
+      "scope": [
+        "Real",
+        "Admin",
+        "API",
+        "PWA",
+        "Mobile",
+        "World when implemented",
+        "future modules"
+      ],
+      "category": "LEGAL_REVIEW_REQUIRED",
+      "references": [
+        "RELOO",
+        "VN-CONSUMER"
+      ],
+      "severity": "HIGH",
+      "method": "Review contract version acceptance journal, disputes and obligations",
+      "evidenceRequired": [
+        "source-bound test artifacts",
+        "manual review where not mechanically decidable"
+      ],
+      "remediation": "Resolve with the listed owner, preserve user rights and attach current evidence; do not edit binding policy without approval.",
+      "status": "NOT_TESTED",
+      "owner": "Legal/Product",
+      "releaseRequired": true
+    },
+    {
+      "id": "RULE-003",
+      "description": "Cookie Policy",
+      "scope": [
+        "Real",
+        "Admin",
+        "API",
+        "PWA",
+        "Mobile",
+        "World when implemented",
+        "future modules"
+      ],
+      "category": "LEGAL_REVIEW_REQUIRED",
+      "references": [
+        "RELOO",
+        "VN-DATA"
+      ],
+      "severity": "HIGH",
+      "method": "Inventory actual cookies/storage categories, purposes, processors and settings",
+      "evidenceRequired": [
+        "source-bound test artifacts",
+        "manual review where not mechanically decidable"
+      ],
+      "remediation": "Resolve with the listed owner, preserve user rights and attach current evidence; do not edit binding policy without approval.",
+      "status": "NOT_TESTED",
+      "owner": "Privacy/Frontend",
+      "releaseRequired": true
+    },
+    {
+      "id": "RULE-004",
+      "description": "Refund and Cancellation Policy",
+      "scope": [
+        "Real",
+        "Admin",
+        "API",
+        "PWA",
+        "Mobile",
+        "World when implemented",
+        "future modules"
+      ],
+      "category": "LEGAL_REVIEW_REQUIRED",
+      "references": [
+        "RELOO",
+        "VN-CONSUMER"
+      ],
+      "severity": "HIGH",
+      "method": "Review per-domain snapshot, deadlines and amount before confirmation",
+      "evidenceRequired": [
+        "source-bound test artifacts",
+        "manual review where not mechanically decidable"
+      ],
+      "remediation": "Resolve with the listed owner, preserve user rights and attach current evidence; do not edit binding policy without approval.",
+      "status": "NOT_TESTED",
+      "owner": "Commerce/Legal",
+      "releaseRequired": true
+    },
+    {
+      "id": "RULE-005",
+      "description": "Data Minimization",
+      "scope": [
+        "Real",
+        "Admin",
+        "API",
+        "PWA",
+        "Mobile",
+        "World when implemented",
+        "future modules"
+      ],
+      "category": "LEGAL_REVIEW_REQUIRED",
+      "references": [
+        "RELOO",
+        "VN-DATA"
+      ],
+      "severity": "HIGH",
+      "method": "Diff field-purpose inventory; sensitive data requires accountable purpose and retention",
+      "evidenceRequired": [
+        "source-bound test artifacts",
+        "manual review where not mechanically decidable"
+      ],
+      "remediation": "Resolve with the listed owner, preserve user rights and attach current evidence; do not edit binding policy without approval.",
+      "status": "NOT_TESTED",
+      "owner": "Privacy/Domain owner",
+      "releaseRequired": true
+    },
+    {
+      "id": "RULE-006",
+      "description": "Consent Management",
+      "scope": [
+        "Real",
+        "Admin",
+        "API",
+        "PWA",
+        "Mobile",
+        "World when implemented",
+        "future modules"
+      ],
+      "category": "LEGAL_REVIEW_REQUIRED",
+      "references": [
+        "RELOO",
+        "VN-DATA"
+      ],
+      "severity": "HIGH",
+      "method": "Test unchecked defaults, distinct purposes, evidence and withdrawal",
+      "evidenceRequired": [
+        "source-bound test artifacts",
+        "manual review where not mechanically decidable"
+      ],
+      "remediation": "Resolve with the listed owner, preserve user rights and attach current evidence; do not edit binding policy without approval.",
+      "status": "NOT_TESTED",
+      "owner": "Privacy/Frontend",
+      "releaseRequired": true
+    },
+    {
+      "id": "RULE-007",
+      "description": "Purpose Transparency",
+      "scope": [
+        "Real",
+        "Admin",
+        "API",
+        "PWA",
+        "Mobile",
+        "World when implemented",
+        "future modules"
+      ],
+      "category": "LEGAL_REVIEW_REQUIRED",
+      "references": [
+        "RELOO",
+        "VN-DATA"
+      ],
+      "severity": "HIGH",
+      "method": "Map notice to actual collection, controller/processor and purpose changes",
+      "evidenceRequired": [
+        "source-bound test artifacts",
+        "manual review where not mechanically decidable"
+      ],
+      "remediation": "Resolve with the listed owner, preserve user rights and attach current evidence; do not edit binding policy without approval.",
+      "status": "NOT_TESTED",
+      "owner": "Privacy/Legal",
+      "releaseRequired": true
+    },
+    {
+      "id": "RULE-008",
+      "description": "Data Subject Rights",
+      "scope": [
+        "Real",
+        "Admin",
+        "API",
+        "PWA",
+        "Mobile",
+        "World when implemented",
+        "future modules"
+      ],
+      "category": "LEGAL_REVIEW_REQUIRED",
+      "references": [
+        "RELOO",
+        "VN-DATA"
+      ],
+      "severity": "HIGH",
+      "method": "Verify identity, request workflow, deadlines and lawful retention exceptions",
+      "evidenceRequired": [
+        "source-bound test artifacts",
+        "manual review where not mechanically decidable"
+      ],
+      "remediation": "Resolve with the listed owner, preserve user rights and attach current evidence; do not edit binding policy without approval.",
+      "status": "NOT_TESTED",
+      "owner": "Privacy/Support",
+      "releaseRequired": true
+    },
+    {
+      "id": "RULE-009",
+      "description": "Third-party Tracking",
+      "scope": [
+        "Real",
+        "Admin",
+        "API",
+        "PWA",
+        "Mobile",
+        "World when implemented",
+        "future modules"
+      ],
+      "category": "LEGAL_REVIEW_REQUIRED",
+      "references": [
+        "RELOO",
+        "VN-DATA"
+      ],
+      "severity": "HIGH",
+      "method": "Observe requests before/after consent and approved destination/transfer inventory",
+      "evidenceRequired": [
+        "source-bound test artifacts",
+        "manual review where not mechanically decidable"
+      ],
+      "remediation": "Resolve with the listed owner, preserve user rights and attach current evidence; do not edit binding policy without approval.",
+      "status": "NOT_TESTED",
+      "owner": "Privacy/Security",
+      "releaseRequired": true
+    },
+    {
+      "id": "RULE-010",
+      "description": "Copyright Assets",
+      "scope": [
+        "Real",
+        "Admin",
+        "API",
+        "PWA",
+        "Mobile",
+        "World when implemented",
+        "future modules"
+      ],
+      "category": "INTERNAL_POLICY",
+      "references": [
+        "RELOO",
+        "VN-DATA"
+      ],
+      "severity": "MEDIUM",
+      "method": "Verify asset hashes against provenance/license permissions; no inference from filename",
+      "evidenceRequired": [
+        "source-bound test artifacts",
+        "manual review where not mechanically decidable"
+      ],
+      "remediation": "Resolve with the listed owner, preserve user rights and attach current evidence; do not edit binding policy without approval.",
+      "status": "NOT_TESTED",
+      "owner": "Content/IP",
+      "releaseRequired": true
+    },
+    {
+      "id": "RULE-011",
+      "description": "Authentic Reviews",
+      "scope": [
+        "Real",
+        "Admin",
+        "API",
+        "PWA",
+        "Mobile",
+        "World when implemented",
+        "future modules"
+      ],
+      "category": "INTERNAL_POLICY",
+      "references": [
+        "RELOO",
+        "VN-DATA"
+      ],
+      "severity": "MEDIUM",
+      "method": "Verify production feedback origin, demo isolation and anti-spam controls",
+      "evidenceRequired": [
+        "source-bound test artifacts",
+        "manual review where not mechanically decidable"
+      ],
+      "remediation": "Resolve with the listed owner, preserve user rights and attach current evidence; do not edit binding policy without approval.",
+      "status": "NOT_TESTED",
+      "owner": "Trust and Safety",
+      "releaseRequired": true
+    },
+    {
+      "id": "RULE-012",
+      "description": "Marketing Claims",
+      "scope": [
+        "Real",
+        "Admin",
+        "API",
+        "PWA",
+        "Mobile",
+        "World when implemented",
+        "future modules"
+      ],
+      "category": "INTERNAL_POLICY",
+      "references": [
+        "RELOO",
+        "VN-CONSUMER"
+      ],
+      "severity": "MEDIUM",
+      "method": "Candidate text scan plus substantiation reviewed by content owner",
+      "evidenceRequired": [
+        "source-bound test artifacts",
+        "manual review where not mechanically decidable"
+      ],
+      "remediation": "Resolve with the listed owner, preserve user rights and attach current evidence; do not edit binding policy without approval.",
+      "status": "NOT_TESTED",
+      "owner": "Content/Legal",
+      "releaseRequired": true
+    },
+    {
+      "id": "RULE-013",
+      "description": "Business Transparency",
+      "scope": [
+        "Real",
+        "Admin",
+        "API",
+        "PWA",
+        "Mobile",
+        "World when implemented",
+        "future modules"
+      ],
+      "category": "LEGAL_REVIEW_REQUIRED",
+      "references": [
+        "RELOO",
+        "VN-CONSUMER"
+      ],
+      "severity": "HIGH",
+      "method": "Verify operator/contact and e-commerce model; do not invent license numbers",
+      "evidenceRequired": [
+        "source-bound test artifacts",
+        "manual review where not mechanically decidable"
+      ],
+      "remediation": "Resolve with the listed owner, preserve user rights and attach current evidence; do not edit binding policy without approval.",
+      "status": "NOT_TESTED",
+      "owner": "Operations/Legal",
+      "releaseRequired": true
+    },
+    {
+      "id": "RULE-014",
+      "description": "Image Accessibility",
+      "scope": [
+        "Real",
+        "Admin",
+        "API",
+        "PWA",
+        "Mobile",
+        "World when implemented",
+        "future modules"
+      ],
+      "category": "TECHNICAL_STANDARD",
+      "references": [
+        "WCAG22"
+      ],
+      "severity": "MEDIUM",
+      "method": "Static alt candidates plus rendered accessible-name/decorative review",
+      "evidenceRequired": [
+        "source-bound test artifacts",
+        "manual review where not mechanically decidable"
+      ],
+      "remediation": "Resolve with the listed owner, preserve user rights and attach current evidence; do not edit binding policy without approval.",
+      "status": "NOT_TESTED",
+      "owner": "Frontend/QA",
+      "releaseRequired": true
+    },
+    {
+      "id": "RULE-015",
+      "description": "Color Contrast",
+      "scope": [
+        "Real",
+        "Admin",
+        "API",
+        "PWA",
+        "Mobile",
+        "World when implemented",
+        "future modules"
+      ],
+      "category": "TECHNICAL_STANDARD",
+      "references": [
+        "WCAG22"
+      ],
+      "severity": "MEDIUM",
+      "method": "Measure computed foreground/background including dark mode; manual image/gradient review",
+      "evidenceRequired": [
+        "source-bound test artifacts",
+        "manual review where not mechanically decidable"
+      ],
+      "remediation": "Resolve with the listed owner, preserve user rights and attach current evidence; do not edit binding policy without approval.",
+      "status": "NOT_TESTED",
+      "owner": "Design/QA",
+      "releaseRequired": true
+    },
+    {
+      "id": "RULE-016",
+      "description": "Keyboard Accessibility",
+      "scope": [
+        "Real",
+        "Admin",
+        "API",
+        "PWA",
+        "Mobile",
+        "World when implemented",
+        "future modules"
+      ],
+      "category": "TECHNICAL_STANDARD",
+      "references": [
+        "WCAG22"
+      ],
+      "severity": "MEDIUM",
+      "method": "Keyboard journeys, focus, labels/errors and valid dialog traps",
+      "evidenceRequired": [
+        "source-bound test artifacts",
+        "manual review where not mechanically decidable"
+      ],
+      "remediation": "Resolve with the listed owner, preserve user rights and attach current evidence; do not edit binding policy without approval.",
+      "status": "NOT_TESTED",
+      "owner": "Frontend/QA",
+      "releaseRequired": true
+    },
+    {
+      "id": "RULE-017",
+      "description": "Tracking Configuration Audit",
+      "scope": [
+        "Real",
+        "Admin",
+        "API",
+        "PWA",
+        "Mobile",
+        "World when implemented",
+        "future modules"
+      ],
+      "category": "INTERNAL_POLICY",
+      "references": [
+        "RELOO",
+        "VN-DATA"
+      ],
+      "severity": "HIGH",
+      "method": "Compare production scripts/network to registry; sensitive log candidates",
+      "evidenceRequired": [
+        "source-bound test artifacts",
+        "manual review where not mechanically decidable"
+      ],
+      "remediation": "Resolve with the listed owner, preserve user rights and attach current evidence; do not edit binding policy without approval.",
+      "status": "NOT_TESTED",
+      "owner": "Security/Privacy",
+      "releaseRequired": true
+    },
+    {
+      "id": "RULE-018",
+      "description": "Cookie Consent Gate",
+      "scope": [
+        "Real",
+        "Admin",
+        "API",
+        "PWA",
+        "Mobile",
+        "World when implemented",
+        "future modules"
+      ],
+      "category": "INTERNAL_POLICY",
+      "references": [
+        "RELOO",
+        "VN-DATA"
+      ],
+      "severity": "HIGH",
+      "method": "Browser fresh/accept/reject/revoke states and mobile/desktop banner",
+      "evidenceRequired": [
+        "source-bound test artifacts",
+        "manual review where not mechanically decidable"
+      ],
+      "remediation": "Resolve with the listed owner, preserve user rights and attach current evidence; do not edit binding policy without approval.",
+      "status": "NOT_TESTED",
+      "owner": "Privacy/QA",
+      "releaseRequired": true
+    },
+    {
+      "id": "RULE-019",
+      "description": "Jurisdiction Check",
+      "scope": [
+        "Real",
+        "Admin",
+        "API",
+        "PWA",
+        "Mobile",
+        "World when implemented",
+        "future modules"
+      ],
+      "category": "LEGAL_REVIEW_REQUIRED",
+      "references": [
+        "RELOO",
+        "VN-DATA"
+      ],
+      "severity": "HIGH",
+      "method": "Official current source, effective date, transition, territory and responsible counsel",
+      "evidenceRequired": [
+        "source-bound test artifacts",
+        "manual review where not mechanically decidable"
+      ],
+      "remediation": "Resolve with the listed owner, preserve user rights and attach current evidence; do not edit binding policy without approval.",
+      "status": "NOT_TESTED",
+      "owner": "Legal",
+      "releaseRequired": true
+    },
+    {
+      "id": "RULE-020",
+      "description": "Continuous Compliance",
+      "scope": [
+        "Real",
+        "Admin",
+        "API",
+        "PWA",
+        "Mobile",
+        "World when implemented",
+        "future modules"
+      ],
+      "category": "INTERNAL_POLICY",
+      "references": [
+        "RELOO",
+        "VN-DATA"
+      ],
+      "severity": "HIGH",
+      "method": "Source-bound artifact evidence, periodic checks and release enforcement",
+      "evidenceRequired": [
+        "source-bound test artifacts",
+        "manual review where not mechanically decidable"
+      ],
+      "remediation": "Resolve with the listed owner, preserve user rights and attach current evidence; do not edit binding policy without approval.",
+      "status": "NOT_TESTED",
+      "owner": "Release/Security",
+      "releaseRequired": true
+    },
+    {
+      "id": "RELOO-RENTAL",
+      "description": "Rental/neighborhood identity, private address/location, deposits and disputes",
+      "scope": [
+        "rental/neighborhood"
+      ],
+      "category": "INTERNAL_POLICY",
+      "references": [
+        "RELOO",
+        "VN-DATA",
+        "VN-CONSUMER"
+      ],
+      "severity": "HIGH",
+      "method": "Existing domain regression tests plus accountable legal/operational review; not implemented is NOT_TESTED until release exclusion is approved",
+      "evidenceRequired": [
+        "domain tests",
+        "owner applicability decision"
+      ],
+      "remediation": "Block launch of affected module until evidence is reviewed",
+      "status": "NOT_TESTED",
+      "owner": "Domain owner + Security + Legal",
+      "releaseRequired": true
+    },
+    {
+      "id": "RELOO-JOBS",
+      "description": "Candidate CV/identity purpose, employer ACL, scam reports and retention",
+      "scope": [
+        "jobs"
+      ],
+      "category": "INTERNAL_POLICY",
+      "references": [
+        "RELOO",
+        "VN-DATA",
+        "VN-CONSUMER"
+      ],
+      "severity": "HIGH",
+      "method": "Existing domain regression tests plus accountable legal/operational review; not implemented is NOT_TESTED until release exclusion is approved",
+      "evidenceRequired": [
+        "domain tests",
+        "owner applicability decision"
+      ],
+      "remediation": "Block launch of affected module until evidence is reviewed",
+      "status": "NOT_TESTED",
+      "owner": "Domain owner + Security + Legal",
+      "releaseRequired": true
+    },
+    {
+      "id": "RELOO-STAYS",
+      "description": "Server price/inventory, policy/quote snapshots and authorized images",
+      "scope": [
+        "stays"
+      ],
+      "category": "INTERNAL_POLICY",
+      "references": [
+        "RELOO",
+        "VN-DATA",
+        "VN-CONSUMER"
+      ],
+      "severity": "HIGH",
+      "method": "Existing domain regression tests plus accountable legal/operational review; not implemented is NOT_TESTED until release exclusion is approved",
+      "evidenceRequired": [
+        "domain tests",
+        "owner applicability decision"
+      ],
+      "remediation": "Block launch of affected module until evidence is reviewed",
+      "status": "NOT_TESTED",
+      "owner": "Domain owner + Security + Legal",
+      "releaseRequired": true
+    },
+    {
+      "id": "RELOO-PAYMENTS",
+      "description": "Webhook authenticity, idempotency, no card logs, refunds and reconciliation",
+      "scope": [
+        "payments"
+      ],
+      "category": "INTERNAL_POLICY",
+      "references": [
+        "RELOO",
+        "VN-DATA",
+        "VN-CONSUMER"
+      ],
+      "severity": "HIGH",
+      "method": "Existing domain regression tests plus accountable legal/operational review; not implemented is NOT_TESTED until release exclusion is approved",
+      "evidenceRequired": [
+        "domain tests",
+        "owner applicability decision"
+      ],
+      "remediation": "Block launch of affected module until evidence is reviewed",
+      "status": "NOT_TESTED",
+      "owner": "Domain owner + Security + Legal",
+      "releaseRequired": true
+    },
+    {
+      "id": "RELOO-TRUST",
+      "description": "Evidence quality, appeal/manual review, private allegations/IP data",
+      "scope": [
+        "security"
+      ],
+      "category": "INTERNAL_POLICY",
+      "references": [
+        "RELOO",
+        "VN-DATA",
+        "VN-CONSUMER"
+      ],
+      "severity": "HIGH",
+      "method": "Existing domain regression tests plus accountable legal/operational review; not implemented is NOT_TESTED until release exclusion is approved",
+      "evidenceRequired": [
+        "domain tests",
+        "owner applicability decision"
+      ],
+      "remediation": "Block launch of affected module until evidence is reviewed",
+      "status": "NOT_TESTED",
+      "owner": "Domain owner + Security + Legal",
+      "releaseRequired": true
+    },
+    {
+      "id": "RELOO-WORLD",
+      "description": "Avatar/profile/chat, minors, UGC and digital assets approval",
+      "scope": [
+        "World"
+      ],
+      "category": "INTERNAL_POLICY",
+      "references": [
+        "RELOO",
+        "VN-DATA",
+        "VN-CONSUMER"
+      ],
+      "severity": "HIGH",
+      "method": "Existing domain regression tests plus accountable legal/operational review; not implemented is NOT_TESTED until release exclusion is approved",
+      "evidenceRequired": [
+        "domain tests",
+        "owner applicability decision"
+      ],
+      "remediation": "Block launch of affected module until evidence is reviewed",
+      "status": "NOT_TESTED",
+      "owner": "Domain owner + Security + Legal",
+      "releaseRequired": true
+    }
+  ]
+}

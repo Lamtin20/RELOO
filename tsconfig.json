@@ -1,6 +1,5 @@
 {
   "compilerOptions": {
-    "baseUrl": ".",
     "paths": {
       "@/*": [
         "./*"
@@ -33,7 +32,15 @@
     "lib/**/*",
     "scripts/**/*",
     ".next/types/**/*.ts",
-    ".next/dev/types/**/*.ts"
+    ".next/dev/types/**/*.ts",
+    ".next-neighborhood-test/types/**/*.ts",
+    ".next-neighborhood-test/dev/types/**/*.ts",
+    ".next-care-test/types/**/*.ts",
+    ".next-care-test/dev/types/**/*.ts",
+    ".next-analytics-test/types/**/*.ts",
+    ".next-analytics-test/dev/types/**/*.ts",
+    ".next-stays-test/types/**/*.ts",
+    ".next-stays-test/dev/types/**/*.ts"
   ],
   "exclude": [
     "node_modules"

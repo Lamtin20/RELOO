@@ -1,0 +1,16 @@
+[Unit]
+Description=Synchronize healthy RELOO image and private dependency into K3s
+After=docker.service k3s.service tailscaled.service
+Requires=k3s.service docker.service
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/python3 /srv/reloo/kubernetes/reconcile.py sync
+User=root
+UMask=0077
+TimeoutStartSec=480
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectHome=true
+ProtectSystem=full
+LogRateLimitIntervalSec=30s
+LogRateLimitBurst=20

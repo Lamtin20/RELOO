@@ -1,0 +1,132 @@
+{
+  "compiler": "0.8.28+commit.7893614a.Emscripten.clang",
+  "abi": [
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "initialWriter",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "nonpayable",
+      "type": "constructor"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "bytes32",
+          "name": "eventId",
+          "type": "bytes32"
+        },
+        {
+          "indexed": true,
+          "internalType": "bytes32",
+          "name": "streamKey",
+          "type": "bytes32"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint64",
+          "name": "sequence",
+          "type": "uint64"
+        },
+        {
+          "indexed": false,
+          "internalType": "bytes32",
+          "name": "digest",
+          "type": "bytes32"
+        }
+      ],
+      "name": "Anchored",
+      "type": "event"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "bytes32",
+          "name": "streamKey",
+          "type": "bytes32"
+        },
+        {
+          "internalType": "uint64",
+          "name": "sequence",
+          "type": "uint64"
+        },
+        {
+          "internalType": "bytes32",
+          "name": "previousDigest",
+          "type": "bytes32"
+        },
+        {
+          "internalType": "bytes32",
+          "name": "recordDigest",
+          "type": "bytes32"
+        }
+      ],
+      "name": "anchor",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "bytes32",
+          "name": "",
+          "type": "bytes32"
+        }
+      ],
+      "name": "digests",
+      "outputs": [
+        {
+          "internalType": "bytes32",
+          "name": "",
+          "type": "bytes32"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "bytes32",
+          "name": "",
+          "type": "bytes32"
+        }
+      ],
+      "name": "streams",
+      "outputs": [
+        {
+          "internalType": "uint64",
+          "name": "count",
+          "type": "uint64"
+        },
+        {
+          "internalType": "bytes32",
+          "name": "head",
+          "type": "bytes32"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "writer",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    }
+  ],
+  "bytecode": "0x60a060405234801561000f575f5ffd5b5060405161050638038061050683398101604081905261002e9161008b565b6001600160a01b03811661007a5760405162461bcd60e51b815260206004820152600f60248201526e15dc9a5d195c881c995c5d5a5c9959608a1b604482015260640160405180910390fd5b6001600160a01b03166080526100b8565b5f6020828403121561009b575f5ffd5b81516001600160a01b03811681146100b1575f5ffd5b9392505050565b6080516104306100d65f395f81816085015261013201526104305ff3fe608060405234801561000f575f5ffd5b506004361061004a575f3560e01c806301ac42931461004e578063453a2abc146100805780637f00e393146100bf5780637f7bd2df146100d4575b5f5ffd5b61006d61005c36600461036b565b5f6020819052908152604090205481565b6040519081526020015b60405180910390f35b6100a77f000000000000000000000000000000000000000000000000000000000000000081565b6040516001600160a01b039091168152602001610077565b6100d26100cd366004610382565b610127565b005b6101076100e236600461036b565b600160208190525f9182526040909120805491015467ffffffffffffffff9091169082565b6040805167ffffffffffffffff9093168352602083019190915201610077565b336001600160a01b037f000000000000000000000000000000000000000000000000000000000000000016146101925760405162461bcd60e51b815260206004820152600b60248201526a577269746572206f6e6c7960a81b60448201526064015b60405180910390fd5b83158015906101a057508015155b6101db5760405162461bcd60e51b815260206004820152600c60248201526b115b5c1d1e48191a59d95cdd60a21b6044820152606401610189565b5f848152600160208190526040909120805490916102039167ffffffffffffffff16906103c8565b67ffffffffffffffff168467ffffffffffffffff161480156102285750806001015483145b6102635760405162461bcd60e51b815260206004820152600c60248201526b27baba1037b31037b93232b960a11b6044820152606401610189565b5f858560405160200161028d92919091825260c01b6001600160c01b031916602082015260280190565b60408051601f1981840301815291815281516020928301205f81815292839052912054909150156102f35760405162461bcd60e51b815260206004820152601060248201526f105b1c9958591e48185b98da1bdc995960821b6044820152606401610189565b5f8181526020818152604091829020859055835467ffffffffffffffff191667ffffffffffffffff88169081178555600185018690558251908152908101859052879183917fc88d5c7068287610e1024b29dfd53872465fb3912264c5fd60a38595ef9bdd00910160405180910390a3505050505050565b5f6020828403121561037b575f5ffd5b5035919050565b5f5f5f5f60808587031215610395575f5ffd5b84359350602085013567ffffffffffffffff811681146103b3575f5ffd5b93969395505050506040820135916060013590565b67ffffffffffffffff81811683821601908111156103f457634e487b7160e01b5f52601160045260245ffd5b9291505056fea2646970667358221220a7a684671b25f70bcd1fc33606b185bbcbf6f4e84101480cbe1d0f6173358fb464736f6c634300081c0033"
+}

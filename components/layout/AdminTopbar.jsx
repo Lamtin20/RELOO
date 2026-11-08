@@ -1,141 +1,26 @@
-"use client";
-
-import { useMemo, useState } from "react";
-import { usePathname } from "next/navigation";
-import { Menu, Bell, ChevronDown, LogOut, UserCog } from "lucide-react";
-import { useAuth, useReloo } from "@/lib/store";
-import { PageBackButton } from "@/components/navigation/PageBackButton";
-
-export function AdminTopbar({ onMenuClick }) {
-  const pathname = usePathname();
-  const showBack = pathname !== "/admin";
-  const { user, users, switchUser, logout } = useAuth();
-  const { state } = useReloo();
-  const [menuOpen, setMenuOpen] = useState(false);
-
-  const unread = useMemo(
-    () => (state.notifications || []).filter((n) => n.userId === user?.id && !n.read).length,
-    [state.notifications, user?.id]
-  );
-
-  const initials = (user?.name || "?")
-    .split(" ")
-    .map((p) => p[0])
-    .slice(0, 2)
-    .join("")
-    .toUpperCase();
-
-  return (
-    <header className="admin-topbar">
-      {showBack && (
-        <PageBackButton
-          variant="topbar"
-          fallback="/admin"
-          showLabel={false}
-          className="admin-topbar__back"
-        />
-      )}
-      <button
-        type="button"
-        className="btn btn-ghost btn-icon"
-        onClick={onMenuClick}
-        aria-label="Mở menu"
-        style={{ display: "none" }}
-        id="admin-mobile-menu-btn"
-      >
-        <Menu size={18} />
-      </button>
-
-      <span className="admin-topbar-title">Bảng điều khiển quản trị</span>
-
-      <div className="admin-topbar-spacer" />
-
-      <button type="button" className="btn btn-ghost btn-icon" aria-label="Thông báo" style={{ position: "relative" }}>
-        <Bell size={18} />
-        {unread > 0 && (
-          <span
-            style={{
-              position: "absolute",
-              top: 4,
-              right: 4,
-              width: 8,
-              height: 8,
-              borderRadius: "50%",
-              background: "var(--danger)",
-            }}
-          />
-        )}
-      </button>
-
-      <div style={{ position: "relative" }}>
-        <button
-          type="button"
-          className="admin-user-chip"
-          onClick={() => setMenuOpen((v) => !v)}
-        >
-          <div className="avatar" style={{ width: 30, height: 30, fontSize: 12 }}>
-            {user?.avatar ? (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img src={user.avatar} alt={user.name} />
-            ) : (
-              initials
-            )}
-          </div>
-          <div style={{ textAlign: "left", lineHeight: 1.2 }}>
-            <div style={{ fontSize: 13, fontWeight: 600 }}>{user?.name || "Ẩn danh"}</div>
-            <div style={{ fontSize: 11, color: "var(--muted)" }}>Quản trị viên</div>
-          </div>
-          <ChevronDown size={14} style={{ color: "var(--muted)" }} />
-        </button>
-
-        {menuOpen && (
-          <div
-            className="panel"
-            style={{
-              position: "absolute",
-              right: 0,
-              top: "calc(100% + 8px)",
-              width: 260,
-              padding: 8,
-              zIndex: 200,
-            }}
-            onMouseLeave={() => setMenuOpen(false)}
-          >
-            <div style={{ padding: "8px 10px", fontSize: 12, color: "var(--muted)" }}>
-              Chuyển đổi vai trò xem thử (demo)
-            </div>
-            {users?.map((u) => (
-              <button
-                key={u.id}
-                type="button"
-                className="admin-nav-link"
-                style={{ width: "100%", justifyContent: "flex-start" }}
-                onClick={() => {
-                  switchUser(u.id);
-                  setMenuOpen(false);
-                }}
-              >
-                <UserCog size={15} />
-                {u.name}
-                <span style={{ marginLeft: "auto", fontSize: 11, color: "var(--muted)" }}>{u.role}</span>
-              </button>
-            ))}
-            <div className="divider" style={{ margin: "6px 0" }} />
-            <button
-              type="button"
-              className="admin-nav-link"
-              style={{ width: "100%", justifyContent: "flex-start", color: "var(--danger)" }}
-              onClick={() => {
-                logout();
-                setMenuOpen(false);
-              }}
-            >
-              <LogOut size={15} />
-              Đăng xuất
-            </button>
-          </div>
-        )}
-      </div>
-    </header>
-  );
+'use client';
+import {useEffect,useRef,useState} from 'react';
+import Link from 'next/link';
+import {usePathname} from 'next/navigation';
+import {Menu,ChevronDown,LogOut,UserCog} from 'lucide-react';
+import {useAuth} from '@/lib/store';
+import {useLocale} from '@/components/settings/LocaleProvider';
+import {uiText} from '@/lib/i18n/ui';
+import {PageBackButton} from '@/components/navigation/PageBackButton';
+import {NotificationBell} from '@/components/notifications/NotificationCenter';
+export function AdminTopbar({onMenuClick,menuExpanded=false}){
+ const pathname=usePathname(),{user,logout}=useAuth(),{locale}=useLocale(),t=v=>uiText(locale,v);
+ const [menuOpen,setMenuOpen]=useState(false),[busy,setBusy]=useState(false),[error,setError]=useState(''),wrapper=useRef(null),trigger=useRef(null);
+ useEffect(()=>{if(!menuOpen)return;const close=e=>{if(!wrapper.current?.contains(e.target))setMenuOpen(false)},key=e=>{if(e.key==='Escape'){setMenuOpen(false);trigger.current?.focus()}};document.addEventListener('pointerdown',close);document.addEventListener('keydown',key);return()=>{document.removeEventListener('pointerdown',close);document.removeEventListener('keydown',key)}},[menuOpen]);
+ const initials=(user?.name||'?').split(' ').map(p=>p[0]).slice(0,2).join('').toUpperCase();
+ async function signOut(){if(busy)return;setBusy(true);setError('');try{await logout();setMenuOpen(false)}catch{setError(t('Chưa đăng xuất được. Vui lòng thử lại.'))}finally{setBusy(false)}}
+ return <header className="admin-topbar">
+  {pathname!=='/admin'&&<PageBackButton variant="topbar" fallback="/admin" showLabel={false} className="admin-topbar__back"/>}
+  <button type="button" className="btn btn-ghost btn-icon" onClick={onMenuClick} aria-label={t('Mở menu')} aria-expanded={menuExpanded} aria-controls="reloo-admin-sidebar" style={{display:'none'}} id="admin-mobile-menu-btn"><Menu size={20}/></button>
+  <span className="admin-topbar-title">{t('Quản trị RELOO')}</span><div className="admin-topbar-spacer"/>
+  <NotificationBell className="btn btn-ghost btn-icon"/>
+  <div ref={wrapper} style={{position:'relative'}}><button ref={trigger} type="button" className="admin-user-chip" aria-expanded={menuOpen} onClick={()=>setMenuOpen(v=>!v)}><span className="avatar" style={{width:30,height:30,fontSize:12}}>{initials}</span><span>{user?.name||t('Tài khoản')}</span><ChevronDown size={14}/></button>
+   {menuOpen&&<div className="admin-user-menu"><Link href="/dashboard/profile" onClick={()=>setMenuOpen(false)}><UserCog size={17}/>{t('Cài đặt tài khoản')}</Link><button type="button" disabled={busy} onClick={signOut}><LogOut size={17}/>{t(busy?'Đang đăng xuất…':'Đăng xuất')}</button>{error&&<p role="alert">{error}</p>}</div>}
+  </div>
+ </header>;
 }

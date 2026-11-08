@@ -1,363 +1,265 @@
 "use client";
-
+import {IdentityStatusBadge} from '@/components/profile/IdentityStatus';
+import {createPortal} from 'react-dom';
+import {NotificationBell} from '@/components/notifications/NotificationCenter';
+import {useLocale} from '@/components/settings/LocaleProvider';
+import {homeDiscoveryCopy} from '@/lib/i18n/home-discovery';
+import {uiText} from '@/lib/i18n/ui';
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { useRouter, usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import {
+  Calculator,
+  Building2,
   ChevronDown,
-  Bell,
-  Menu,
-  X,
   Heart,
-  MessageCircle,
-  LayoutGrid,
-  PackagePlus,
-  ClipboardList,
   LayoutDashboard,
-  ShieldCheck,
   LogOut,
-  UserRoundCheck,
+  MessageCircle,
+  Plus,
+  Search,
+  ShieldCheck,
+  ShoppingBag,
+  UserRound,
+  ClipboardList,
+  Package,
 } from "lucide-react";
-
+import {
+  Menu as MenuShape,
+  X as CloseShape,
+  ChevronDown as ChevronDownShape,
+  ChevronUp as ChevronUpShape,
+  LayoutGrid as GridShape,
+  Bell as BellShape,
+  BellRing as BellRingShape,
+} from "lucide";
+import { MorphIcon } from "@/components/ui/MorphIcon";
 import { useAuth, useNotifications } from "@/lib/store";
 import { CATEGORIES } from "@/lib/constants";
 import { Icon } from "@/components/ui";
 import { Logo } from "@/components/brand/Logo";
 import { LocationChip } from "@/components/location/LocationChip";
-import { PageBackButton } from "@/components/navigation/PageBackButton";
-import { SearchBox } from "@/components/search/SearchBox";
-import { HeaderRecentChips } from "@/components/layout/HeaderRecentChips";
+import { HeaderWeather } from "./HeaderWeather";
+import {accountCopy} from '@/lib/i18n/account';
+import {accountSessionCopy} from '@/lib/i18n/account-session';
+import './account-session.css';
+import {text as neighborhoodText} from '@/lib/neighborhood/content';
 
-const QUICK_DEMO_USERS = [
-  { id: "user_minh", label: "Minh Nguyễn (Chủ đồ)" },
-  { id: "user_lan", label: "Lan Trần (Người thuê)" },
-  { id: "user_admin", label: "RELOO Admin" },
+const NAV = [
+  { href: "/", label: "Trang chủ" },
+  { href: "/explore", label: "Khám phá sản phẩm" },
+  { href: "/noi-khu", label: neighborhoodText('vi-VN','brand'),icon:Building2 },
+  { href: "/dat-phong", label: "Đặt phòng" },
+  { href: "/lend", label: "Đăng sản phẩm", icon: Plus },
+  { href: "/pricing", label: "Định giá", icon: Calculator },
+  { href: "/cashback", label: "Mua sắm hoàn tiền", icon: ShoppingBag },
+  { href: "/safety", label: "An toàn", icon: ShieldCheck },
+  { href: "/news", label: "Tin tức" },
 ];
-
 export function Header() {
+ const {locale}=useLocale(),t=v=>uiText(locale,v),a=accountCopy[locale]||accountCopy['vi-VN'],st=accountSessionCopy[locale]||accountSessionCopy['vi-VN'];
   const router = useRouter();
   const pathname = usePathname();
-  const showExploreBack = pathname === "/explore";
-  const isHome = pathname === "/";
-  const { user, isAuthenticated, isAdmin, logout, switchUser } = useAuth();
+  const { user, isAuthenticated, isAdmin, logout } = useAuth();
   const { unreadCount } = useNotifications();
-
-  const [categoryOpen, setCategoryOpen] = useState(false);
-  const [userMenuOpen, setUserMenuOpen] = useState(false);
-  const [mobileOpen, setMobileOpen] = useState(false);
-
-  const categoryRef = useRef(null);
-  const userMenuRef = useRef(null);
-
+  const [query, setQuery] = useState("");
+  const [menu, setMenu] = useState(null);
+  const [error, setError] = useState("");
+  const compact=['/','/account'].includes(pathname),hc=homeDiscoveryCopy[locale]||homeDiscoveryCopy['vi-VN'];
+  const headerRef = useRef(null), accountTriggerRef = useRef(null), accountMenuRef = useRef(null);
+  useEffect(()=>{if(menu==='account'&&isAuthenticated)accountMenuRef.current?.querySelector('a')?.focus({preventScroll:true});},[menu,isAuthenticated]);
   useEffect(() => {
-    function handleClickOutside(e) {
-      if (categoryRef.current && !categoryRef.current.contains(e.target)) {
-        setCategoryOpen(false);
-      }
-      if (userMenuRef.current && !userMenuRef.current.contains(e.target)) {
-        setUserMenuOpen(false);
-      }
+    function outside(event) {
+      if (!headerRef.current?.contains(event.target)&&!accountMenuRef.current?.contains(event.target)) setMenu(null);
     }
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
+    function escape(event) {
+      if (event.key === "Escape") {setMenu(null);if(accountMenuRef.current)accountTriggerRef.current?.focus();}
+    }
+    document.addEventListener("mousedown", outside);
+    document.addEventListener("keydown", escape);
+    return () => {
+      document.removeEventListener("mousedown", outside);
+      document.removeEventListener("keydown", escape);
+    };
   }, []);
-
-  function handleSearch(query) {
-    const q = query.trim();
-    router.push(q ? `/explore?q=${encodeURIComponent(q)}` : "/explore");
-    setMobileOpen(false);
+  function search(event) {
+    event.preventDefault();
+    setMenu(null);
+    router.push(
+      query.trim()
+        ? `/explore?q=${encodeURIComponent(query.trim())}`
+        : "/explore",
+    );
   }
-
-  function handleSwitchUser(userId) {
-    switchUser(userId);
-    setUserMenuOpen(false);
+  async function signOut() {
+    try {
+      await logout();
+      setMenu(null);
+    } catch {
+      setError("Chưa đăng xuất được. Vui lòng thử lại.");
+    }
   }
-
-  function handleLogout() {
-    logout();
-    setUserMenuOpen(false);
-  }
-
-
   return (
-    <header
-      className={`site-header${showExploreBack ? " site-header--with-back" : ""}${isHome ? " site-header--home" : ""}`}
-    >
-      <div className="container site-header__inner">
-        {showExploreBack && (
-          <PageBackButton
-            variant="topbar"
-            fallback="/"
-            showLabel={false}
-            className="header-back"
-            ariaLabel="Quay lại"
-          />
-        )}
+    <header className={"site-header r-header"+(compact?" r-header--compact":"")} ref={headerRef}>
+      <div className="container r-header__top">
         <button
           type="button"
-          className="header-icon-btn header-hamburger header-hamburger--lead"
-          aria-label="Mở menu"
-          onClick={() => setMobileOpen((v) => !v)}
+          className="r-header__mobile-menu icon-tool"
+          title={menu === "categories" ? "Đóng danh mục" : "Mở danh mục"}
+          aria-label={menu === "categories" ? "Đóng danh mục" : "Mở danh mục"}
+          aria-expanded={menu === "categories"}
+          onClick={() => setMenu(menu === "categories" ? null : "categories")}
         >
-          {mobileOpen ? <X size={20} /> : <Menu size={20} />}
+          <MorphIcon
+            icon={menu === "categories" ? CloseShape : MenuShape}
+            size={20}
+          />
         </button>
-
-        <Logo size="md" className="header-logo" />
-
-        <div className="header-loc-chip header-loc-chip--desktop">
-          <LocationChip compact autoRequest />
+        <Logo size={34} className="r-header__logo" />
+        {compact&&<nav className="r-header__primary" aria-label={hc.intent}><Link href="/cms/about">{hc.about}</Link><Link href="/lend">{hc.owner}</Link>{isAuthenticated&&<Link href="/dashboard/orders">{hc.orders}</Link>}</nav>}<div className="r-header__location">
+          <LocationChip compact />
         </div>
-
-        <SearchBox
-          variant="header"
-          onSearch={handleSearch}
-          className="header-search-wrap"
-          placeholder="Tìm sản phẩm..."
-        />
-
-        <nav className="header-nav header-nav--desktop">
-          <Link href="/explore" className="header-nav__link">
-            Khám phá
-          </Link>
-
-          <div className="header-nav__item" ref={categoryRef}>
-            <button
-              type="button"
-              className="header-nav__link"
-              onClick={() => setCategoryOpen((v) => !v)}
-            >
-              Danh mục
-              <ChevronDown size={14} />
-            </button>
-            {categoryOpen && (
-              <div className="header-dropdown header-dropdown--categories">
-                <div className="header-dropdown__grid">
-                  {CATEGORIES.map((cat) => (
-                    <Link
-                      key={cat.id}
-                      href={`/explore?category=${cat.slug}`}
-                      className="header-dropdown__link"
-                      onClick={() => setCategoryOpen(false)}
-                      title={cat.name}
-                    >
-                      <span className="header-dropdown__icon">
-                        <Icon name={cat.icon} size="sm" />
-                      </span>
-                      <span className="header-dropdown__label">{cat.name}</span>
-                    </Link>
-                  ))}
-                </div>
-                <Link
-                  href="/explore"
-                  className="header-dropdown__all"
-                  onClick={() => setCategoryOpen(false)}
-                >
-                  Xem tất cả danh mục
-                </Link>
-              </div>
-            )}
-          </div>
-
-          <Link href="/dashboard/assets/new" className="header-nav__link">
-            Cho thuê
-          </Link>
-          <Link href="/dashboard/orders" className="header-nav__link">
-            Đơn hàng
-          </Link>
-        </nav>
-
-        <div className="header-actions">
-          <Link
-            href={isAuthenticated ? "/dashboard/messages" : "/auth"}
-            className="header-icon-btn header-chat"
-            aria-label="Trao đổi liên hệ"
-            title="Trao đổi với người thuê / cho thuê"
+        {compact?<div className="r-header__home-space"/>:<form className="r-header__search" onSubmit={search} role="search">
+          <Search size={18} />
+          <input
+            aria-label="Tìm đồ trên RELOO"
+            placeholder="Tìm máy ảnh, đồ camping, laptop..."
+            value={query}
+            onChange={(event) => setQuery(event.target.value)}
+          />
+          <button type="submit" title="Tìm kiếm" aria-label="Tìm kiếm">
+            <Search size={17} />
+          </button>
+        </form>}
+        <div className="r-header__actions">
+          {!compact&&<HeaderWeather />}
+          {isAuthenticated&&<Link href="/dashboard/orders" className="r-header__orders" aria-label={a.orders} title={a.orders}><ClipboardList size={18}/><span>{a.orders}</span></Link>}
+          {isAuthenticated&&<Link
+            href="/explore?saved=1"
+            className="icon-tool r-header__saved"
+            title="Tin đã lưu"
+            aria-label="Tin đã lưu"
           >
-            <MessageCircle size={19} />
-          </Link>
+            <Heart size={20} />
+          </Link>}
+          {isAuthenticated&&<Link
+            href={
+              isAuthenticated
+                ? "/dashboard/messages"
+                : "/auth?next=%2Fdashboard%2Fmessages"
+            }
+            className="icon-tool r-header__messages"
+            title="Tin nhắn"
+            aria-label="Tin nhắn"
+          >
+            <MessageCircle size={21} />
+          </Link>}
           {isAuthenticated ? (
             <>
-              <Link
-                href="/notifications"
-                className="header-icon-btn header-icon-btn--notif header-notif"
-                aria-label="Thông báo"
+              <NotificationBell className="icon-tool r-header__bell"/>
+              <button
+                type="button"
+                className="r-header__account"
+                ref={accountTriggerRef}
+                aria-controls={menu==='account'?'reloo-account-menu':undefined}
+                onClick={() => setMenu(menu === "account" ? null : "account")}
+                aria-expanded={menu === "account"}
+                aria-label={st.menu}
+                title="Tài khoản"
               >
-                <Bell size={19} />
-                {unreadCount > 0 && (
-                  <span className="header-bell__badge">
-                    {unreadCount > 9 ? "9+" : unreadCount}
-                  </span>
-                )}
-              </Link>
-
-              <div className="header-nav__item header-nav__item--user header-user-wrap" ref={userMenuRef}>
-                <button
-                  type="button"
-                  className="header-user"
-                  aria-expanded={userMenuOpen}
-                  aria-haspopup="true"
-                  onClick={() => {
-                    setUserMenuOpen((v) => !v);
-                    setMobileOpen(false);
-                  }}
-                >
-                  <img src={user.avatar} alt={user.name} className="header-user__avatar" />
-                  <div className="header-user__info">
-                    <span className="header-user__name">{user.name}</span>
-                  </div>
-                  <ChevronDown size={14} className="header-user__chev" />
-                </button>
-
-                {userMenuOpen && (
-                  <>
-                    <button
-                      type="button"
-                      className="header-user-menu-backdrop"
-                      aria-label="Đóng menu"
-                      onClick={() => setUserMenuOpen(false)}
-                    />
-                    <div className="header-user-menu">
-                    <div className="header-user-menu__header">
-                      <img src={user.avatar} alt={user.name} />
-                      <div>
-                        <div className="header-user__name">{user.name}</div>
-                        <div className="header-user__role">
-                          Trust Score {user.trustScore ?? 0}/1000
-                        </div>
-                      </div>
-                    </div>
-
-                    <Link
-                      href="/account"
-                      className="header-user-menu__item"
-                      onClick={() => setUserMenuOpen(false)}
-                    >
-                      <UserRoundCheck size={15} /> Tài khoản của tôi
-                    </Link>
-                    <Link
-                      href="/explore?saved=1"
-                      className="header-user-menu__item"
-                      onClick={() => setUserMenuOpen(false)}
-                    >
-                      <Heart size={15} /> Yêu thích
-                    </Link>
-                    <Link
-                      href="/dashboard"
-                      className="header-user-menu__item"
-                      onClick={() => setUserMenuOpen(false)}
-                    >
-                      <LayoutDashboard size={15} /> Trang quản lý
-                    </Link>
-                    {isAdmin && (
-                      <Link
-                        href="/admin"
-                        className="header-user-menu__item"
-                        onClick={() => setUserMenuOpen(false)}
-                      >
-                        <ShieldCheck size={15} /> Quản trị hệ thống
-                      </Link>
-                    )}
-
-                    <div className="header-user-menu__divider" />
-                    <div className="header-user-menu__section-label">
-                      Chuyển vai trò demo
-                    </div>
-                    {QUICK_DEMO_USERS.map((demo) => (
-                      <button
-                        key={demo.id}
-                        type="button"
-                        className={`header-user-menu__item ${
-                          user.id === demo.id ? "header-user-menu__item--active" : ""
-                        }`}
-                        onClick={() => handleSwitchUser(demo.id)}
-                      >
-                        <UserRoundCheck size={15} /> {demo.label}
-                      </button>
-                    ))}
-
-                    <div className="header-user-menu__divider" />
-                    <button
-                      type="button"
-                      className="header-user-menu__item header-user-menu__item--danger"
-                      onClick={handleLogout}
-                    >
-                      <LogOut size={15} /> Đăng xuất
-                    </button>
-                  </div>
-                  </>
-                )}
-              </div>
+                {user.avatar?<img src={user.avatar} alt="" />:<span className="r-header__avatar-fallback"><UserRound size={20}/></span>}
+                <span className="r-header__account-name"><span>{user.name}</span><IdentityStatusBadge/></span>
+                <MorphIcon
+                  icon={menu === "account" ? ChevronUpShape : ChevronDownShape}
+                  size={13}
+                />
+              </button>
             </>
           ) : (
-            <Link href="/auth" className="btn btn-primary btn-sm header-login-btn">
-              Đăng nhập
-            </Link>
-          )}
-
-        </div>
-      </div>
-
-      <HeaderRecentChips onSelect={handleSearch} />
-
-      {mobileOpen && (
-        <div className="header-mobile-panel">
-          <div className="header-mobile-panel__brand">
-            <Logo size="sm" />
-            <div className="header-loc-chip">
-              <LocationChip compact autoRequest />
-            </div>
-          </div>
-          <div className="header-mobile-panel__links">
-            <Link
-              href="/explore"
-              className="header-mobile-panel__link"
-              onClick={() => setMobileOpen(false)}
-            >
-              <LayoutGrid size={17} /> Khám phá
-            </Link>
-            <Link
-              href="/dashboard/assets/new"
-              className="header-mobile-panel__link"
-              onClick={() => setMobileOpen(false)}
-            >
-              <PackagePlus size={17} /> Cho thuê
-            </Link>
-            <Link
-              href="/dashboard/orders"
-              className="header-mobile-panel__link"
-              onClick={() => setMobileOpen(false)}
-            >
-              <ClipboardList size={17} /> Đơn thuê
-            </Link>
-            {isAuthenticated && (
-              <Link
-                href="/dashboard/messages"
-                className="header-mobile-panel__link"
-                onClick={() => setMobileOpen(false)}
-              >
-                <MessageCircle size={17} /> Trao đổi liên hệ
-              </Link>
-            )}
-            {isAuthenticated && (
-              <Link
-                href="/dashboard"
-                className="header-mobile-panel__link"
-                onClick={() => setMobileOpen(false)}
-              >
-                <LayoutDashboard size={17} /> Trang quản lý
-              </Link>
-            )}
-            {!isAuthenticated && (
+            <>
+              <Link href="/auth/register" className="r-header__register">{a.register}</Link>
               <Link
                 href="/auth"
-                className="header-mobile-panel__link"
-                onClick={() => setMobileOpen(false)}
+                className="r-header__login"
+                aria-label="Đăng nhập"
+                title="Đăng nhập"
               >
-                <UserRoundCheck size={17} /> Đăng nhập
+                <UserRound size={18} />
+                <span>{t('Đăng nhập')}</span>
               </Link>
-            )}
+            </>
+          )}
+        </div>
+      </div>
+      {!compact&&<div className="r-header__nav-row">
+        <div className="container">
+          <button
+            type="button"
+            className="r-header__categories"
+            aria-expanded={menu === "categories"}
+            onClick={() => setMenu(menu === "categories" ? null : "categories")}
+          >
+            <MorphIcon
+              icon={menu === "categories" ? CloseShape : GridShape}
+              size={17}
+            />{t('Danh mục')}
+            <MorphIcon
+              icon={menu === "categories" ? ChevronUpShape : ChevronDownShape}
+              size={13}
+            />
+          </button>
+          <nav aria-label="Điều hướng chính">
+            {NAV.map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                aria-current={pathname === item.href ? "page" : undefined}
+                className={pathname === item.href ? "is-active" : ""}
+              >
+                {item.icon && <item.icon size={16} />}
+                <span>{item.href==='/dat-phong'?(locale==='en-US'?'Stays':'Đặt phòng'):t(item.label)}</span>
+              </Link>
+            ))}
+          </nav>
+          {isAuthenticated&&<Link href="/dashboard/assets" className="r-header__manage">{t('Quản lý tin')} <ChevronDown size={13} /></Link>}
+        </div>
+      </div>
+      }
+      {menu === "categories" && (
+        <div className="r-header__category-menu container">
+          <div className="r-header__category-grid">
+            {CATEGORIES.map((category) => (
+              <Link
+                key={category.id}
+                href={`/explore?category=${category.slug}`}
+                onClick={() => setMenu(null)}
+              >
+                <Icon name={category.icon} size="sm" />
+                <span>{category.name}</span>
+              </Link>
+            ))}
           </div>
         </div>
+      )}
+      {isAuthenticated && menu === "account" && typeof document!=='undefined' && createPortal(
+        <div id="reloo-account-menu" ref={accountMenuRef} className="r-header__account-menu r-header__account-menu--floating">
+          <div>
+            <strong>{user?.name}</strong>
+            <span>{user?.activationStatus==='ACTIVE'?a.active:user?.activationStatus==='PENDING'?a.activationPending:['SUSPENDED','BLOCKED'].includes(user?.activationStatus)?a.suspended:st.account}</span>
+          </div>
+          {[["/account",a.title,UserRound],["/dashboard/orders",a.orders,ClipboardList],["/dashboard/messages",a.messages,MessageCircle],["/dashboard/assets",a.assets,Package],["/explore?saved=1",a.saved,Heart],["/verify-identity",a.identity,ShieldCheck]].map(([path,label,Icon])=><Link key={path} href={path} onClick={()=>setMenu(null)}><Icon size={17}/>{label}</Link>)}
+          {isAdmin && (
+            <Link href="/admin/risk" onClick={() => setMenu(null)}>
+              <ShieldCheck size={17} />
+              {st.admin}
+            </Link>
+          )}
+          <button type="button" onClick={signOut}>
+            <LogOut size={17} />
+            {a.logout}
+          </button>
+          {error && <p role="alert">{error}</p>}
+        </div>,document.body
       )}
     </header>
   );

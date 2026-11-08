@@ -1,0 +1,3 @@
+import {assertOrigin,readJson,rateLimit,errorResponse,HttpError} from '@/lib/server/http';
+import {placeSearch} from '@/lib/maps/provider';
+export async function POST(request){try{assertOrigin(request);rateLimit(request,'map-places',15);const input=await readJson(request,2000);return Response.json({ok:true,places:await placeSearch(input)},{headers:{'Cache-Control':'private,no-store'}});}catch(error){return errorResponse(error instanceof HttpError?error:new HttpError(error.message==='MAP_QUERY_INVALID'?400:503,'Chưa tra cứu được địa điểm. Bạn có thể chọn thủ công.','MAP_PLACES_UNAVAILABLE'));}}

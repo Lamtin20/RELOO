@@ -1,0 +1,85 @@
+services:
+  app:
+    volumes:
+      - /srv/reloo/data/private-evidence:/private-evidence
+      - /srv/reloo/data/public-media:/public-media
+    networks:
+      - default
+      - homelab
+
+  worker:
+    security_opt: [no-new-privileges:true]
+    cap_drop: [ALL]
+    read_only: true
+    tmpfs:
+      - /tmp:size=256m,uid=1000,gid=1000
+    cpus: 1.5
+    mem_limit: 1536m
+    pids_limit: 256
+    user: "1000:1000"
+    environment:
+      HOME: /tmp
+      NEWS_AI_URL: http://news-ai:11434
+      NEWS_AI_MODEL: qwen2.5:7b
+    build:
+      context: .
+      dockerfile: deploy/worker/Dockerfile
+    env_file: .env.production
+    restart: unless-stopped
+    init: true
+    volumes:
+      - /srv/reloo/data/private-evidence:/private-evidence
+      - /srv/reloo/data/public-media:/public-media
+    networks: [default, homelab]
+  kyc:
+    build: ./deploy/kyc
+    environment:
+      KYC_SERVICE_TOKEN: ${KYC_SERVICE_TOKEN:?Set private KYC service token}
+    restart: unless-stopped
+    volumes:
+      - /srv/reloo/data/face-models:/root/.deepface
+    networks: [default]
+    mem_limit: 3g
+  ai:
+    image: ollama/ollama:0.11.4
+    restart: unless-stopped
+    volumes:
+      - /srv/reloo/data/ai-models:/root/.ollama
+    networks: [default]
+    mem_limit: 2g
+  news-ai:
+    image: ollama/ollama:0.11.4
+    restart: unless-stopped
+    volumes:
+      - /srv/reloo/data/news-ai-models:/root/.ollama
+    networks: [default]
+    mem_limit: 6g
+    cpus: 3
+    pids_limit: 256
+    security_opt: [no-new-privileges:true]
+    cap_drop: [ALL]
+    read_only: true
+    tmpfs:
+      - /tmp:size=256m
+  edge:
+    image: nginx:1.28-alpine
+    restart: unless-stopped
+    environment:
+      RELOO_EDGE_SECRET: ${RELOO_EDGE_SECRET:?Set trusted edge secret}
+      NGINX_ENVSUBST_FILTER: '^RELOO_EDGE_SECRET$'
+    volumes:
+      - ./deploy/edge.conf.template:/etc/nginx/templates/default.conf.template:ro
+    networks: [default, homelab]
+  browser:
+    build: ./deploy/browser
+    restart: unless-stopped
+    init: true
+    environment:
+      LOOKUP_SERVICE_TOKEN: ${LOOKUP_SERVICE_TOKEN:?Set private browser transport token}
+    networks: [default]
+    mem_limit: 1g
+
+networks:
+  homelab:
+    external: true
+    name: ${RELOO_DOCKER_NETWORK:?Set the existing homelab Docker network}

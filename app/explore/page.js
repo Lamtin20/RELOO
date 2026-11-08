@@ -1,11 +1,21 @@
 "use client";
+import {PartnerDiscovery} from '@/components/search/PartnerDiscovery';
 
+
+import Link from 'next/link';
+import {useLocale} from '@/components/settings/LocaleProvider';
+import {discoveryCopy} from '@/lib/i18n/discovery';
 import { Suspense, useEffect, useMemo, useRef, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { ChevronDown, MapPin, Navigation } from "lucide-react";
+import { CalendarDays, ChevronDown, MapPin, Navigation, X } from "lucide-react";
 
 import { MarketplaceShell } from "@/components/layout/MarketplaceShell";
+import {DiscoveryIntent} from '@/components/search/DiscoveryIntent';
+import { ExploreFilters } from "@/components/search/ExploreFilters";
+import { CategorySheet } from "@/components/listings/CategorySheet";
 import { CategoryPills } from "@/components/listings/CategoryPills";
+import {locationLabel} from '@/lib/location-label';
+import {ExploreResultsMap} from '@/components/location/ExploreResultsMap';
 import { ListingGrid } from "@/components/listings/ListingGrid";
 import { SearchBox } from "@/components/search/SearchBox";
 import {
@@ -13,11 +23,23 @@ import {
   EXPLORE_DEFAULT_RADIUS,
 } from "@/components/location/ExploreLocationSheet";
 import { useGeolocation } from "@/lib/hooks/useGeolocation";
-import { buildLocationAddress, formatProvinceFilterLabel, listingMatchesProvince, listingMatchesWards } from "@/lib/listing-location";
+import { useSavedListings } from "@/lib/hooks/useSavedListings";
+import {
+  buildLocationAddress,
+  formatProvinceFilterLabel,
+  listingMatchesProvince,
+  listingMatchesWards,
+} from "@/lib/listing-location";
 import { fetchWards } from "@/lib/vn-address";
 import { useAuth, useListings, useReloo } from "@/lib/store";
 import { listingDistanceKm } from "@/lib/utils";
 import { setLastViewedCategory } from "@/lib/search-history";
+import { getSpecGroupId } from "@/lib/category-specs";
+import { CATEGORY_MAIN_LABELS } from "@/lib/category-artwork";
+import { rentalDays } from "@/lib/rental-estimate";
+import {calendarRange} from '@/lib/rental-calendar';
+import {Recommendations,usePersonalizedProducts} from '@/components/rental-care/Recommendations';
+import {SearchInterestSignal} from '@/components/rental-care/InterestSignal';
 
 const SORT_OPTIONS = [
   { value: "nearest", label: "Gần nhất" },
@@ -28,22 +50,29 @@ const SORT_OPTIONS = [
   { value: "newest", label: "Mới nhất" },
 ];
 
-const DEFAULT_ADDRESS = "Quận 1, TP.HCM";
+const DEFAULT_ADDRESS = "";
 
+function ExploreEntry(){const params=useSearchParams(),channel=params.get('channel');return ['BRAND','AFFILIATE'].includes(channel)?<PartnerDiscovery channel={channel}/>:<ExploreContent/>;}
 function ExploreContent() {
   const router = useRouter();
+  const {locale}=useLocale(),copy=discoveryCopy[locale]||discoveryCopy["vi-VN"];
   const searchParams = useSearchParams();
   const { state, actions } = useReloo();
   const { user } = useAuth();
   const guestLocation = state.guestLocation;
   const geo = useGeolocation();
+  const { savedIds } = useSavedListings();
+  const savedOnly = searchParams.get("saved") === "1";
 
   const categorySlug = searchParams.get("category") || "";
   const q = searchParams.get("q") || "";
+  const estimatedDays = rentalDays(searchParams.get("days"));
+  const selectedRental={startDate:searchParams.get('start')||'',endDate:searchParams.get('end')||'',startTime:searchParams.get('pickupTime')||'',endTime:searchParams.get('returnTime')||''};
   const sortParam = searchParams.get("sort") || "";
   const locParam = searchParams.get("loc") || "";
   const locMode = searchParams.get("locMode") || "current";
-  const radiusParam = searchParams.get("radius") || String(EXPLORE_DEFAULT_RADIUS);
+  const radiusParam =
+    searchParams.get("radius") || String(EXPLORE_DEFAULT_RADIUS);
   const wardsParam = searchParams.get("wards") || "";
 
   const defaultAddress = useMemo(() => {
@@ -57,44 +86,44 @@ function ExploreContent() {
   const [searchInput, setSearchInput] = useState(q);
   const [minPrice, setMinPrice] = useState(searchParams.get("min") || "");
   const [maxPrice, setMaxPrice] = useState(searchParams.get("max") || "");
-  const [radius, setRadius] = useState(Number(radiusParam) || EXPLORE_DEFAULT_RADIUS);
+  const [radius, setRadius] = useState(
+    Number(radiusParam) || EXPLORE_DEFAULT_RADIUS,
+  );
   const [sheetOpen, setSheetOpen] = useState(false);
   const priceDebounceRef = useRef(null);
-  const geoInitRef = useRef(false);
+
   const wardsInitRef = useRef(false);
 
   const sort = sortParam || "nearest";
 
-  useEffect(() => setSearchInput(q), [q]);
+  useEffect(() => {
+    const timer = setTimeout(() => setSearchInput(q), 0);
+    return () => clearTimeout(timer);
+  }, [q]);
   useEffect(() => {
     if (categorySlug) setLastViewedCategory(categorySlug);
   }, [categorySlug]);
-  useEffect(() => setMinPrice(searchParams.get("min") || ""), [searchParams]);
-  useEffect(() => setMaxPrice(searchParams.get("max") || ""), [searchParams]);
   useEffect(() => {
-    setRadius(Number(radiusParam) || EXPLORE_DEFAULT_RADIUS);
+    const timer = setTimeout(() => {
+      setMinPrice(searchParams.get("min") || "");
+      setMaxPrice(searchParams.get("max") || "");
+    }, 0);
+    return () => clearTimeout(timer);
+  }, [searchParams]);
+  useEffect(() => {
+    const timer = setTimeout(
+      () => setRadius(Number(radiusParam) || EXPLORE_DEFAULT_RADIUS),
+      0,
+    );
+    return () => clearTimeout(timer);
   }, [radiusParam]);
 
-  useEffect(() => {
-    if (geoInitRef.current) return;
-    if (locMode !== "current") return;
-    if (guestLocation?.province) return;
-    geoInitRef.current = true;
-    let cancelled = false;
-    (async () => {
-      const nearest = await geo.request();
-      if (!cancelled && nearest) {
-        actions.setGuestLocation({ province: nearest, ward: null, wards: null });
-      }
-    })();
-    return () => {
-      cancelled = true;
-    };
-  }, [locMode, guestLocation?.province, geo, actions]);
+
 
   useEffect(() => {
     if (wardsInitRef.current) return;
-    if (locMode !== "province" || !wardsParam || !guestLocation?.province?.code) return;
+    if (locMode !== "province" || !wardsParam || !guestLocation?.province?.code)
+      return;
     if (guestLocation?.wards?.length) return;
 
     wardsInitRef.current = true;
@@ -105,7 +134,11 @@ function ExploreContent() {
       if (cancelled) return;
       const selected = allWards.filter((w) => codes.includes(String(w.code)));
       if (selected.length) {
-        actions.setGuestLocation({ ...guestLocation, wards: selected, ward: null });
+        actions.setGuestLocation({
+          ...guestLocation,
+          wards: selected,
+          ward: null,
+        });
       }
     });
 
@@ -114,16 +147,14 @@ function ExploreContent() {
     };
   }, [locMode, wardsParam, guestLocation, actions]);
 
-  const { listings, categories, dbLoading } = useListings({
+  const { listings, allListings, categories, dbLoading } = useListings({
     category: categorySlug || undefined,
     search: q || undefined,
     status: "available",
   });
 
   const provinceName =
-    locMode === "province"
-      ? guestLocation?.province?.name || locParam
-      : null;
+    locMode === "province" ? guestLocation?.province?.name || locParam : null;
 
   const anchorAddress = useMemo(() => {
     if (locMode === "province" && provinceName) return provinceName;
@@ -132,7 +163,11 @@ function ExploreContent() {
 
   const displayLabel = useMemo(() => {
     if (locMode === "province" && provinceName) {
-      return formatProvinceFilterLabel(guestLocation?.province, guestLocation?.wards);
+      return formatProvinceFilterLabel(
+        guestLocation?.province,
+        guestLocation?.wards,
+    guestLocation?.coords,guestLocation?.province?.coords,geo.coords,
+      );
     }
     if (guestLocation?.ward?.name && guestLocation?.province?.name) {
       return `${guestLocation.ward.name}, ${guestLocation.province.name}`;
@@ -141,25 +176,45 @@ function ExploreContent() {
       return `Vị trí hiện tại · ${guestLocation.province.name}`;
     }
     return "Chọn khu vực";
-  }, [locMode, provinceName, guestLocation]);
+  }, [locMode, provinceName, guestLocation,geo.coords]);
 
   const filtered = useMemo(() => {
     let result = listings.map((listing) => ({
       ...listing,
-      _km: listingDistanceKm(listing, anchorAddress) ?? 999,
+      _km: listingDistanceKm(listing, anchorAddress,geo.coords||guestLocation?.coords||guestLocation?.province?.coords) ?? 999,
     }));
+    const group = searchParams.get("group");
+    if (group)
+      result = result.filter((l) => getSpecGroupId(l.category) === group);
+    const transaction = searchParams.get("transaction");
+    if (transaction === "SALE")
+      result = result.filter((l) =>
+        ["SALE", "BOTH"].includes(l.transactionMode),
+      );
+    if (transaction === "RENT")
+      result = result.filter((l) => l.transactionMode !== "SALE");
+    const price = (l) =>
+      transaction === "SALE" || l.transactionMode === "SALE"
+        ? Number(l.salePrice)
+        : l.dailyPrice;
+    if (savedOnly)
+      result = result.filter((listing) => savedIds.includes(listing.id));
 
-    if (locMode === "province") {
+    if (!savedOnly && locMode === "province") {
       result = result.filter((l) => listingMatchesProvince(l, provinceName));
-      result = result.filter((l) => listingMatchesWards(l, guestLocation?.wards));
-    } else {
+      result = result.filter((l) =>
+        listingMatchesWards(l, guestLocation?.wards),
+      );
+    } else if (!savedOnly && anchorAddress && searchParams.has("radius")) {
       result = result.filter((l) => l._km <= radius);
     }
 
     const min = minPrice ? Number(minPrice) : null;
     const max = maxPrice ? Number(maxPrice) : null;
-    if (min != null && !Number.isNaN(min)) result = result.filter((l) => l.dailyPrice >= min);
-    if (max != null && !Number.isNaN(max)) result = result.filter((l) => l.dailyPrice <= max);
+    if (min != null && !Number.isNaN(min))
+      result = result.filter((l) => price(l) >= min);
+    if (max != null && !Number.isNaN(max))
+      result = result.filter((l) => price(l) <= max);
 
     const sorter = sort === "featured" ? "nearest" : sort;
 
@@ -173,10 +228,10 @@ function ExploreContent() {
         });
         break;
       case "price_asc":
-        result.sort((a, b) => a.dailyPrice - b.dailyPrice);
+        result.sort((a, b) => price(a) - price(b));
         break;
       case "price_desc":
-        result.sort((a, b) => b.dailyPrice - a.dailyPrice);
+        result.sort((a, b) => price(b) - price(a));
         break;
       case "rating":
         result.sort((a, b) => (b.rating ?? 0) - (a.rating ?? 0));
@@ -189,16 +244,31 @@ function ExploreContent() {
     }
 
     return result;
-  }, [listings, anchorAddress, locMode, provinceName, guestLocation?.wards, radius, minPrice, maxPrice, sort]);
+  }, [
+    searchParams,
+    listings,
+    anchorAddress,
+    locMode,
+    provinceName,
+    guestLocation?.wards,
+    guestLocation?.coords,guestLocation?.province?.coords,geo.coords,
+    radius,
+    minPrice,
+    maxPrice,
+    sort,
+    savedOnly,
+    savedIds,
+  ]);
 
+  const personalized=usePersonalizedProducts(filtered,{...(locMode==='province'&&guestLocation?.province?.code?{province:String(guestLocation.province.code)}:{}),...(categorySlug?{category:categorySlug}:{})});
   function updateParams(updates) {
-    const params = new URLSearchParams(searchParams.toString());
+    const params = new URLSearchParams(window.location.search);
     Object.entries(updates).forEach(([key, value]) => {
       if (value != null && value !== "") params.set(key, String(value));
       else params.delete(key);
     });
     const qs = params.toString();
-    router.push(`/explore${qs ? `?${qs}` : ""}`);
+    router.push(`/explore${qs ? `?${qs}` : ""}`,{scroll:false});
   }
 
   function updateParam(key, value) {
@@ -222,14 +292,22 @@ function ExploreContent() {
     updateParam("radius", next);
   }
 
-  function handleLocationApply({ mode, location, radius: nextRadius, address }) {
+  function handleLocationApply({
+    mode,
+    location,
+    radius: nextRadius,
+    address,
+  }) {
     if (location?.province) {
       actions.setGuestLocation(location);
     }
 
     const updates = {
       locMode: mode,
-      loc: mode === "province" ? location?.province?.name || address : address || "",
+      loc:
+        mode === "province"
+          ? location?.province?.name || address
+          : address || "",
     };
 
     if (mode === "province") {
@@ -262,6 +340,7 @@ function ExploreContent() {
 
   function buildCategoryHref(slug) {
     const params = new URLSearchParams(searchParams.toString());
+    params.delete("group");
     if (slug) params.set("category", slug);
     else params.delete("category");
     const qs = params.toString();
@@ -275,39 +354,46 @@ function ExploreContent() {
     return ` · ${wards.length} phường/xã`;
   }, [guestLocation?.wards]);
 
-  const resultSubtitle =
-    locMode === "province"
-      ? `${filtered.length} sản phẩm tại ${provinceName || "khu vực đã chọn"}${wardFilterLabel}`
-      : `${filtered.length} sản phẩm trong bán kính ${radius} km`;
+  const resultSubtitle = savedOnly
+    ? `${filtered.length} tin đã lưu`
+    : locMode === "province"
+      ? `${filtered.length} sản phẩm ${provinceName ? `tại ${provinceName}${wardFilterLabel}` : "trên toàn quốc"}`
+      : `${filtered.length} sản phẩm gần khu vực của bạn`;
 
-  const emptyDescription =
-    locMode === "province"
+  const emptyDescription = savedOnly
+    ? "Không có tin đã lưu phù hợp với bộ lọc hiện tại."
+    : locMode === "province"
       ? guestLocation?.wards?.length
         ? `Không tìm thấy tin tại các phường/xã đã chọn trong “${provinceName}”. Hãy chọn thêm phường/xã hoặc chọn “Tất cả”.`
-        : `Không tìm thấy tin tại “${provinceName}”. Hãy chọn tỉnh thành khác hoặc dùng vị trí hiện tại.`
-      : `Không tìm thấy tin trong bán kính ${radius} km quanh “${anchorAddress}”. Hãy tăng bán kính hoặc đổi khu vực tìm kiếm.`;
+        : provinceName
+          ? `Không tìm thấy tin tại “${provinceName}”. Hãy chọn tỉnh thành khác hoặc dùng vị trí hiện tại.`
+          : "Thử từ khóa khác hoặc chọn khu vực để tìm đồ phù hợp."
+      : `Chưa tìm thấy sản phẩm phù hợp quanh “${anchorAddress}”. Thử danh mục hoặc khu vực khác nhé.`;
 
   return (
     <MarketplaceShell>
-      <div className="explore-header container">
-        <h1>Khám phá</h1>
-        <p className="text-muted">
-          {resultSubtitle}
-          {q && <> cho “{q}”</>}
-        </p>
-        <SearchBox
-          variant="explore"
-          value={searchInput}
-          onChange={setSearchInput}
-          onSearch={handleSearchQuery}
-          showSubmitButton
-          submitLabel="Tìm"
-          className="explore-search-wrap"
-        />
-      </div>
-
+      <DiscoveryIntent params={searchParams} count={filtered.length} loading={dbLoading&&!allListings.length} hasLocation={Boolean(anchorAddress)} groupLabel={CATEGORY_MAIN_LABELS[searchParams.get("group")]} categoryLabel={categories.find(c=>c.slug===categorySlug)?.name||categorySlug} onChange={updates=>{if('min' in updates||'max' in updates){clearTimeout(priceDebounceRef.current);if('min' in updates)setMinPrice(updates.min);if('max' in updates)setMaxPrice(updates.max);}updateParams(updates);}}/>
+      <SearchInterestSignal query={q} category={categorySlug} filterKey={minPrice+':'+maxPrice+':'+estimatedDays}/>
+      {searchParams.get("group") && (
+        <div className="container explore-group-title">
+          <span>{CATEGORY_MAIN_LABELS[searchParams.get("group")]}</span>
+          <button
+            type="button"
+            className="market-group-reset"
+            onClick={() => updateParams({ group: null })}
+          >
+            Xem mọi danh mục <X size={14} />
+          </button>
+        </div>
+      )}
       <div className="explore-categories">
-        <div className="container">
+        <div className="container market-explore-category">
+          <div className="market-explore-category__heading"><strong>Danh mục sản phẩm</strong>
+          <CategorySheet
+            categories={categories}
+            hrefFor={(cat) => buildCategoryHref(cat.slug)}
+          />
+          </div>
           <CategoryPills
             variant="scroll"
             categories={categories}
@@ -317,11 +403,9 @@ function ExploreContent() {
         </div>
       </div>
 
-      <div
-        className={`explore-location container ${locMode === "province" ? "explore-location--province" : ""}`}
-      >
-        <div className="explore-loc-field">
-          <label htmlFor="explore-loc-trigger">Vị trí tìm kiếm</label>
+      <div className="explore-controls container">
+        <div className="explore-control-location">
+          <label htmlFor="explore-loc-trigger">Khu vực tìm kiếm</label>
           <div className="explore-loc-input-wrap">
             <button
               id="explore-loc-trigger"
@@ -330,46 +414,51 @@ function ExploreContent() {
               onClick={() => setSheetOpen(true)}
             >
               <MapPin size={16} className="explore-loc-trigger__ic" />
-              <span className="explore-loc-trigger__text">{displayLabel}</span>
-              <ChevronDown size={16} className="explore-loc-trigger__chev" />
+              <span className="explore-loc-trigger__text">{locationLabel(displayLabel)}</span>
+              <ChevronDown size={16} />
             </button>
             <button
               type="button"
               className="explore-loc-trigger__gps"
               onClick={refreshToCurrent}
-              title="Dùng vị trí hiện tại"
               aria-label="Dùng vị trí hiện tại"
             >
-              <Navigation size={14} />
+              <Navigation size={16} />
             </button>
           </div>
         </div>
-
-        {locMode === "current" && (
-          <div className="explore-radius-field">
-            <label htmlFor="explore-radius">Bán kính tìm kiếm</label>
-            <div className="explore-radius-control">
-              <span className="explore-radius-badge">{radius} km</span>
-              <input
-                id="explore-radius"
-                type="range"
-                min={1}
-                max={50}
-                step={1}
-                value={radius}
-                onChange={(e) => handleRadiusChange(e.target.value)}
-                className="explore-radius-slider"
-                style={{ "--radius-pct": `${((radius - 1) / 49) * 100}%` }}
-              />
-              <div className="explore-radius-scale">
-                <span>1</span>
-                <span>50</span>
-              </div>
-            </div>
-          </div>
-        )}
+        <ExploreFilters
+          minimumDays={searchParams.get("rentalPlan")==="LONG"?30:1}
+          locationLabel={locationLabel(displayLabel)}
+          onLocation={()=>setSheetOpen(true)}
+          locationOpen={sheetOpen}
+          group={searchParams.get('group')||''}
+          query={q}
+          rentalSelection={selectedRental}
+          showTransaction={false}
+          minPrice={minPrice}
+          maxPrice={maxPrice}
+          sort={sort}
+          transaction={searchParams.get("transaction") || ""}
+          sortOptions={SORT_OPTIONS}
+          onTransaction={(value) => updateParam("transaction", value)}
+          onPrice={handlePriceChange}
+          onSort={(value) => updateParam("sort", value)}
+          onApply={(values) => {
+            clearTimeout(priceDebounceRef.current);
+            setMinPrice(values.min);
+            setMaxPrice(values.max);
+            updateParams({
+              ...(values.q!==undefined?{q:values.q}:{}),
+              ...(values.group!==undefined?{group:values.group,...(values.group!==searchParams.get('group')?{category:''}:{})}:{}),
+              ...(values.calendar?{start:values.calendar.startDate,end:values.calendar.endDate,pickupTime:values.calendar.startTime,returnTime:values.calendar.endTime,days:calendarRange(values.calendar).days||''}:{}),
+              min: values.min,
+              max: values.max,
+              sort: values.sort,
+            });
+          }}
+        />
       </div>
-
       <ExploreLocationSheet
         open={sheetOpen}
         onClose={() => setSheetOpen(false)}
@@ -377,52 +466,44 @@ function ExploreContent() {
         radius={radius}
         onApply={handleLocationApply}
       />
-
-      <div className="explore-toolbar container">
-        <div className="explore-filters">
-          <div className="explore-price-filter">
-            <input
-              type="number"
-              min="0"
-              placeholder="Giá từ"
-              value={minPrice}
-              onChange={(e) => handlePriceChange("min", e.target.value)}
-              className="input-compact"
-            />
-            <span>-</span>
-            <input
-              type="number"
-              min="0"
-              placeholder="Giá đến"
-              value={maxPrice}
-              onChange={(e) => handlePriceChange("max", e.target.value)}
-              className="input-compact"
-            />
+      {estimatedDays > 0 && searchParams.get("transaction")!=="SALE" && (
+        <div className="container rental-estimate-notice">
+          <CalendarDays size={18} />
+          <div>
+            <strong>Chi phí tham khảo cho {estimatedDays} ngày</strong>
+            <span>
+              Tính theo giá ngày trên tin đăng, chưa gồm tiền cọc và giao nhận.
+              Lịch trống và giá cuối cùng do hai bên xác nhận.
+            </span>
           </div>
-          <select
-            value={sort}
-            onChange={(e) => updateParam("sort", e.target.value)}
-            className="select-compact"
+          <button
+            type="button"
+            title="Bỏ thời lượng dự kiến"
+            aria-label="Bỏ thời lượng dự kiến"
+            onClick={() => updateParams({days:"",start:"",end:"",pickupTime:"",returnTime:""})}
           >
-            {SORT_OPTIONS.map((opt) => (
-              <option key={opt.value} value={opt.value}>
-                {opt.label}
-              </option>
-            ))}
-          </select>
+            <X size={18} />
+          </button>
         </div>
-      </div>
-
+      )}
       <div className="container" style={{ paddingBottom: 64 }}>
-        {dbLoading ? (
+        <ExploreResultsMap listings={!sortParam?personalized.items:personalized.baseItems} rentalSelection={!calendarRange(selectedRental).error?selectedRental:null} sale={searchParams.get("transaction")==="SALE"}/>
+        <Recommendations items={filtered} province={locMode==='province'&&guestLocation?.province?.code?String(guestLocation.province.code):undefined} category={categorySlug||undefined}/>
+        {dbLoading && !allListings.length ? (
           <div className="db-loading" aria-label="Đang tải sản phẩm">
             <div className="dashboard-spinner" />
           </div>
         ) : (
           <ListingGrid
-            listings={filtered}
+            rentalSelection={!calendarRange(selectedRental).error?selectedRental:null}
+            listings={!sortParam?personalized.items:personalized.baseItems}
+            estimatedDays={estimatedDays}
+            priceMode={
+              searchParams.get("transaction") === "SALE" ? "SALE" : null
+            }
             viewerAddress={anchorAddress}
-            emptyTitle="Không có sản phẩm gần bạn"
+            emptyAction={<div className="di-empty-actions"><button type="button" className="btn btn-secondary" onClick={()=>{clearTimeout(priceDebounceRef.current);setMinPrice("");setMaxPrice("");updateParams({q:"",category:"",group:"",min:"",max:"",saved:"",days:"",sort:"",start:"",end:"",pickupTime:"",returnTime:""});}}>{copy.clear}</button><Link className="btn btn-primary" href="/needs">{copy.postNeed}</Link></div>}
+            emptyTitle="Chưa tìm thấy đồ phù hợp"
             emptyDescription={emptyDescription}
           />
         )}
@@ -434,7 +515,7 @@ function ExploreContent() {
 export default function ExplorePage() {
   return (
     <Suspense fallback={null}>
-      <ExploreContent />
+      <ExploreEntry />
     </Suspense>
   );
 }

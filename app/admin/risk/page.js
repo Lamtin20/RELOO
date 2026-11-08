@@ -1,390 +1,502 @@
 "use client";
-
-import Link from "next/link";
-import { useSearchParams } from "next/navigation";
-import { Suspense, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import {
+  FileCheck2,
+  LoaderCircle,
+  RefreshCw,
   ShieldAlert,
-  Leaf,
-  MapPin,
-  CheckCircle2,
-  ArrowUpCircle,
-  FileWarning,
-  Hash,
+  ShieldCheck,
 } from "lucide-react";
-import { useReloo } from "@/lib/store";
-import { Money } from "@/components/ui/Money";
-import { Badge } from "@/components/ui/Badge";
-import { Modal } from "@/components/ui/Modal";
-import { EmptyState } from "@/components/ui/EmptyState";
-import { PageHeader } from "@/components/admin/PageHeader";
-import { StatusPill } from "@/components/admin/StatusPill";
-import { getRiskLevelMeta } from "@/lib/admin-helpers";
-import { formatDateTime, shortHash } from "@/lib/utils";
-
-const LEVEL_ORDER = ["low", "medium", "high", "critical"];
-
-function RiskAlertsTab() {
-  const { state, actions } = useReloo();
-  const { riskAlerts, orders, users } = state;
-  const [resolveTarget, setResolveTarget] = useState(null);
-  const [resolution, setResolution] = useState("");
-  const [demandLetterOrder, setDemandLetterOrder] = useState(null);
-
-  const getUser = (id) => users.find((u) => u.id === id);
-  const getOrder = (id) => orders.find((o) => o.id === id);
-
-  const active = riskAlerts.filter((a) => a.status === "active");
-  const resolved = riskAlerts.filter((a) => a.status !== "active");
-
-  const escalate = (alert) => {
-    const idx = LEVEL_ORDER.indexOf(alert.level);
-    const next = LEVEL_ORDER[Math.min(idx + 1, LEVEL_ORDER.length - 1)];
-    actions.updateRiskAlert(alert.id, { level: next });
-  };
-
-  const confirmResolve = () => {
-    if (!resolveTarget) return;
-    actions.resolveRisk(resolveTarget.id, resolution || "Đã xử lý bởi Admin");
-    setResolveTarget(null);
-    setResolution("");
-  };
-
-  const overdueOrders = orders.filter((o) => o.status === "overdue" || (o.overdueHours && o.overdueHours > 0));
-
+const STATES = {
+  OPEN: "Mới tiếp nhận",
+  VERIFYING: "Đang xác minh",
+  APPEALED: "Có khiếu nại",
+  RESTRICTED: "Đang hạn chế",
+  CLEARED: "Đã gỡ hạn chế",
+};
+export default function RiskPage() {
+  const [data, setData] = useState(null);
+  const [selectedId, setSelectedId] = useState(null);
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
+  const [busy, setBusy] = useState(false);
+  const [action, setAction] = useState("VERIFY");
+  const [reason, setReason] = useState("");
+  const [evidenceUrl, setEvidenceUrl] = useState("");
+  const [evidenceNote, setEvidenceNote] = useState("");
+  const [hours, setHours] = useState(720);
+  const [signal, setSignal] = useState({
+    phone: "",
+    source: "verified_review",
+    evidenceUrl: "",
+    note: "",
+    expiresAt: "",
+  });
+  const [ipScope, setIpScope] = useState("chat_write");
+  const [ipHours, setIpHours] = useState(1);
+  useEffect(() => {
+    let cancelled = false;
+    fetch("/api/security/admin/cases")
+      .then((res) => res.json())
+      .then((result) => {
+        if (!cancelled) {
+          if (result.ok) setData(result);
+          else setError(result.error);
+        }
+      })
+      .catch(() => {
+        if (!cancelled) setError("Chưa tải được hồ sơ rủi ro.");
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+  async function load() {
+    setBusy(true);
+    setError("");
+    try {
+      const result = await fetch("/api/security/admin/cases").then((res) =>
+        res.json(),
+      );
+      if (!result.ok) throw new Error(result.error);
+      setData(result);
+    } catch (cause) {
+      setError(cause.message);
+    } finally {
+      setBusy(false);
+    }
+  }
+  const selected =
+    data?.cases?.find((item) => item.id === selectedId) || data?.cases?.[0];
+  async function command(path, payload) {
+    setBusy(true);
+    setError("");
+    setSuccess("");
+    try {
+      const response = await fetch(path, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      const result = await response.json();
+      if (!response.ok) throw new Error(result.error);
+      setSuccess("Đã lưu quyết định và nhật ký kiểm toán.");
+      await load();
+    } catch (cause) {
+      setError(cause.message);
+    } finally {
+      setBusy(false);
+    }
+  }
+  function review(event) {
+    event.preventDefault();
+    command("/api/security/admin/cases", {
+      caseId: selected.id,
+      action,
+      reason,
+      validHours: Number(hours),
+      evidence: evidenceUrl
+        ? [{ url: evidenceUrl, note: evidenceNote, source: "admin_review" }]
+        : [],
+    });
+  }
+  function addSignal(event) {
+    event.preventDefault();
+    command("/api/security/admin/signals", {
+      ...signal,
+      expiresAt: new Date(signal.expiresAt).toISOString(),
+    });
+  }
   return (
-    <>
-      <div className="panel mb-4">
-        <div className="panel-header">
-          <span className="panel-title flex items-center gap-2">
-            <FileWarning size={16} /> Timeline xử lý quá hạn
-          </span>
+    <div className="dashboard-page">
+      <div className="feature-heading">
+        <span className="feature-icon feature-icon--blue">
+          <ShieldAlert size={24} />
+        </span>
+        <div>
+          <h1>Rủi ro & xác minh tài khoản</h1>
+          <p>
+            Quyết định dựa trên bằng chứng, có khiếu nại và nhật ký đối chiếu.
+          </p>
         </div>
-        {overdueOrders.length === 0 ? (
-          <EmptyState icon="CheckCircle2" title="Không có đơn quá hạn" description="Tất cả đơn hàng đang trong hạn." />
-        ) : (
-          <div className="flex flex-col gap-6">
-            {overdueOrders.map((order) => {
-              const hours = order.overdueHours || 0;
-              const renter = getUser(order.renterId);
-              const steps = [
-                {
-                  key: "0-6h",
-                  title: "0–6 giờ: Nhắc nhở tự động",
-                  desc: "Gửi SMS/App notification nhắc trả đồ, tính phụ phí trễ hạn.",
-                  done: hours >= 0,
-                  active: hours <= 6,
-                },
-                {
-                  key: "6-24h",
-                  title: "6–24 giờ: Cảnh báo & khóa tính năng",
-                  desc: "Khóa đăng tin/đặt thuê mới, gọi điện xác minh, thông báo chủ đồ.",
-                  done: hours > 6,
-                  active: hours > 6 && hours <= 24,
-                },
-                {
-                  key: ">24h",
-                  title: ">24 giờ: Cưỡng chế thu hồi",
-                  desc: "Gửi Demand Letter chính thức, trừ cọc, chuyển hồ sơ Risk/Pháp lý.",
-                  done: hours > 24,
-                  active: hours > 24,
-                },
-              ];
-              return (
-                <div key={order.id}>
-                  <div className="flex items-center justify-between mb-3">
-                    <div>
-                      <Link href={`/admin/orders/${order.id}`} className="font-semibold text-sm">
-                        {order.id}
-                      </Link>
-                      <span className="text-xs text-muted"> · {renter?.name} · Quá hạn {hours}h</span>
-                    </div>
-                    <button type="button" className="btn btn-danger btn-sm" onClick={() => setDemandLetterOrder(order)}>
-                      <FileWarning size={14} /> Xem Demand Letter
-                    </button>
+        <button
+          type="button"
+          className="icon-tool"
+          onClick={load}
+          title="Tải lại hồ sơ"
+          aria-label="Tải lại hồ sơ"
+          disabled={busy}
+        >
+          {busy ? (
+            <LoaderCircle size={20} className="spin" />
+          ) : (
+            <RefreshCw size={20} />
+          )}
+        </button>
+      </div>
+      {error && (
+        <p className="feature-error" role="alert">
+          {error}
+        </p>
+      )}
+      {success && (
+        <p className="feature-success" role="status">
+          {success}
+        </p>
+      )}
+      {data && (
+        <>
+          <div className="risk-workspace">
+            <aside className="risk-list">
+              <h2>Hồ sơ ({data.cases.length})</h2>
+              {!data.cases.length && (
+                <p className="feature-footnote">Chưa có hồ sơ xác minh.</p>
+              )}
+              {data.cases.map((item) => (
+                <button
+                  type="button"
+                  key={item.id}
+                  className={selected?.id === item.id ? "is-active" : ""}
+                  onClick={() => {
+                    setSelectedId(item.id);
+                    setReason("");
+                    setEvidenceUrl("");
+                    setEvidenceNote("");
+                  }}
+                >
+                  <strong>{item.profiles?.name || "Tài khoản"}</strong>
+                  <span>
+                    {STATES[item.status]} · {item.reason}
+                  </span>
+                  <span>{item.id.slice(0, 8)}</span>
+                </button>
+              ))}
+            </aside>
+            <section className="risk-review">
+              {selected ? (
+                <>
+                  <span className="r-eyebrow">
+                    HỒ SƠ {selected.id.slice(0, 8)}
+                  </span>
+                  <h2>{selected.profiles?.name || "Tài khoản"}</h2>
+                  <div className="risk-detail-row">
+                    <span>Trạng thái</span>
+                    <strong>{STATES[selected.status]}</strong>
                   </div>
-                  <div className="enforce-timeline">
-                    {steps.map((s) => (
+                  <div className="risk-detail-row">
+                    <span>Số điện thoại</span>
+                    <strong>•••• {selected.profiles?.phone?.slice(-4)}</strong>
+                  </div>
+                  <div className="risk-detail-row">
+                    <span>Kết quả kiểm tra</span>
+                    <strong>
+                      {selected.phone_screening_checks?.result ||
+                        selected.reason}
+                    </strong>
+                  </div>
+                  {selected.phone_screening_checks?.source_results?.map(
+                    (source, index) => (
+                      <p className="feature-footnote" key={index}>
+                        {source.source}: {source.status}.{" "}
+                        {source.reason || "Bằng chứng đã được đối chiếu."}
+                      </p>
+                    ),
+                  )}
+                  <h3 style={{ marginTop: 24 }}>Bằng chứng & khiếu nại</h3>
+                  {data.evidence
+                    .filter((item) => item.case_id === selected.id)
+                    .map((item) => (
+                      <p className="feature-footnote" key={item.id}>
+                        <a
+                          href={item.evidence_url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          {item.source}
+                        </a>{" "}
+                        · {item.note}
+                      </p>
+                    ))}
+                  {data.appeals
+                    .filter((item) => item.case_id === selected.id)
+                    .map((item) => (
                       <div
-                        key={s.key}
-                        className={`enforce-step${s.active ? " enforce-step--active" : s.done ? " enforce-step--done" : ""}`}
+                        className="safety-status"
+                        key={item.id}
+                        style={{ marginTop: 12 }}
                       >
-                        <div className="enforce-step-dot">
-                          {s.done && !s.active ? <CheckCircle2 size={14} /> : <span style={{ fontSize: 10, fontWeight: 700 }}>{s.key}</span>}
-                        </div>
+                        <FileCheck2 size={20} />
                         <div>
-                          <div className="enforce-step__title">{s.title}</div>
-                          <div className="enforce-step__desc">{s.desc}</div>
+                          <strong>Yêu cầu đối chiếu</strong>
+                          <p>{item.explanation}</p>
+                          {item.evidence.map((url, index) => (
+                            <p key={index}>
+                              <a
+                                href={url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                              >
+                                Bằng chứng {index + 1}
+                              </a>
+                            </p>
+                          ))}
                         </div>
                       </div>
                     ))}
-                  </div>
-                  <div className="divider" />
-                </div>
-              );
-            })}
-          </div>
-        )}
-      </div>
-
-      <div className="panel mb-4">
-        <div className="panel-header">
-          <span className="panel-title flex items-center gap-2">
-            <ShieldAlert size={16} /> Cảnh báo đang hoạt động ({active.length})
-          </span>
-        </div>
-        {active.length === 0 ? (
-          <EmptyState icon="ShieldCheck" title="Không có cảnh báo" description="Hệ thống Risk Ops đang an toàn." />
-        ) : (
-          <div className="flex flex-col gap-3">
-            {active.map((alert) => {
-              const levelMeta = getRiskLevelMeta(alert.level);
-              const order = getOrder(alert.orderId);
-              const user = getUser(alert.userId);
-              return (
-                <div key={alert.id} className="panel" style={{ borderLeft: `3px solid ${levelMeta.color}` }}>
-                  <div className="flex items-center justify-between gap-3 flex-wrap">
-                    <div>
-                      <div className="flex items-center gap-2">
-                        <span className="font-semibold text-sm">{alert.title}</span>
-                        <StatusPill label={levelMeta.label} color={levelMeta.color} />
-                        <Badge variant="muted">{alert.type}</Badge>
-                      </div>
-                      <p className="text-sm text-muted mt-1" style={{ maxWidth: 560 }}>{alert.description}</p>
-                      <div className="flex items-center gap-3 mt-2 text-xs text-muted">
-                        {user && <span>Người dùng: {user.name}</span>}
-                        {order && <Link href={`/admin/orders/${order.id}`} className="text-blue">Đơn: {order.id}</Link>}
-                        {alert.gpsLastSeen && (
-                          <span className="flex items-center gap-1">
-                            <MapPin size={12} /> {alert.gpsLastSeen}
-                          </span>
-                        )}
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <button type="button" className="btn btn-secondary btn-sm" onClick={() => escalate(alert)}>
-                        <ArrowUpCircle size={14} /> Nâng mức
+                  {selected.status !== "CLEARED" && (
+                    <form onSubmit={review}>
+                      <label>
+                        Quyết định
+                        <select
+                          value={action}
+                          onChange={(event) => setAction(event.target.value)}
+                        >
+                          <option value="VERIFY">Chuyển xác minh</option>
+                          <option value="RESTRICT">Giữ hạn chế</option>
+                          <option value="CLEAR">
+                            Gỡ hạn chế sau đối chiếu
+                          </option>
+                        </select>
+                      </label>
+                      <label>
+                        Lý do quyết định
+                        <textarea
+                          required
+                          minLength={20}
+                          maxLength={4000}
+                          rows={3}
+                          value={reason}
+                          onChange={(event) => setReason(event.target.value)}
+                        />
+                      </label>
+                      <label>
+                        Liên kết bằng chứng
+                        <input
+                          type="url"
+                          required={action === "CLEAR"}
+                          value={evidenceUrl}
+                          onChange={(event) =>
+                            setEvidenceUrl(event.target.value)
+                          }
+                        />
+                      </label>
+                      <label>
+                        Ghi chú đối chiếu bằng chứng
+                        <textarea
+                          required={Boolean(evidenceUrl)}
+                          minLength={10}
+                          rows={3}
+                          value={evidenceNote}
+                          onChange={(event) =>
+                            setEvidenceNote(event.target.value)
+                          }
+                        />
+                      </label>
+                      {action === "CLEAR" && (
+                        <label>
+                          Hiệu lực xác minh (giờ, tối đa 720)
+                          <input
+                            type="number"
+                            min={1}
+                            max={720}
+                            required
+                            value={hours}
+                            onChange={(event) => setHours(event.target.value)}
+                          />
+                        </label>
+                      )}
+                      <button
+                        type="submit"
+                        className="btn btn-primary"
+                        disabled={busy}
+                      >
+                        <ShieldCheck size={17} />
+                        Lưu quyết định
                       </button>
-                      <button type="button" className="btn btn-primary btn-sm" onClick={() => setResolveTarget(alert)}>
-                        <CheckCircle2 size={14} /> Giải quyết
-                      </button>
-                    </div>
-                  </div>
+                    </form>
+                  )}
+                  <form
+                    onSubmit={(event) => {
+                      event.preventDefault();
+                      command("/api/security/admin/ip-signals", {
+                        checkId: selected.check_id,
+                        scope: ipScope,
+                        hours: Number(ipHours),
+                        reason,
+                      });
+                    }}
+                  >
+                    <h3>Hạn chế IP có phạm vi</h3>
+                    <p className="feature-footnote">
+                      Chỉ áp dụng IP ghi nhận trong lần kiểm tra của tài khoản
+                      này. Không áp dụng cho các tài khoản dùng chung mạng.
+                    </p>
+                    <label>
+                      Nghiệp vụ
+                      <select
+                        value={ipScope}
+                        onChange={(event) => setIpScope(event.target.value)}
+                      >
+                        <option value="chat_write">Gửi tin nhắn</option>
+                        <option value="listing_write">Đăng / sửa tin</option>
+                        <option value="inquiry_write">Gửi yêu cầu thuê</option>
+                        <option value="cashback">Tạo link hoàn tiền</option>
+                      </select>
+                    </label>
+                    <label>
+                      Thời hạn (1–24 giờ)
+                      <input
+                        type="number"
+                        min={1}
+                        max={24}
+                        value={ipHours}
+                        onChange={(event) => setIpHours(event.target.value)}
+                      />
+                    </label>
+                    <label>
+                      Lý do có căn cứ
+                      <textarea
+                        required
+                        minLength={20}
+                        value={reason}
+                        onChange={(event) => setReason(event.target.value)}
+                      />
+                    </label>
+                    <button
+                      type="submit"
+                      className="btn btn-secondary"
+                      disabled={busy}
+                    >
+                      Lưu hạn chế có thời hạn
+                    </button>
+                  </form>
+                </>
+              ) : (
+                <div className="feature-empty">
+                  <ShieldCheck size={32} />
+                  <h3>Chọn hồ sơ để đối chiếu</h3>
                 </div>
-              );
-            })}
+              )}
+            </section>
           </div>
-        )}
-      </div>
-
-      <div className="panel">
-        <div className="panel-header">
-          <span className="panel-title">Đã xử lý ({resolved.length})</span>
-        </div>
-        {resolved.length === 0 ? (
-          <span className="text-sm text-muted">Chưa có cảnh báo nào được xử lý.</span>
-        ) : (
-          <div className="table-wrap" style={{ boxShadow: "none" }}>
-            <table className="table">
+          <section
+            className="risk-review"
+            style={{
+              marginTop: 35,
+              borderTop: "1px solid #e1e8e3",
+              paddingTop: 25,
+            }}
+          >
+            <h2>Ghi nhận cảnh báo đã đối chiếu</h2>
+            <p className="feature-footnote">
+              Thông tin nhập thủ công được ghi là bằng chứng quản trị, không
+              thay thế kết nối API nguồn bên ngoài. Tài khoản có số điện thoại
+              khớp sẽ được hạn chế và mở hồ sơ.
+            </p>
+            <form onSubmit={addSignal}>
+              <label>
+                Số điện thoại
+                <input
+                  required
+                  type="tel"
+                  value={signal.phone}
+                  onChange={(event) =>
+                    setSignal({ ...signal, phone: event.target.value })
+                  }
+                />
+              </label>
+              <label>
+                Nguồn bằng chứng
+                <select
+                  value={signal.source}
+                  onChange={(event) =>
+                    setSignal({ ...signal, source: event.target.value })
+                  }
+                >
+                  <option value="verified_review">Xác minh quản trị</option>
+                  <option value="checkscam">
+                    Báo cáo CheckScam được đối chiếu
+                  </option>
+                  <option value="chongluadao">
+                    Báo cáo Chống Lừa Đảo được đối chiếu
+                  </option>
+                  <option value="user_report">Phản ánh có bằng chứng</option>
+                </select>
+              </label>
+              <label>
+                Liên kết HTTPS
+                <input
+                  required
+                  type="url"
+                  value={signal.evidenceUrl}
+                  onChange={(event) =>
+                    setSignal({ ...signal, evidenceUrl: event.target.value })
+                  }
+                />
+              </label>
+              <label>
+                Ghi chú kiểm chứng
+                <textarea
+                  required
+                  minLength={20}
+                  value={signal.note}
+                  onChange={(event) =>
+                    setSignal({ ...signal, note: event.target.value })
+                  }
+                />
+              </label>
+              <label>
+                Hết hiệu lực (tối đa 30 ngày)
+                <input
+                  required
+                  type="datetime-local"
+                  value={signal.expiresAt}
+                  onChange={(event) =>
+                    setSignal({ ...signal, expiresAt: event.target.value })
+                  }
+                />
+              </label>
+              <button
+                type="submit"
+                className="btn btn-secondary"
+                disabled={busy}
+              >
+                <ShieldAlert size={17} />
+                Ghi nhận cảnh báo
+              </button>
+            </form>
+          </section>
+          <section className="risk-audit">
+            <h2>Nhật ký kiểm toán</h2>
+            <table>
               <thead>
                 <tr>
-                  <th>Cảnh báo</th>
-                  <th>Mức độ</th>
-                  <th>Kết quả xử lý</th>
                   <th>Thời gian</th>
+                  <th>Hành động</th>
+                  <th>Chủ thể</th>
+                  <th>Chi tiết</th>
                 </tr>
               </thead>
               <tbody>
-                {resolved.map((a) => {
-                  const meta = getRiskLevelMeta(a.level);
-                  return (
-                    <tr key={a.id}>
-                      <td className="text-sm">{a.title}</td>
-                      <td><StatusPill label={meta.label} color={meta.color} /></td>
-                      <td className="text-sm text-muted">{a.resolution || "-"}</td>
-                      <td className="text-sm text-muted">{a.resolvedAt ? formatDateTime(a.resolvedAt) : "-"}</td>
-                    </tr>
-                  );
-                })}
+                {data.audit.map((item) => (
+                  <tr key={item.id}>
+                    <td>
+                      {new Date(item.created_at).toLocaleString("vi-VN", {
+                        timeZone: "Asia/Ho_Chi_Minh",
+                      })}
+                    </td>
+                    <td>{item.action}</td>
+                    <td>{item.subject_id?.slice(0, 8)}</td>
+                    <td>
+                      <code>{JSON.stringify(item.details)}</code>
+                    </td>
+                  </tr>
+                ))}
               </tbody>
             </table>
-          </div>
-        )}
-      </div>
-
-      <Modal
-        open={!!resolveTarget}
-        onClose={() => setResolveTarget(null)}
-        title="Giải quyết cảnh báo rủi ro"
-        footer={
-          <>
-            <button type="button" className="btn btn-secondary" onClick={() => setResolveTarget(null)}>
-              Hủy
-            </button>
-            <button type="button" className="btn btn-primary" onClick={confirmResolve}>
-              Xác nhận giải quyết
-            </button>
-          </>
-        }
-      >
-        <p className="text-sm text-muted mb-3">{resolveTarget?.title}</p>
-        <div className="input-group">
-          <label className="input-label">Ghi chú kết quả xử lý</label>
-          <textarea
-            className="textarea"
-            rows={4}
-            value={resolution}
-            onChange={(e) => setResolution(e.target.value)}
-            placeholder="Ví dụ: Admin đã liên hệ và xác nhận tài sản an toàn..."
-          />
-        </div>
-      </Modal>
-
-      <Modal
-        open={!!demandLetterOrder}
-        onClose={() => setDemandLetterOrder(null)}
-        title="Xem trước Thư yêu cầu thu hồi (Demand Letter)"
-        size="lg"
-        footer={
-          <button type="button" className="btn btn-primary" onClick={() => setDemandLetterOrder(null)}>
-            Đóng
-          </button>
-        }
-      >
-        {demandLetterOrder && (
-          <DemandLetterPreview order={demandLetterOrder} renter={getUser(demandLetterOrder.renterId)} />
-        )}
-      </Modal>
-    </>
-  );
-}
-
-function DemandLetterPreview({ order, renter }) {
-  const penaltyRate = 2;
-  const hourlyRate = order.dailyPrice / 24;
-  const penalty = Math.round(hourlyRate * penaltyRate * (order.overdueHours || 0));
-
-  return (
-    <div style={{ fontSize: 13.5, lineHeight: 1.8 }}>
-      <p style={{ textAlign: "center", fontWeight: 700, fontFamily: "var(--font-display)" }}>
-        THƯ YÊU CẦU THU HỒI TÀI SẢN
-      </p>
-      <p className="text-muted text-xs" style={{ textAlign: "center" }}>Số: DL-{order.id}</p>
-      <div className="divider" />
-      <p>Kính gửi: <strong>{renter?.name}</strong> ({renter?.phone})</p>
-      <p>
-        RELOO xin thông báo Quý khách đang <strong>quá hạn trả tài sản {order.overdueHours || 0} giờ</strong> theo
-        đơn hàng <strong>{order.id}</strong>, thời hạn trả dự kiến {order.endDate ? new Date(order.endDate).toLocaleDateString("vi-VN") : "-"}.
-      </p>
-      <p>
-        Theo Điều khoản sử dụng RELOO, khoản phạt quá hạn được tính theo công thức:
-        <br />
-        <span className="copyable-hash">P = (Giá thuê/giờ × 200%) × Số giờ trễ = <Money amount={penalty} /></span>
-      </p>
-      <p>
-        Đề nghị Quý khách hoàn trả tài sản trong vòng <strong>24 giờ</strong> kể từ khi nhận thư này. Quá thời hạn,
-        RELOO sẽ tiến hành:
-      </p>
-      <ul style={{ paddingLeft: 20 }}>
-        <li>Trừ trực tiếp khoản phạt vào tiền cọc đã giữ</li>
-        <li>Khóa tài khoản và đưa vào Danh sách đen hệ thống</li>
-        <li>Chuyển hồ sơ cho đơn vị pháp lý/thu hồi đối tác</li>
-      </ul>
-      <p className="text-xs text-muted mt-3">
-        Văn bản này được ký số tự động bởi hệ thống RELOO Risk Ops và lưu trữ Hash Blockchain để đối chiếu.
-      </p>
+          </section>
+        </>
+      )}
     </div>
-  );
-}
-
-function GreenAuditTab() {
-  const { state } = useReloo();
-  const { listings } = state;
-
-  const sorted = useMemo(
-    () => [...listings].sort((a, b) => (b.nftPassport?.auditCount || 0) - (a.nftPassport?.auditCount || 0)),
-    [listings]
-  );
-
-  return (
-    <div className="panel">
-      <div className="panel-header">
-        <span className="panel-title flex items-center gap-2">
-          <Leaf size={16} /> Giám sát Green Audit theo tài sản
-        </span>
-      </div>
-      <div className="table-wrap" style={{ boxShadow: "none" }}>
-        <table className="table">
-          <thead>
-            <tr>
-              <th>Tài sản</th>
-              <th>NFT Passport</th>
-              <th>Số lần kiểm định</th>
-              <th>Hash gần nhất</th>
-              <th>Trust badges</th>
-            </tr>
-          </thead>
-          <tbody>
-            {sorted.map((l) => (
-              <tr key={l.id}>
-                <td className="text-sm font-semibold" style={{ maxWidth: 240 }}>{l.title}</td>
-                <td className="text-xs text-muted">{l.nftPassport?.id}</td>
-                <td>
-                  <Badge variant={l.nftPassport?.auditCount > 8 ? "green" : "muted"}>
-                    {l.nftPassport?.auditCount || 0} lượt
-                  </Badge>
-                </td>
-                <td>
-                  <span className="copyable-hash flex items-center gap-1">
-                    <Hash size={11} /> {shortHash(l.nftPassport?.hash)}
-                  </span>
-                </td>
-                <td>
-                  <div className="flex gap-1 flex-wrap">
-                    {(l.trustBadges || []).map((b) => (
-                      <Badge key={b} variant="blue">{b}</Badge>
-                    ))}
-                  </div>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-    </div>
-  );
-}
-
-function RiskOpsInner() {
-  const searchParams = useSearchParams();
-  const initialTab = searchParams.get("tab") === "audit" ? "audit" : "alerts";
-  const [tab, setTab] = useState(initialTab);
-
-  return (
-    <div>
-      <PageHeader
-        title="Risk Ops Console"
-        description="Giám sát rủi ro tài chính, hành vi bất thường Geofencing và tình trạng Green Audit trên toàn sàn."
-      />
-
-      <div className="tabs mb-4" style={{ maxWidth: 420 }}>
-        <button type="button" className={`tab${tab === "alerts" ? " tab--active" : ""}`} onClick={() => setTab("alerts")}>
-          <ShieldAlert size={14} /> Cảnh báo rủi ro
-        </button>
-        <button type="button" className={`tab${tab === "audit" ? " tab--active" : ""}`} onClick={() => setTab("audit")}>
-          <Leaf size={14} /> Green Audit giám sát
-        </button>
-      </div>
-
-      {tab === "alerts" ? <RiskAlertsTab /> : <GreenAuditTab />}
-    </div>
-  );
-}
-
-export default function RiskOpsPage() {
-  return (
-    <Suspense fallback={null}>
-      <RiskOpsInner />
-    </Suspense>
   );
 }

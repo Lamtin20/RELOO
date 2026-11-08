@@ -1,0 +1,44 @@
+.product-rental-history {
+  padding: 24px 0;
+  border-top: 1px solid #dae6df;
+  border-bottom: 1px solid #dae6df;
+  margin: 22px 0;
+}
+.product-rental-history h2 {
+  font-size: 19px;
+  display: flex;
+  gap: 9px;
+  align-items: center;
+  margin: 0 0 20px;
+}
+.product-rental-history > div {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 13px 0;
+}
+.product-rental-history > div > svg {
+  color: #21784f;
+  flex-shrink: 0;
+}
+.product-rental-history strong,
+.product-rental-history small {
+  display: block;
+}
+.product-rental-history strong {
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.7;
+}
+.product-rental-history small {
+  font-size: 11px;
+  color: #75857a;
+  margin-top: 5px;
+}
+.profile-page :is(h1, h2, h3, button, label),
+.business-settings :is(h1, h2, h3, button, label),
+.legal-document :is(h1, h2, h3),
+.email-protection :is(h1, h2, h3),
+.rental-agreements :is(h1, h2, h3, button, label) {
+  letter-spacing: 0;
+}

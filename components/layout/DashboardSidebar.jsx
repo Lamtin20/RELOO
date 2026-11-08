@@ -9,32 +9,58 @@ import {
   PlusCircle,
   ClipboardList,
   Leaf,
-  Landmark,
+  MessageCircle,
+  ShoppingBag,
   Megaphone,
   ShieldCheck,
   UserCircle,
   ArrowLeft,
   Menu,
   X,
+  Wallet,
+  Gift,
 } from "lucide-react";
 import { Logo } from "@/components/brand/Logo";
+import { Wallet as WalletShape } from "lucide";
+import { MorphIcon } from "@/components/ui/MorphIcon";
 
 const NAV_ITEMS = [
-  { href: "/dashboard", label: "Tổng quan", icon: LayoutDashboard },
-  { href: "/dashboard/assets", label: "Kho đồ", icon: Package },
-  { href: "/dashboard/assets/new", label: "Đăng đồ mới", icon: PlusCircle },
+  { href: "/dashboard/cashflow", label: "Thu nhập & thanh toán", icon: Wallet },
+  {
+    href: "/dashboard/activity",
+    label: "Hoạt động của tôi",
+    icon: LayoutDashboard,
+  },
+  { href: "/dashboard/assets", label: "Tin cho thuê", icon: Package },
+  { href: "/lend", label: "Đăng tin cho thuê", icon: PlusCircle },
   { href: "/dashboard/orders", label: "Đơn hàng", icon: ClipboardList },
+  { href: "/dashboard/promotions", label: "Chương trình ưu đãi", icon: Gift },
+  {
+    href: "/dashboard/agreements",
+    label: "Thỏa thuận thuê",
+    icon: ClipboardList,
+  },
   { href: "/dashboard/audit", label: "Kiểm tra tình trạng", icon: Leaf },
-  { href: "/dashboard/wallet", label: "Tài chính & ký quỹ", icon: Landmark },
+  {
+    href: "/dashboard/messages",
+    label: "Trao đổi với người dùng",
+    icon: MessageCircle,
+  },
+  { href: "/cashback", label: "Mua sắm hoàn tiền", icon: ShoppingBag },
+  { href: "/safety", label: "Hồ sơ an toàn", icon: ShieldCheck },
   { href: "/dashboard/ads", label: "Quảng cáo", icon: Megaphone },
-  { href: "/dashboard/kyc", label: "eKYC / Trust", icon: ShieldCheck },
+  {
+    href: "/dashboard/kyc/verify",
+    label: "Xác minh căn cước",
+    icon: ShieldCheck,
+  },
   { href: "/dashboard/profile", label: "Hồ sơ", icon: UserCircle },
 ];
 
 function getActiveHref(pathname) {
   const sorted = [...NAV_ITEMS].sort((a, b) => b.href.length - a.href.length);
   const match = sorted.find(
-    (item) => pathname === item.href || pathname.startsWith(`${item.href}/`)
+    (item) => pathname === item.href || pathname.startsWith(`${item.href}/`),
   );
   return match?.href;
 }
@@ -78,7 +104,11 @@ export function DashboardSidebar() {
                 href === activeHref ? "sidebar-link--active" : ""
               }`.trim()}
             >
-              <ItemIcon size={18} strokeWidth={1.9} />
+              {href === "/dashboard/cashflow" ? (
+                <MorphIcon icon={WalletShape} size={18} />
+              ) : (
+                <ItemIcon size={18} strokeWidth={1.9} />
+              )}
               <span>{label}</span>
             </Link>
           ))}

@@ -1,0 +1,19 @@
+# Reference matrix — RELOO Real
+
+Checked22/10/2026. A=directly observed UI; B=official public policy/description; C=unknown; D=RELOO proposal. Reference evidence is retained in ignored `output/rea/superapp/`; no reference images, text, logo or code imported into RELOO assets. Prior Dayladau Host study remains separate (`BOOKING_HOST_REFERENCE_20261022.md`) and does not establish Go2Joy behavior.
+
+| Platform | Screen/flow and evidence | Problem addressed | RELOO application / rule / component | Difference and unknowns |
+|---|---|---|---|---|
+| Go2Joy | A browser home: hourly/overnight/daily, location/dates, card time range and price; `go2joy-home.json`, ev_fe3002d724e51c0a6c22f9b62c9adc22dd0743ee6ef0124e5f270deb953f6329 | Price meaningful only with schedule | STAY-002; existing Stays review, future mode tariff | RELOO only day demo; not copy inventory/photos/promos; payment/host/internal pricing unobserved |
+| Go2Joy | B [official regulations](https://go2joy.vn/en-vn/regulations-on-operating-website), `go2joy.json`, ev_909c6b0ca88f6a96871c2805fa5ea241ee7872ecd083ea980e1874d08f2e9954 | Consumer/provider roles and platform responsibility | LEGAL-001 register scoped per RELOO business | No claim competitor terms approve RELOO model; booking no real hold |
+| Small Jobs | A Samsung1.2.4 home/filter; B [official site](https://smalljobs.vn/) links exact Android package, `smalljobs.json`, ev_bcc1fc28bfbd3ab30fd1e5151f8869345c7a8463b5ff019e519d396076f4b1a3 | Separate worker/recruiter intent, field/location and job types | JOB-001 + UX-001; JobsLanding roles/coming-soon, future protected pipeline | No real application; identity/payment/anti-fraud internals unverified; promotional safety claims not guaranteed |
+| Mioto | A Samsung5.3.1 home self-drive/chauffeur, location/time; B [terms](https://www.mioto.vn/terms), `mioto.json`, ev_273a315e75f4d6b51fc6f4b62c5a58765a051c105c25c5f91fcc9062d98f2fe0 | Rental dates, handover responsibility, trust | RENT-001 reuse existing rental calendar/identity/agreements | Do not transfer vehicle insurance or driving requirements to all items; booking/payout unobserved this run |
+| Chợ Tốt | A Samsung5.51.0 category/feed card product specs/condition/sale price, saved/notification, bottom nav; B [regulations](https://trogiup.chotot.com/nguoi-mua/hoat-dong/), `chotot.json`, ev_53a05e08481a67469e829baaaa5701f6bed089e20e18f9af3bd277d293b5630a | Buyer/seller connection and category context | SALE-001 proposal, existing sale API, shell routes and posting chooser | Negotiation FSM is RELOO proposal, not claimed as Chợ Tốt rule; no chat/offer sent |
+
+Research boundary: official source pages rendered through REA scenario, no hidden/private API, no new accounts, no payment/hold/application/chat/public posting. Samsung evidence app versions verified via ADB metadata projection, not APK signature attestation. No Go2Joy package match for query `go2joy`; alternative package identity remains unverified. Don't guess/install a similar app to fill gap.
+
+Official legal metadata [91/2025/QH15](https://chinhphu.vn/?classid=1&docid=214590&pageid=27160&typegroupid=3) rendered `privacy-law.json`, ev_2ec4e27b5b3e9867d3950f766c0ad132c5ed32b859c76b6ff383cf31d769e5f0. Full article/model/transitional validation still legal-review gate. Existing repository legal matrix carries further primary-source links, not all rechecked this run; no blanket compliance claim.
+
+## Coverage questions still open
+
+Go2Joy native target identity, search detail/checkout states, partner onboarding; Small Jobs application/shift acceptance/payment/dispute and recruiter permission; Mioto detailed rental/handover recovery in current app version; Chợ Tốt posting/moderation/negotiation. All these are UNOBSERVED in this run unless linked to prior evidence explicitly. Public site descriptions cannot replace direct runtime observation. Continue module-by-module without waiting for every competitor path.

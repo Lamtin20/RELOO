@@ -1,0 +1,10 @@
+[Unit]
+Description=RELOO grounded news automation
+After=docker.service
+Requires=docker.service
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/docker exec reloo-web-worker-1 nice -n 15 node /worker/scripts/news-autopilot.mjs
+TimeoutStartSec=1140
+

@@ -1,0 +1,14 @@
+﻿ma_truong,ten_truong,gia_tri,bat_buoc,goi_y
+__format,Định dạng,reloo-listing-v1,,
+title,Tên món đồ,,Có,"Tên sản phẩm, model và phiên bản"
+category,Danh mục,salon-toc,Có,Salon tóc
+condition,Tình trạng,good,Có,new: Mới 100%; like_new: Như mới; good: Tốt; fair: Khá
+description,Mô tả & điều kiện thuê,,Có,Mô tả thực tế và điều kiện giao nhận
+dailyPrice,Giá thuê mỗi ngày,,Có,"Số nguyên VND, ví dụ 180000"
+marketValue,Giá trị tài sản,,Có,"Số nguyên VND, ví dụ 3500000"
+addressDetail,Chi tiết địa chỉ,,Không,"Số nhà, đường hoặc tòa nhà"
+spec.brand,Thương hiệu,,Có,"Dyson, Panasonic..."
+spec.type,Loại thiết bị,,Có,"Máy sấy, máy uốn..."
+spec.power,Công suất / Nhiệt độ,,Có,"1600W, 230°C..."
+spec.hygiene,Vệ sinh thiết bị,,Có,Khử khuẩn sau mỗi lần thuê; Túi riêng cho mỗi khách; Reloo-Care tiệt trùng
+spec.accessories,Phụ kiện kèm theo,,Có,Liệt kê phụ kiện; nhập Không có nếu không kèm phụ kiện

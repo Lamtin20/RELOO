@@ -1,0 +1,269 @@
+.market-extras-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 20px;
+  margin-top: 30px;
+}
+.market-extras-grid > .market-shorts,
+.market-extras-grid > .market-cashback,
+.market-extras-grid > .market-service-pair {
+  margin: 0;
+}
+.market-promo__dots .market-promo__pause::after {
+  display: none;
+}
+.market-promo__pause {
+  color: #537163;
+  border-radius: 50%;
+}
+.market-promo__pause:focus-visible {
+  outline: 2px solid #087e59;
+}
+.rental-benefits article > img {
+  display: block;
+  margin-inline: auto;
+}
+.market-extras-grid h2 br::after {
+  content: " ";
+}
+.market-extras-grid .market-service-pair h2 {
+  word-spacing: 1px;
+}
+.rental-benefits {
+  margin: 36px 0;
+  padding: 30px 24px;
+  border-radius: 26px;
+  background: #f2f9f5;
+  border: 1px solid #e3eee7;
+  text-align: center;
+}
+.rental-benefits header {
+  max-width: 670px;
+  margin: auto;
+}
+.rental-benefits header > span {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1.4px;
+  color: #27845d;
+}
+.market-home .rental-benefits h2 {
+  font-size: 26px;
+  line-height: 1.4;
+  margin: 10px 0;
+}
+.rental-benefits header p {
+  font-size: 13px;
+  color: #6c8475;
+  line-height: 1.7;
+}
+.rental-benefits > div {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 22px 26px;
+  margin: 26px 0;
+}
+.rental-benefits article {
+  padding: 12px;
+  min-width: 0;
+}
+.rental-benefits img {
+  object-fit: contain;
+  filter: drop-shadow(0 5px 6px #254b2f0b);
+}
+.rental-benefits h3 {
+  font-size: 15px;
+  margin: 12px 0 7px;
+}
+.rental-benefits article p {
+  font-size: 12px;
+  line-height: 1.8;
+  color: #6d8175;
+  max-width: 260px;
+  margin: auto;
+}
+.rental-benefits > small {
+  display: block;
+  font-size: 11px;
+  line-height: 1.8;
+  color: #829286;
+  max-width: 700px;
+  margin: auto;
+}
+@media (min-width: 901px) {
+  .market-extras-grid {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    align-items: stretch;
+  }
+  .market-extras-grid > .market-shorts,
+  .market-extras-grid > .market-cashback {
+    min-height: 280px;
+    padding: 28px;
+    gap: 20px;
+    border-radius: 24px;
+  }
+  .market-extras-grid > .market-service-pair {
+    grid-column: 1/-1;
+  }
+  .market-extras-grid > .market-cashback {
+    grid-column: 1/-1;
+  }
+  .market-extras-grid .market-shorts h2 {
+    font-size: 27px;
+  }
+  .market-extras-grid .market-shorts__art {
+    width: 125px;
+    min-height: 170px;
+  }
+  .market-extras-grid .market-service-art {
+    width: 78px;
+    height: 78px;
+  }
+  .market-extras-grid .market-cashback h2 {
+    font-size: 25px;
+  }
+  .market-extras-grid .market-service-pair section {
+    display: grid;
+    grid-template-columns: 42px minmax(0, 1fr);
+    gap: 7px 16px;
+    padding: 24px 28px;
+  }
+  .market-extras-grid .market-service-pair section > svg {
+    grid-row: 1/4;
+    align-self: start;
+  }
+  .market-extras-grid .market-service-pair h2 {
+    margin: 0;
+    font-size: 22px;
+  }
+  .market-extras-grid .market-service-pair h2 br {
+    display: none;
+  }
+  .market-extras-grid .market-service-pair p,
+  .market-extras-grid .market-service-pair a {
+    grid-column: 2;
+    margin: 0;
+  }
+  .market-extras-grid .market-service-pair a {
+    margin-top: 5px;
+  }
+}
+@media (max-width: 900px) {
+  html,
+  body {
+    background: #f4fff7;
+  }
+  .site-header-shell,
+  .reloo-native .site-header-shell {
+    padding-top: env(safe-area-inset-top, 0px);
+    background: #f4fff7 !important;
+    overflow: visible;
+  }
+  .site-header-shell::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 100%;
+    height: env(safe-area-inset-top, 0px);
+    background: #f4fff7;
+    pointer-events: none;
+  }
+  .dashboard-main > .native-header,
+  .mobile-market-header > .native-header,
+  .auth-site__header {
+    padding-top: calc(10px + env(safe-area-inset-top, 0px));
+  }
+  .site-header-shell .native-header {
+    padding-top: 10px;
+  }
+  .market-extras-grid {
+    gap: 18px;
+    margin-top: 26px;
+  }
+  .rental-benefits {
+    padding: 24px 14px;
+    margin: 26px 0;
+    border-radius: 22px;
+  }
+  .market-home .rental-benefits h2 {
+    font-size: 21px;
+  }
+  .rental-benefits > div {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px 10px;
+  }
+  .rental-benefits article {
+    padding: 4px;
+  }
+  .rental-benefits img {
+    width: 80px;
+    height: 80px;
+  }
+  .rental-benefits h3 {
+    font-size: 13px;
+  }
+  .rental-benefits article p {
+    font-size: 11px;
+  }
+  .bottom-nav.bottom-nav--reloo {
+    padding-inline: 8px;
+    border-radius: 23px 23px 0 0;
+    background: #fffffff5;
+    box-shadow: 0 -4px 18px #184b2d10;
+    border-top: 1px solid #e1ece5;
+  }
+  .bottom-nav--reloo .bottom-nav__clean-row,
+  .reloo-native .bottom-nav--reloo .bottom-nav__clean-row {
+    min-height: 71px;
+  }
+  .bottom-nav--reloo .bottom-nav__item,
+  .reloo-native .bottom-nav--reloo .bottom-nav__item {
+    min-height: 66px;
+    gap: 4px;
+    padding: 7px 0;
+    transition:
+      transform 0.16s ease,
+      color 0.16s ease;
+  }
+  .bottom-nav--reloo .bottom-nav__icon,
+  .reloo-native .bottom-nav--reloo .bottom-nav__icon {
+    width: 46px;
+    height: 29px;
+    border-radius: 15px;
+    transition:
+      background 0.16s ease,
+      transform 0.16s ease;
+  }
+  .bottom-nav--reloo .bottom-nav__item.is-active .bottom-nav__icon {
+    background: #e4f5e9;
+  }
+  .bottom-nav--reloo .bottom-nav__label,
+  .reloo-native .bottom-nav--reloo .bottom-nav__label {
+    font-size: 10px;
+    font-weight: 500;
+  }
+  .bottom-nav--reloo .bottom-nav__item--post .bottom-nav__icon,
+  .reloo-native .bottom-nav--reloo .bottom-nav__item--post .bottom-nav__icon {
+    width: 47px;
+    height: 40px;
+    border-radius: 14px;
+    margin-top: -5px;
+    background: linear-gradient(135deg, #079565, #087653);
+    box-shadow: 0 4px 10px #08825822;
+  }
+  .bottom-nav--reloo .bottom-nav__item:active .bottom-nav__icon {
+    transform: scale(0.88);
+  }
+  .app-shell--home .site-header-shell {
+    background: #f4fff7 !important;
+  }
+  .layout-sidebar .desktop-market-header {
+    display: none;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .bottom-nav--reloo * {
+    transition: none !important;
+  }
+}

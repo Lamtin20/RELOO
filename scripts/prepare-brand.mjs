@@ -1,0 +1,11 @@
+import sharp from "sharp";
+import { writeFile } from "node:fs/promises";
+await sharp("public/brand/reloo-logo.png").resize(512, 512, { fit: "contain", background: "#ffffff" }).png().toFile("app/icon.png");
+await sharp("public/brand/reloo-logo.png").resize(180, 180, { fit: "contain", background: "#ffffff" }).png().toFile("app/apple-icon.png");
+console.log("RELOO browser and Apple icons generated from the existing logo.");
+const png = await sharp("public/brand/reloo-logo.png").resize(256, 256, { fit: "contain", background: "#ffffff" }).png().toBuffer();
+const directory = Buffer.alloc(22);
+directory.writeUInt16LE(1, 2); directory.writeUInt16LE(1, 4);
+directory.writeUInt16LE(1, 10); directory.writeUInt16LE(32, 12);
+directory.writeUInt32LE(png.length, 14); directory.writeUInt32LE(22, 18);
+await writeFile("app/favicon.ico", Buffer.concat([directory, png]));

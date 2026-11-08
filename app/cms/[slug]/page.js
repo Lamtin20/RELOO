@@ -6,6 +6,7 @@ import { MarketplaceShell } from "@/components/layout/MarketplaceShell";
 import { EmptyState } from "@/components/ui";
 import { useReloo } from "@/lib/store";
 import { formatDate } from "@/lib/utils";
+import { LegalDocument } from '@/components/privacy/LegalDocument';
 
 function renderInline(text, keyPrefix) {
   const parts = text.split(/\*\*(.+?)\*\*/g);
@@ -63,6 +64,7 @@ export default function CmsPage() {
   const params = useParams();
   const { state } = useReloo();
   const page = state.cmsPages.find((p) => p.slug === params.slug && p.published);
+  if(['terms','rental-guide','help','privacy-annex','deposit-terms'].includes(params.slug))return <MarketplaceShell><article className="container cms-page"><LegalDocument slug={params.slug}/></article></MarketplaceShell>;
 
   if (!page) {
     return (

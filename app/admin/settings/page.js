@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Save, SlidersHorizontal, Percent, MapPin, Phone, Flag } from "lucide-react";
 import { useReloo } from "@/lib/store";
 import { PageHeader } from "@/components/admin/PageHeader";
@@ -10,11 +10,7 @@ export default function SettingsPage() {
   const { state, actions } = useReloo();
   const settings = state.settings || {};
 
-  const [form, setForm] = useState(null);
-  const [savedAt, setSavedAt] = useState(null);
-
-  useEffect(() => {
-    setForm({
+  const [form,setForm]=useState(()=>({
       platformFee: settings.platformFee ?? FEE_RATES.platform,
       relooCareBasicRate: settings.relooCareBasicRate ?? FEE_RATES.relooCareBasic,
       relooCarePremiumRate: settings.relooCarePremiumRate ?? FEE_RATES.relooCarePremium,
@@ -25,9 +21,8 @@ export default function SettingsPage() {
       maintenanceMode: settings.maintenanceMode ?? false,
       supportHotline: settings.supportHotline ?? "",
       supportEmail: settings.supportEmail ?? "",
-    });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    }));
+  const [savedAt,setSavedAt]=useState(null);
 
   if (!form) return null;
 

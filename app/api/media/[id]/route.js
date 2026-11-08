@@ -1,0 +1,3 @@
+import {securityDb} from '@/lib/security/service';
+import {mediaBytes} from '@/lib/content/media';
+export async function GET(request,{params}){try{const {id}=await params;if(!/^[a-f0-9-]{36}$/i.test(id))return new Response(null,{status:404});const {data,error}=await securityDb().from('media_assets').select('filename,mime').eq('id',id).single();if(error)return new Response(null,{status:404});return new Response(await mediaBytes(data),{headers:{'Content-Type':'image/webp','Cache-Control':'public,max-age=31536000,immutable','X-Content-Type-Options':'nosniff'}});}catch{return new Response(null,{status:404});}}

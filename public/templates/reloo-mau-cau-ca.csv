@@ -1,0 +1,14 @@
+﻿ma_truong,ten_truong,gia_tri,bat_buoc,goi_y
+__format,Định dạng,reloo-listing-v1,,
+title,Tên món đồ,,Có,"Tên sản phẩm, model và phiên bản"
+category,Danh mục,cau-ca,Có,Câu cá
+condition,Tình trạng,good,Có,new: Mới 100%; like_new: Như mới; good: Tốt; fair: Khá
+description,Mô tả & điều kiện thuê,,Có,Mô tả thực tế và điều kiện giao nhận
+dailyPrice,Giá thuê mỗi ngày,,Có,"Số nguyên VND, ví dụ 180000"
+marketValue,Giá trị tài sản,,Có,"Số nguyên VND, ví dụ 3500000"
+addressDetail,Chi tiết địa chỉ,,Không,"Số nhà, đường hoặc tòa nhà"
+spec.brand,Thương hiệu,,Có,"Naturehike, Fire-Maple..."
+spec.capacity,Sức chứa / Quy cách,,Có,"Lều 4 người, 2 lớp..."
+spec.weight,Trọng lượng,,Có,2.1 kg
+spec.weather,Chống nước / Gió,,Có,"Chống mưa IPX4, gió cấp 6..."
+spec.included,Bộ kèm theo,,Có,"Peg, túi đựng, lót lều..."

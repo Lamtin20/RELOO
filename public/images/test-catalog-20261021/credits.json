@@ -1,0 +1,322 @@
+[
+  {
+    "key": "camera",
+    "title": "File:Sony Alpha ILCE-7 (A7) full-frame camera with body cap.jpg",
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/09/Sony_Alpha_ILCE-7_%28A7%29_full-frame_camera_with_body_cap.jpg/3840px-Sony_Alpha_ILCE-7_%28A7%29_full-frame_camera_with_body_cap.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "page": "https://commons.wikimedia.org/wiki/File:Sony_Alpha_ILCE-7_(A7)_full-frame_camera_with_body_cap.jpg",
+    "license": "CC BY-SA 3.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+    "artist": "Jürgen Matern",
+    "description": "Sony Alpha ILCE-7 (A7) full-frame camera (mirrorless interchangeable-lens camera).",
+    "transform": "Image 1: resized/padded to 4:3; images 2 and 3: cropped detail views of the same source.",
+    "images": [
+      "/public/images/test-catalog-20261021/01-camera-1.webp",
+      "/public/images/test-catalog-20261021/01-camera-2.webp",
+      "/public/images/test-catalog-20261021/01-camera-3.webp"
+    ]
+  },
+  {
+    "key": "lens",
+    "title": "File:LUMIX G VARIO 45-200 1170797.jpg",
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d5/LUMIX_G_VARIO_45-200_1170797.jpg/3840px-LUMIX_G_VARIO_45-200_1170797.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "page": "https://commons.wikimedia.org/wiki/File:LUMIX_G_VARIO_45-200_1170797.jpg",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "artist": "Ermell",
+    "description": "LUMIX G VARIO 45-200 mm F4.0-5.6 II O.I.S. with lens hood",
+    "transform": "Image 1: resized/padded to 4:3; images 2 and 3: cropped detail views of the same source.",
+    "images": [
+      "/public/images/test-catalog-20261021/02-lens-1.webp",
+      "/public/images/test-catalog-20261021/02-lens-2.webp",
+      "/public/images/test-catalog-20261021/02-lens-3.webp"
+    ]
+  },
+  {
+    "key": "drone",
+    "title": "File:DJI - Drohne Mavic 4 Pro.JPG",
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a8/DJI_-_Drohne_Mavic_4_Pro.JPG/3840px-DJI_-_Drohne_Mavic_4_Pro.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "page": "https://commons.wikimedia.org/wiki/File:DJI_-_Drohne_Mavic_4_Pro.JPG",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "artist": "C.Stadler/Bwag",
+    "description": "The DJI Mavic 4 Pro drone in flight.",
+    "transform": "Image 1: resized/padded to 4:3; images 2 and 3: cropped detail views of the same source.",
+    "images": [
+      "/public/images/test-catalog-20261021/03-drone-1.webp",
+      "/public/images/test-catalog-20261021/03-drone-2.webp",
+      "/public/images/test-catalog-20261021/03-drone-3.webp"
+    ]
+  },
+  {
+    "key": "tent",
+    "title": "File:A Quechua Arpenaz 2 XL tent pitched near Varshe Trekkers hut.jpg",
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/78/A_Quechua_Arpenaz_2_XL_tent_pitched_near_Varshe_Trekkers_hut.jpg/3840px-A_Quechua_Arpenaz_2_XL_tent_pitched_near_Varshe_Trekkers_hut.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "page": "https://commons.wikimedia.org/wiki/File:A_Quechua_Arpenaz_2_XL_tent_pitched_near_Varshe_Trekkers_hut.jpg",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "artist": "Bodhisattwa",
+    "description": "A Quechua Arpenaz 2 XL tent pitched near Varshe Trekkers hut",
+    "transform": "Image 1: resized/padded to 4:3; images 2 and 3: cropped detail views of the same source.",
+    "images": [
+      "/public/images/test-catalog-20261021/04-tent-1.webp",
+      "/public/images/test-catalog-20261021/04-tent-2.webp",
+      "/public/images/test-catalog-20261021/04-tent-3.webp"
+    ]
+  },
+  {
+    "key": "chair",
+    "title": "File:Helinox Ground Chair 1.jpg",
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/51/Helinox_Ground_Chair_1.jpg/3840px-Helinox_Ground_Chair_1.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "page": "https://commons.wikimedia.org/wiki/File:Helinox_Ground_Chair_1.jpg",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "artist": "PsamatheM",
+    "description": "Helinox Ground Chair",
+    "transform": "Image 1: resized/padded to 4:3; images 2 and 3: cropped detail views of the same source.",
+    "images": [
+      "/public/images/test-catalog-20261021/05-chair-1.webp",
+      "/public/images/test-catalog-20261021/05-chair-2.webp",
+      "/public/images/test-catalog-20261021/05-chair-3.webp"
+    ]
+  },
+  {
+    "key": "stove",
+    "title": "File:JetBoil-camping-stove-under-cooking-pot.jpg",
+    "url": "https://upload.wikimedia.org/wikipedia/commons/c/c3/JetBoil-camping-stove-under-cooking-pot.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled",
+    "page": "https://commons.wikimedia.org/wiki/File:JetBoil-camping-stove-under-cooking-pot.jpg",
+    "license": "CC BY 2.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/2.0",
+    "artist": "Original photo: Michael Pereckas on Flickr Modified by Gazebo on February 3, 2015 with the addition of comment and XMP-cc:License metadata and the removal of JPEG IFD1 (thumbnail) metadata.",
+    "description": "A photo of a JetBoil camping stove underneath a JetBoil 1.5L Cooking Pot.",
+    "transform": "Image 1: resized/padded to 4:3; images 2 and 3: cropped detail views of the same source.",
+    "images": [
+      "/public/images/test-catalog-20261021/06-stove-1.webp",
+      "/public/images/test-catalog-20261021/06-stove-2.webp",
+      "/public/images/test-catalog-20261021/06-stove-3.webp"
+    ]
+  },
+  {
+    "key": "laptop",
+    "title": "File:Macbook Air 15 inch - 1.jpg",
+    "url": "https://upload.wikimedia.org/wikipedia/commons/7/72/Macbook_Air_15_inch_-_1.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled",
+    "page": "https://commons.wikimedia.org/wiki/File:Macbook_Air_15_inch_-_1.jpg",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "artist": "KKPCW（Kyu3）",
+    "description": "Macbook Air 15インチモデル。名古屋市内の家電量販店で撮影。",
+    "transform": "Image 1: resized/padded to 4:3; images 2 and 3: cropped detail views of the same source.",
+    "images": [
+      "/public/images/test-catalog-20261021/07-laptop-1.webp",
+      "/public/images/test-catalog-20261021/07-laptop-2.webp",
+      "/public/images/test-catalog-20261021/07-laptop-3.webp"
+    ]
+  },
+  {
+    "key": "projector",
+    "title": "File:Epson EX3280 Projector.jpg",
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/ab/Epson_EX3280_Projector.jpg/3840px-Epson_EX3280_Projector.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "page": "https://commons.wikimedia.org/wiki/File:Epson_EX3280_Projector.jpg",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "artist": "TaurusEmerald",
+    "description": "An Epson EX3280 projector.",
+    "transform": "Image 1: resized/padded to 4:3; images 2 and 3: cropped detail views of the same source.",
+    "images": [
+      "/public/images/test-catalog-20261021/08-projector-1.webp",
+      "/public/images/test-catalog-20261021/08-projector-2.webp",
+      "/public/images/test-catalog-20261021/08-projector-3.webp"
+    ]
+  },
+  {
+    "key": "console",
+    "title": "File:Nintendo-Switch-Console-Docked-wJoyConRB.jpg",
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/76/Nintendo-Switch-Console-Docked-wJoyConRB.jpg/3840px-Nintendo-Switch-Console-Docked-wJoyConRB.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "page": "https://commons.wikimedia.org/wiki/File:Nintendo-Switch-Console-Docked-wJoyConRB.jpg",
+    "license": "Public domain",
+    "licenseUrl": "",
+    "artist": "Evan-Amos",
+    "description": "The Nintendo Switch, a hybrid portable/home console released by Nintendo in 2017. It is shown here in the docked/home mode, with the controllers detached from the main unit and in the included grip.",
+    "transform": "Image 1: resized/padded to 4:3; images 2 and 3: cropped detail views of the same source.",
+    "images": [
+      "/public/images/test-catalog-20261021/09-console-1.webp",
+      "/public/images/test-catalog-20261021/09-console-2.webp",
+      "/public/images/test-catalog-20261021/09-console-3.webp"
+    ]
+  },
+  {
+    "key": "dress",
+    "title": "File:Evening dress MET ci1983.6.1.R.jpg",
+    "url": "https://upload.wikimedia.org/wikipedia/commons/2/25/Evening_dress_MET_ci1983.6.1.R.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled",
+    "page": "https://commons.wikimedia.org/wiki/File:Evening_dress_MET_ci1983.6.1.R.jpg",
+    "license": "CC0",
+    "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+    "artist": "",
+    "description": " French; Evening dress;",
+    "transform": "Image 1: resized/padded to 4:3; images 2 and 3: cropped detail views of the same source.",
+    "images": [
+      "/public/images/test-catalog-20261021/10-dress-1.webp",
+      "/public/images/test-catalog-20261021/10-dress-2.webp",
+      "/public/images/test-catalog-20261021/10-dress-3.webp"
+    ]
+  },
+  {
+    "key": "stroller",
+    "title": "File:Orbit Baby Stroll Sleep Ride Black.png",
+    "url": "https://upload.wikimedia.org/wikipedia/commons/1/1b/Orbit_Baby_Stroll_Sleep_Ride_Black.png?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled",
+    "page": "https://commons.wikimedia.org/wiki/File:Orbit_Baby_Stroll_Sleep_Ride_Black.png",
+    "license": "Public domain",
+    "licenseUrl": "",
+    "artist": "Orbit Baby",
+    "description": "Orbit Baby Stroll Sleep Baby Ride",
+    "transform": "Image 1: resized/padded to 4:3; images 2 and 3: cropped detail views of the same source.",
+    "images": [
+      "/public/images/test-catalog-20261021/11-stroller-1.webp",
+      "/public/images/test-catalog-20261021/11-stroller-2.webp",
+      "/public/images/test-catalog-20261021/11-stroller-3.webp"
+    ]
+  },
+  {
+    "key": "vacuum",
+    "title": "File:A Dyson vacuum cleaner.jpg",
+    "url": "https://upload.wikimedia.org/wikipedia/commons/e/e8/A_Dyson_vacuum_cleaner.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled",
+    "page": "https://commons.wikimedia.org/wiki/File:A_Dyson_vacuum_cleaner.jpg",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "artist": "Tbatb",
+    "description": "​一台戴森吸塵器。",
+    "transform": "Image 1: resized/padded to 4:3; images 2 and 3: cropped detail views of the same source.",
+    "images": [
+      "/public/images/test-catalog-20261021/12-vacuum-1.webp",
+      "/public/images/test-catalog-20261021/12-vacuum-2.webp",
+      "/public/images/test-catalog-20261021/12-vacuum-3.webp"
+    ]
+  },
+  {
+    "key": "coffee",
+    "title": "File:Automatic espresso machine 02.JPG",
+    "url": "https://upload.wikimedia.org/wikipedia/commons/3/38/Automatic_espresso_machine_02.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled",
+    "page": "https://commons.wikimedia.org/wiki/File:Automatic_espresso_machine_02.JPG",
+    "license": "Public domain",
+    "licenseUrl": "",
+    "artist": "Feťour",
+    "description": "Automatic espresso machine DeLonghi.",
+    "transform": "Image 1: resized/padded to 4:3; images 2 and 3: cropped detail views of the same source.",
+    "images": [
+      "/public/images/test-catalog-20261021/13-coffee-1.webp",
+      "/public/images/test-catalog-20261021/13-coffee-2.webp",
+      "/public/images/test-catalog-20261021/13-coffee-3.webp"
+    ]
+  },
+  {
+    "key": "drill",
+    "title": "File:Bosch cordless Battdrill 14.4V blue series.jpg",
+    "url": "https://upload.wikimedia.org/wikipedia/commons/6/6e/Bosch_cordless_Battdrill_14.4V_blue_series.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled",
+    "page": "https://commons.wikimedia.org/wiki/File:Bosch_cordless_Battdrill_14.4V_blue_series.jpg",
+    "license": "CC BY-SA 2.0 ca",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.0/ca/deed.en",
+    "artist": "Luigi Zanasi",
+    "description": "Picture of battery operated cordless Bosch 3650 drill.",
+    "transform": "Image 1: resized/padded to 4:3; images 2 and 3: cropped detail views of the same source.",
+    "images": [
+      "/public/images/test-catalog-20261021/14-drill-1.webp",
+      "/public/images/test-catalog-20261021/14-drill-2.webp",
+      "/public/images/test-catalog-20261021/14-drill-3.webp"
+    ]
+  },
+  {
+    "key": "washer",
+    "title": "File:Karcher pressure washer K MINI.webp",
+    "url": "https://upload.wikimedia.org/wikipedia/commons/7/76/Karcher_pressure_washer_K_MINI.webp?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled",
+    "page": "https://commons.wikimedia.org/wiki/File:Karcher_pressure_washer_K_MINI.webp",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "artist": "Mosatsu",
+    "description": "家庭用高圧洗浄機",
+    "transform": "Image 1: resized/padded to 4:3; images 2 and 3: cropped detail views of the same source.",
+    "images": [
+      "/public/images/test-catalog-20261021/15-washer-1.webp",
+      "/public/images/test-catalog-20261021/15-washer-2.webp",
+      "/public/images/test-catalog-20261021/15-washer-3.webp"
+    ]
+  },
+  {
+    "key": "speaker",
+    "title": "Unsplash photo-1608043152269-423dbba4e7e1",
+    "url": "https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?auto=format&fit=max&w=2000&q=90",
+    "page": "https://images.unsplash.com/photo-1608043152269-423dbba4e7e1",
+    "license": "Unsplash License",
+    "licenseUrl": "https://unsplash.com/license",
+    "artist": "Unsplash contributors",
+    "description": "Illustrative stock photograph; fictional test-product specifications are not claims about this photograph.",
+    "transform": "Image 1: resized/padded to 4:3; images 2 and 3: cropped detail views of the same source.",
+    "images": [
+      "/public/images/test-catalog-20261021/16-speaker-1.webp",
+      "/public/images/test-catalog-20261021/16-speaker-2.webp",
+      "/public/images/test-catalog-20261021/16-speaker-3.webp"
+    ]
+  },
+  {
+    "key": "guitar",
+    "title": "Unsplash photo-1510915361894-db8b60106cb1",
+    "url": "https://images.unsplash.com/photo-1510915361894-db8b60106cb1?auto=format&fit=max&w=2000&q=90",
+    "page": "https://images.unsplash.com/photo-1510915361894-db8b60106cb1",
+    "license": "Unsplash License",
+    "licenseUrl": "https://unsplash.com/license",
+    "artist": "Unsplash contributors",
+    "description": "Illustrative stock photograph; fictional test-product specifications are not claims about this photograph.",
+    "transform": "Image 1: resized/padded to 4:3; images 2 and 3: cropped detail views of the same source.",
+    "images": [
+      "/public/images/test-catalog-20261021/17-guitar-1.webp",
+      "/public/images/test-catalog-20261021/17-guitar-2.webp",
+      "/public/images/test-catalog-20261021/17-guitar-3.webp"
+    ]
+  },
+  {
+    "key": "bicycle",
+    "title": "Unsplash photo-1485965120184-e220f721d03e",
+    "url": "https://images.unsplash.com/photo-1485965120184-e220f721d03e?auto=format&fit=max&w=2000&q=90",
+    "page": "https://images.unsplash.com/photo-1485965120184-e220f721d03e",
+    "license": "Unsplash License",
+    "licenseUrl": "https://unsplash.com/license",
+    "artist": "Unsplash contributors",
+    "description": "Illustrative stock photograph; fictional test-product specifications are not claims about this photograph.",
+    "transform": "Image 1: resized/padded to 4:3; images 2 and 3: cropped detail views of the same source.",
+    "images": [
+      "/public/images/test-catalog-20261021/18-bicycle-1.webp",
+      "/public/images/test-catalog-20261021/18-bicycle-2.webp",
+      "/public/images/test-catalog-20261021/18-bicycle-3.webp"
+    ]
+  },
+  {
+    "key": "car",
+    "title": "Unsplash photo-1492144534655-ae79c964c9d7",
+    "url": "https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?auto=format&fit=max&w=2000&q=90",
+    "page": "https://images.unsplash.com/photo-1492144534655-ae79c964c9d7",
+    "license": "Unsplash License",
+    "licenseUrl": "https://unsplash.com/license",
+    "artist": "Unsplash contributors",
+    "description": "Illustrative stock photograph; fictional test-product specifications are not claims about this photograph.",
+    "transform": "Image 1: resized/padded to 4:3; images 2 and 3: cropped detail views of the same source.",
+    "images": [
+      "/public/images/test-catalog-20261021/19-car-1.webp",
+      "/public/images/test-catalog-20261021/19-car-2.webp",
+      "/public/images/test-catalog-20261021/19-car-3.webp"
+    ]
+  },
+  {
+    "key": "printer",
+    "title": "Unsplash photo-1612815154858-60aa4c59eaa6",
+    "url": "https://images.unsplash.com/photo-1612815154858-60aa4c59eaa6?auto=format&fit=max&w=2000&q=90",
+    "page": "https://images.unsplash.com/photo-1612815154858-60aa4c59eaa6",
+    "license": "Unsplash License",
+    "licenseUrl": "https://unsplash.com/license",
+    "artist": "Unsplash contributors",
+    "description": "Illustrative stock photograph; fictional test-product specifications are not claims about this photograph.",
+    "transform": "Image 1: resized/padded to 4:3; images 2 and 3: cropped detail views of the same source.",
+    "images": [
+      "/public/images/test-catalog-20261021/20-printer-1.webp",
+      "/public/images/test-catalog-20261021/20-printer-2.webp",
+      "/public/images/test-catalog-20261021/20-printer-3.webp"
+    ]
+  }
+]

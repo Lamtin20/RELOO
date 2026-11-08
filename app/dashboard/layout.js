@@ -1,98 +1,64 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import {AccountCountsProvider} from "@/components/dashboard/AccountCounts";
+import {AccountNavigation} from "@/components/dashboard/AccountNavigation";
+import {RelooLoading} from '@/components/ui/RelooLoading';
+import { usePathname,useRouter } from "next/navigation";
+import {BannerPlacement} from '@/components/content/BannerPlacement';
 import { LockKeyhole } from "lucide-react";
 import { useAuth } from "@/lib/store";
-import { DashboardSidebar } from "@/components/layout/DashboardSidebar";
 import { BottomNav } from "@/components/layout/BottomNav";
-import { PageBackButton } from "@/components/navigation/PageBackButton";
 import { SwipeBackHandler } from "@/lib/hooks/useSwipeBack";
-import { Badge } from "@/components/ui";
-import { Logo } from "@/components/brand/Logo";
+import {Suspense} from 'react';
+import {useSearchParams} from 'next/navigation';
+import {MiniAppNavigation} from '@/components/superapp/MiniAppNavigation';
+import {miniAppContext} from '@/lib/product/mini-app-navigation';
 
-const ROLE_LABELS = {
-  admin: "Quản trị viên",
-  lender: "Chủ đồ",
-  renter: "Người thuê",
-  both: "Chủ đồ & Người thuê",
-};
-
-export default function DashboardLayout({ children }) {
+export default function DashboardLayout(props){return <Suspense><DashboardContent {...props}/></Suspense>}
+function DashboardContent({ children }) {
+  const router=useRouter();
   const { user, hydrated } = useAuth();
   const pathname = usePathname();
+  const params=useSearchParams(),world=miniAppContext(pathname,params.toString());
   const isMessagesPage = pathname?.startsWith("/dashboard/messages");
   const showDashboardBack = pathname !== "/dashboard" && !isMessagesPage;
 
   if (!hydrated) {
     return (
-      <div className="dashboard-guard">
-        <div className="dashboard-spinner" aria-label="Đang tải" />
-      </div>
+      <MiniAppNavigation><div className="dashboard-guard">
+        <RelooLoading/>
+      </div></MiniAppNavigation>
     );
   }
 
-  if (!user) {
+  if (!user && !(isMessagesPage && params.get('support')==='1')) {
     return (
-      <div className="dashboard-guard">
+      <MiniAppNavigation><div className="dashboard-guard">
         <div className="dashboard-guard__card panel animate-fade-up">
           <div className="empty-state__icon" style={{ margin: "0 auto" }}>
             <LockKeyhole size={26} strokeWidth={1.75} />
           </div>
           <h2 className="mt-4">Vui lòng đăng nhập</h2>
           <p className="text-muted mt-2">
-            Bạn cần đăng nhập để truy cập trang quản lý của RELOO - quản lý kho
-            đồ, đơn hàng, thu nhập cho thuê và nhiều hơn nữa.
+            Đăng nhập để xem các cuộc trao đổi và quản lý tin cho thuê của bạn.
           </p>
-          <Link href="/auth" className="btn btn-primary mt-6">
+          <Link
+            href={`/auth?next=${encodeURIComponent(pathname)}`}
+            onClick={event=>{event.preventDefault();router.push("/auth?next="+encodeURIComponent(window.location.pathname+window.location.search));}}
+            className="btn btn-primary mt-6"
+          >
             Đăng nhập ngay
           </Link>
         </div>
-      </div>
+      </div></MiniAppNavigation>
     );
   }
 
-  return (
-    <div className={`layout-sidebar ${isMessagesPage ? "layout-messages" : "has-bottom-nav"}`}>
-      <SwipeBackHandler enabled={showDashboardBack} fallback="/dashboard" />
-      {!isMessagesPage && <DashboardSidebar />}
-
-      <div className="dashboard-main">
-        {!isMessagesPage && (
-          <header className="dashboard-topbar">
-            {showDashboardBack && (
-              <PageBackButton
-                variant="topbar"
-                fallback="/dashboard"
-                showLabel={false}
-                className="dashboard-topbar__back"
-              />
-            )}
-            <div className="dashboard-topbar__brand">
-              <Logo size="sm" />
-            </div>
-
-            <div className="dashboard-topbar__spacer" />
-
-            <div className="dashboard-topbar__user">
-              <img
-                src={user.avatar}
-                alt={user.name}
-                className="dashboard-avatar"
-              />
-              <div className="dashboard-topbar__userinfo">
-                <span className="font-semibold text-sm">{user.name}</span>
-                <Badge variant="green" className="dashboard-topbar__role">
-                  {ROLE_LABELS[user.role] ?? user.role}
-                </Badge>
-              </div>
-            </div>
-          </header>
-        )}
-
-        <div className="sidebar-content">{children}</div>
-      </div>
-      {!isMessagesPage && <BottomNav />}
-    </div>
-  );
+  return <MiniAppNavigation><AccountCountsProvider><div className={"account-workspace"+(isMessagesPage?" layout-messages":" has-bottom-nav")}>
+    <SwipeBackHandler enabled={showDashboardBack} fallback="/dashboard"/>
+    {!isMessagesPage&&!world&&<AccountNavigation/>}
+    <main className="dashboard-main"><div className="sidebar-content">{pathname==='/dashboard'&&<BannerPlacement placement="dashboard_top"/>}{children}</div></main>
+    {!isMessagesPage&&!world&&<BottomNav/>}
+  </div></AccountCountsProvider></MiniAppNavigation>;
 }

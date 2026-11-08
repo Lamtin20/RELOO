@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
   ArrowLeft,
   Check,
@@ -14,6 +14,8 @@ import {
 import { fetchProvinces, fetchWards, formatAddressString } from "@/lib/vn-address";
 import { formatProvinceFilterLabel } from "@/lib/listing-location";
 import { useGeolocation } from "@/lib/hooks/useGeolocation";
+import {locationLabel} from '@/lib/location-label';
+import {LocationMap} from './LocationMap';
 
 const DEFAULT_RADIUS = 20;
 
@@ -27,20 +29,39 @@ function wardPickerLabel(wards) {
  * Sheet chọn khu vực tìm kiếm (Chợ Tốt style)
  * mode: current → có bán kính | province → lọc theo tỉnh + phường/xã (multi)
  */
-export function ExploreLocationSheet({
+export function ExploreLocationSheet({open,...props}){return open?<ExploreLocationContent open {...props}/>:null;}
+function ExploreLocationContent({
   open,
   onClose,
   value,
   onApply,
   radius = DEFAULT_RADIUS,
 }) {
+  const root = useRef(null), close = useRef(onClose);
+  useEffect(() => { close.current = onClose; }, [onClose]);
+  useEffect(() => {
+    if (!open) return;
+    const previous = document.activeElement, overflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    root.current?.querySelector('button')?.focus({preventScroll:true});
+    function keydown(event) {
+      if (event.key === 'Escape') { event.preventDefault(); event.stopPropagation(); close.current?.(); return; }
+      if (event.key !== 'Tab') return;
+      const nodes = [...(root.current?.querySelectorAll('button,input,select,a[href],[tabindex="0"]') || [])].filter(node => !node.disabled && node.getClientRects().length);
+      const first=nodes[0], last=nodes.at(-1);
+      if (event.shiftKey && document.activeElement===first) {event.preventDefault();last?.focus();}
+      else if (!event.shiftKey && document.activeElement===last) {event.preventDefault();first?.focus();}
+    }
+    document.addEventListener('keydown',keydown,true);
+    return () => {document.body.style.overflow=overflow;document.removeEventListener('keydown',keydown,true);if(previous?.isConnected)previous.focus({preventScroll:true});};
+  }, [open]);
   const [view, setView] = useState("main");
   const [mode, setMode] = useState(value?.mode || "current");
   const [location, setLocation] = useState(value?.location || null);
   const [localRadius, setLocalRadius] = useState(radius);
   const [provinces, setProvinces] = useState([]);
   const [wards, setWards] = useState([]);
-  const [loadingProv, setLoadingProv] = useState(false);
+  const [loadingProv, setLoadingProv] = useState(true);
   const [loadingWards, setLoadingWards] = useState(false);
   const [provQ, setProvQ] = useState("");
   const [wardQ, setWardQ] = useState("");
@@ -48,18 +69,7 @@ export function ExploreLocationSheet({
 
   useEffect(() => {
     if (!open) return;
-    setView("main");
-    setMode(value?.mode || "current");
-    setLocation(value?.location || null);
-    setLocalRadius(radius);
-    setProvQ("");
-    setWardQ("");
-  }, [open, value, radius]);
-
-  useEffect(() => {
-    if (!open) return;
     let alive = true;
-    setLoadingProv(true);
     fetchProvinces()
       .then((data) => alive && setProvinces(data))
       .catch(() => {})
@@ -71,11 +81,11 @@ export function ExploreLocationSheet({
 
   useEffect(() => {
     if (!open || mode !== "province" || !location?.province?.code) {
-      setWards([]);
-      return;
+      const reset=setTimeout(()=>setWards([]),0);
+      return()=>clearTimeout(reset);
     }
     let alive = true;
-    setLoadingWards(true);
+    Promise.resolve().then(()=>{if(alive)setLoadingWards(true);});
     fetchWards(location.province.code)
       .then((data) => alive && setWards(data))
       .catch(() => alive && setWards([]))
@@ -190,13 +200,13 @@ export function ExploreLocationSheet({
   if (!open) return null;
 
   return (
-    <div className="explore-loc-sheet" role="dialog" aria-modal="true">
+    <div ref={root} className="explore-loc-sheet" role="dialog" aria-modal="true" aria-labelledby="explore-location-title">
       <div className="explore-loc-sheet__backdrop" onClick={onClose} />
 
       {view === "main" ? (
         <div className="explore-loc-sheet__panel">
           <div className="explore-loc-sheet__head">
-            <h3>Khu vực</h3>
+            <h3 id="explore-location-title">Khu vực</h3>
             <button type="button" className="icon-btn" onClick={onClose} aria-label="Đóng">
               <X size={18} />
             </button>
@@ -213,7 +223,7 @@ export function ExploreLocationSheet({
               </span>
               <span className="explore-loc-sheet__option-text">
                 <strong>Vị trí hiện tại</strong>
-                <em>{currentLabel}</em>
+                <em>{locationLabel(currentLabel)}</em>
               </span>
               {mode === "current" && <Check size={18} className="explore-loc-sheet__check" />}
             </button>
@@ -245,7 +255,7 @@ export function ExploreLocationSheet({
               <MapPin size={16} />
               <span>
                 {location?.province?.name && mode === "province"
-                  ? location.province.name
+                  ? locationLabel(location.province.name)
                   : "Chọn tỉnh thành"}
               </span>
               <ChevronDown size={16} />
@@ -263,6 +273,7 @@ export function ExploreLocationSheet({
               </button>
             )}
 
+            {(location?.coords||location?.province)&&<LocationMap coords={mode==='current'?location.coords:null} address={[location?.ward?.name,location?.province?.name].filter(Boolean).join(', ')} approximate={mode!=='current'||!location?.coords}/>}
             {mode === "current" && (
               <div className="explore-loc-sheet__radius">
                 <div className="explore-loc-sheet__radius-head">
@@ -307,7 +318,7 @@ export function ExploreLocationSheet({
             >
               <ArrowLeft size={20} />
             </button>
-            <h3>Tỉnh thành</h3>
+            <h3 id="explore-location-title">Tỉnh thành</h3>
             <span className="explore-loc-sheet__head-spacer" />
           </div>
 
@@ -331,7 +342,7 @@ export function ExploreLocationSheet({
               filteredProv.map((p) => (
                 <li key={p.code}>
                   <button type="button" onClick={() => selectProvince(p)}>
-                    <span>{p.name}</span>
+                    <span>{locationLabel(p.name)}</span>
                     <span
                       className={`explore-loc-sheet__radio ${
                         mode === "province" && location?.province?.code === p.code ? "is-on" : ""
@@ -356,7 +367,7 @@ export function ExploreLocationSheet({
             >
               <ArrowLeft size={20} />
             </button>
-            <h3>Phường / Xã</h3>
+            <h3 id="explore-location-title">Phường / Xã</h3>
             <span className="explore-loc-sheet__head-spacer" />
           </div>
 
@@ -400,7 +411,7 @@ export function ExploreLocationSheet({
                   <li key={w.code}>
                     <button type="button" onClick={() => toggleWard(w)}>
                       <span>
-                        <strong>{w.name}</strong>
+                        <strong>{locationLabel(w.name)}</strong>
                         {w.division_type && (
                           <em className="explore-loc-sheet__ward-sub">{w.division_type}</em>
                         )}

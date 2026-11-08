@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import {useJsonResource} from "@/lib/hooks/useJsonResource";
 import Link from "next/link";
 import { ExternalLink, Loader2, MapPin, Package, Truck } from "lucide-react";
 import { formatGoshipUpdateTime, goshipStatusMeta } from "@/lib/goship/shipment-status";
@@ -9,41 +9,9 @@ import { formatGoshipUpdateTime, goshipStatusMeta } from "@/lib/goship/shipment-
  * Hiển thị tiến trình vận chuyển Goship (webhook)
  */
 export function GoshipTrackingPanel({ orderId, orderStatus, fallbackTrackingNumber }) {
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [tracking, setTracking] = useState(null);
+  const resource=useJsonResource(orderId&&orderStatus==='shipping'?`/api/goship/tracking/${encodeURIComponent(orderId)}`:null,{interval:30000});
+  const loading=resource.loading,error=resource.error,tracking=resource.data?.data;
 
-  useEffect(() => {
-    if (!orderId || orderStatus !== "shipping") {
-      setLoading(false);
-      return;
-    }
-
-    let alive = true;
-
-    async function load() {
-      setLoading(true);
-      setError(null);
-      try {
-        const res = await fetch(`/api/goship/tracking/${encodeURIComponent(orderId)}`);
-        const json = await res.json();
-        if (!alive) return;
-        if (!json.ok) throw new Error(json.error || "Không tải được tracking");
-        setTracking(json.data);
-      } catch (err) {
-        if (alive) setError(err.message || "Lỗi tracking Goship");
-      } finally {
-        if (alive) setLoading(false);
-      }
-    }
-
-    load();
-    const timer = setInterval(load, 30_000);
-    return () => {
-      alive = false;
-      clearInterval(timer);
-    };
-  }, [orderId, orderStatus]);
 
   if (orderStatus !== "shipping") return null;
 

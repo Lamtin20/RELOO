@@ -1,0 +1,11 @@
+[Unit]
+Description=Check and recover existing RELOO containers
+After=docker.service network-online.target
+Wants=network-online.target
+ConditionPathIsDirectory=/srv/reloo/apps/web
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/sbin/reloo-healthcheck
+TimeoutStartSec=240
+Nice=10

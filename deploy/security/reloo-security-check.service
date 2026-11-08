@@ -1,0 +1,11 @@
+[Unit]
+Description=Verify RELOO database privileges, web headers and backup freshness
+After=docker.service network-online.target
+OnFailure=reloo-security-alert@%n.service
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/sbin/reloo-security-check
+User=root
+UMask=0077
+TimeoutStartSec=120

@@ -1,0 +1,14 @@
+﻿ma_truong,ten_truong,gia_tri,bat_buoc,goi_y
+__format,Định dạng,reloo-listing-v1,,
+title,Tên món đồ,,Có,"Tên sản phẩm, model và phiên bản"
+category,Danh mục,sach-hoc,Có,Sách & Giáo trình
+condition,Tình trạng,good,Có,new: Mới 100%; like_new: Như mới; good: Tốt; fair: Khá
+description,Mô tả & điều kiện thuê,,Có,Mô tả thực tế và điều kiện giao nhận
+dailyPrice,Giá thuê mỗi ngày,,Có,"Số nguyên VND, ví dụ 180000"
+marketValue,Giá trị tài sản,,Có,"Số nguyên VND, ví dụ 3500000"
+addressDetail,Chi tiết địa chỉ,,Không,"Số nhà, đường hoặc tòa nhà"
+spec.brand,Thương hiệu,,Có,"HP, Canon..."
+spec.type,Loại thiết bị,,Có,"Máy in laser, bàn học..."
+spec.specs,Thông số chính,,Có,"In đen trắng, A4..."
+spec.pages,Giới hạn in / Sử dụng,,Có,500 trang/tháng
+spec.accessories,Phụ kiện kèm theo,,Có,Liệt kê phụ kiện; nhập Không có nếu không kèm phụ kiện

@@ -1,0 +1,9 @@
+﻿.nav.nav{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:12px;overflow:visible;padding:8px 0;scroll-snap-type:none}
+.nav .item.item{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;min-width:0;min-height:106px;padding:8px 4px;gap:10px;border-radius:8px;color:var(--reloo-text);text-align:center;text-decoration:none}
+.nav .item>.icon.icon{display:grid;place-items:center;width:56px;height:56px;flex:0 0 56px;padding:0;border:1px solid var(--reloo-divider);border-radius:50%;background:var(--reloo-card);color:var(--reloo-text-secondary);transition:border-color 140ms,color 140ms}
+.nav .item>strong{font-size:12px;font-weight:500;line-height:1.5;overflow-wrap:anywhere}
+.nav .item>:global(.tap-link-feedback){position:absolute;inset:0;display:block;width:auto;height:auto;background:none!important;border:0;border-radius:inherit;pointer-events:none}
+.nav .item:hover .icon{border-color:var(--reloo-primary);color:var(--reloo-primary)}
+.nav .item:focus-visible{outline:2px solid var(--reloo-primary);outline-offset:3px}
+@media(max-width:600px){.nav.nav{grid-template-columns:repeat(4,minmax(0,1fr));gap:8px 4px}.nav .item.item{min-height:96px;padding:6px 0;gap:8px}.nav .item>.icon.icon{width:48px;height:48px;flex-basis:48px}.nav .icon svg{width:25px;height:25px}.nav .item>strong{font-size:11px}}
+@media(prefers-reduced-motion:reduce){.nav .item>.icon.icon{transition:none}}

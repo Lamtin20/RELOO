@@ -1,0 +1,505 @@
+.mobile-market-header {
+  display: none;
+}
+.main-categories {
+  display: flex;
+  gap: 15px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  padding: 4px 0 10px;
+  scroll-snap-type: x proximity;
+  overscroll-behavior-x: contain;
+}
+.main-categories > a {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  width: 90px;
+  flex: 0 0 90px;
+  scroll-snap-align: start;
+  text-align: center;
+  min-width: 0;
+  padding: 4px 0;
+  color: #29443a;
+  border-radius: 16px;
+}
+.main-categories > a > span {
+  width: 82px;
+  height: 82px;
+  display: grid;
+  place-items: center;
+  position: relative;
+  background: radial-gradient(
+    ellipse at 50% 68%,
+    #e5f3ff 0%,
+    #e5f3ff 45%,
+    transparent 68%
+  );
+  border-radius: 50%;
+}
+.main-categories > a:nth-child(3n + 2) > span {
+  background: radial-gradient(
+    ellipse at 50% 68%,
+    #fff0cb 0%,
+    #fff0cb 45%,
+    transparent 68%
+  );
+}
+.main-categories > a:nth-child(3n) > span {
+  background: radial-gradient(
+    ellipse at 50% 68%,
+    #fce4e5 0%,
+    #fce4e5 45%,
+    transparent 68%
+  );
+}
+.main-categories img {
+  object-fit: contain;
+  filter: drop-shadow(0 5px 5px #22473512);
+  transition: transform 0.16s ease;
+}
+.main-categories > a:active img {
+  transform: scale(0.93);
+}
+.main-categories strong {
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.5;
+}
+.main-categories > a:focus-visible {
+  outline: 3px solid #068661;
+  outline-offset: 2px;
+}
+.market-home .market-category-area {
+  padding: 12px 0 20px;
+}
+.market-home .market-discover {
+  border-top: 0;
+  padding-top: 24px;
+}
+.market-home .market-discover > header span {
+  color: #b4722b;
+  letter-spacing: 1px;
+}
+.market-home .market-channels button.is-active {
+  background: #078763;
+  border-color: #078763;
+  box-shadow: 0 4px 14px #07876325;
+}
+.market-home .market-cashback {
+  background: linear-gradient(120deg, #fff0ce, #ffe3c5);
+}
+.market-home .market-income {
+  background: linear-gradient(135deg, #dcf8e8, #f1fce8);
+}
+.market-home .market-safety {
+  background: linear-gradient(135deg, #deedff, #eff0ff);
+}
+.market-home .market-shorts {
+  background: linear-gradient(130deg, #343b70, #633ba0);
+}
+.market-promo {
+  position: relative;
+  margin: 0 0 18px;
+  min-width: 0;
+}
+.market-promo__track {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  border-radius: 26px;
+  overscroll-behavior-x: contain;
+}
+.market-promo__slide {
+  position: relative;
+  display: flex;
+  align-items: center;
+  isolation: isolate;
+  flex: 0 0 100%;
+  min-width: 0;
+  min-height: 260px;
+  scroll-snap-align: start;
+  overflow: hidden;
+  border-radius: 26px;
+  padding: 32px 36px;
+}
+.market-promo--sun {
+  background: linear-gradient(110deg, #fff1a9, #ffd55f);
+  color: #453b20;
+}
+.market-promo--sky {
+  background: linear-gradient(110deg, #d6f4ff, #88d8f5);
+  color: #194458;
+}
+.market-promo--peach {
+  background: linear-gradient(110deg, #ffe7de, #ffbb98);
+  color: #633828;
+}
+.market-promo__slide > div:first-child {
+  max-width: 55%;
+  position: relative;
+  z-index: 1;
+}
+.market-promo small {
+  font-size: 10px;
+  letter-spacing: 1.4px;
+  font-weight: 700;
+}
+.market-promo .market-promo__slide h2 {
+  font-size: 32px;
+  line-height: 1.2;
+  margin: 14px 0;
+  letter-spacing: -0.7px;
+}
+.market-promo p {
+  font-size: 13px;
+  line-height: 1.8;
+  max-width: 340px;
+}
+.market-promo__slide > div:first-child > span {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #fff;
+  border-radius: 22px;
+  min-height: 42px;
+  padding: 10px 16px;
+  margin-top: 20px;
+  font-size: 12px;
+  font-weight: 700;
+  box-shadow: 0 3px 8px #63421908;
+}
+.market-promo__objects {
+  position: absolute;
+  right: 4%;
+  top: 8%;
+  width: 39%;
+  height: 84%;
+  z-index: 0;
+}
+.market-promo__desktop-art {
+  position: absolute;
+  right: 3%;
+  top: 10%;
+  width: 49%;
+  height: 80%;
+  object-fit: contain;
+  object-position: center;
+  pointer-events: none;
+}
+@media (min-width: 901px) {
+  .market-promo__objects { display: none; }
+  .market-promo__slide > div:first-child { max-width: 45%; }
+  .market-promo--compact .market-promo__slide > div:first-child { max-width: 45%; }
+  .market-promo--compact .market-promo__desktop-art { top: 8%; height: 84%; }
+}
+@media (max-width: 900px) {
+  .market-promo__desktop-art { display: none; }
+  .market-promo__objects .market-promo__mascot {
+    position: absolute;
+    width: 100% !important;
+    height: auto !important;
+    bottom: -3%;
+    left: -12%;
+    z-index: 1;
+  }
+  .market-promo__objects .market-promo__object--1,
+  .market-promo__objects .market-promo__object--2 { display: none; }
+}
+.market-promo__objects::before {
+  content: "";
+  position: absolute;
+  inset: 15%;
+  background: #ffffff60;
+  border-radius: 50%;
+  filter: blur(6px);
+}
+.market-promo__object {
+  position: absolute;
+  width: 58%;
+  height: auto;
+  object-fit: contain;
+  filter: drop-shadow(0 12px 8px #654d191c);
+}
+.market-promo__object--0 {
+  right: 26%;
+  top: 0;
+  transform: rotate(-10deg);
+}
+.market-promo__object--1 {
+  right: -2%;
+  top: 36%;
+  transform: rotate(9deg);
+}
+.market-promo__object--2 {
+  left: -7%;
+  top: 53%;
+  width: 47%;
+  transform: rotate(-8deg);
+}
+.market-promo__dots {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 30px;
+  gap: 2px;
+}
+.market-promo__dots button {
+  width: 36px;
+  height: 30px;
+  background: none;
+  border: 0;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+}
+.market-promo__dots button::after {
+  content: "";
+  width: 7px;
+  height: 7px;
+  border-radius: 8px;
+  background: #d1dcd4;
+}
+.market-promo__dots button[aria-pressed="true"]::after {
+  width: 22px;
+  background: #07936c;
+}
+.market-promo--compact .market-promo__slide {
+  min-height: 170px;
+  padding: 25px 30px;
+}
+.market-promo--compact .market-promo__slide h2 {
+  font-size: 25px;
+  margin: 9px 0;
+}
+.market-promo--compact p {
+  display: none;
+}
+.market-promo--compact .market-promo__objects {
+  width: 32%;
+  right: 6%;
+}
+.market-promo--compact .market-promo__slide > div:first-child {
+  max-width: 64%;
+}
+.campaign-banner {
+  border-radius: 24px;
+  overflow: hidden;
+  margin-bottom: 20px;
+}
+.campaign-banner img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.native-header__heading {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+  flex: 1;
+}
+.native-header__heading small {
+  font-size: 10px;
+  line-height: 1.4;
+  color: #6a8177;
+  font-weight: 500;
+  letter-spacing: 0.2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.native-header__heading h1 {
+  font-size: 18px;
+  line-height: 1.35;
+  letter-spacing: -0.3px;
+  color: #203b30;
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+.native-header .native-icon-button {
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #ffffffbc;
+  border: 1px solid #e9efe8;
+  box-shadow: 0 3px 8px #324d3806;
+  margin-left: auto;
+}
+.native-header__row {
+  min-height: 58px;
+  gap: 12px;
+}
+.native-header--home {
+  background: linear-gradient(130deg, #fff, #f3fff5);
+}
+.native-header--explore,
+.native-header--orders {
+  background: linear-gradient(130deg, #fff, #e9f5ff);
+}
+.native-header--post {
+  background: linear-gradient(130deg, #fff, #fff1e6);
+}
+.native-header--cashback {
+  background: linear-gradient(130deg, #fff, #fff3cd);
+}
+.native-header--shorts {
+  background: linear-gradient(130deg, #fff, #f0e9ff);
+}
+.native-header--safety {
+  background: linear-gradient(130deg, #fff, #eaf0ff);
+}
+.native-header--account,
+.native-header--income {
+  background: linear-gradient(130deg, #fff, #e7f9ed);
+}
+.native-header {
+  border-radius: 0 0 26px 26px;
+  padding: 10px 18px 16px;
+}
+.native-header .native-search {
+  background: #fff;
+  border: 1px solid #e0ece4;
+  border-radius: 24px;
+  box-shadow: 0 4px 14px #16432805;
+  margin-top: 9px;
+}
+.native-header .native-search button {
+  border-radius: 18px;
+  background: #078b62;
+}
+.reloo-native .site-header-shell {
+  border-radius: 0 0 26px 26px;
+  border: 0;
+  background: transparent;
+  box-shadow: 0 4px 14px #25493608;
+}
+.reloo-native .dashboard-main > .native-header {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  box-shadow: 0 4px 14px #25493608;
+}
+@media (max-width: 900px) {
+  .desktop-market-header {
+    display: none;
+  }
+  .mobile-market-header {
+    display: block;
+  }
+  .site-header-shell {
+    border-radius: 0 0 26px 26px;
+    background: transparent;
+    box-shadow: 0 4px 14px #25493608;
+  }
+  .market-home-search {
+    display: none;
+  }
+  .market-home {
+    padding-top: 18px;
+    background: linear-gradient(180deg, #fffaf0 0, #fff 570px);
+  }
+  .reloo-native .market-home {
+    background: linear-gradient(180deg, #fffaf0 0, #f8faf8 570px);
+  }
+  .main-categories {
+    gap: 12px;
+  }
+  .main-categories > a {
+    width: 82px;
+    flex-basis: 82px;
+  }
+  .main-categories > a > span {
+    width: 78px;
+    height: 78px;
+  }
+  .main-categories img {
+    width: 78px;
+    height: 78px;
+  }
+  .market-home .market-category-area > header {
+    margin-bottom: 10px;
+  }
+  .market-promo__slide {
+    min-height: 218px;
+    padding: 22px 20px;
+    border-radius: 22px;
+  }
+  .market-promo__track {
+    border-radius: 22px;
+  }
+  .market-promo .market-promo__slide h2 {
+    font-size: 24px;
+    margin: 10px 0;
+    max-width: 210px;
+  }
+  .market-promo__slide > div:first-child {
+    max-width: 64%;
+  }
+  .market-promo small {
+    font-size: 8px;
+    letter-spacing: 0.7px;
+  }
+  .market-promo p {
+    font-size: 11px;
+    line-height: 1.6;
+    max-width: 195px;
+  }
+  .market-promo__slide > div:first-child > span {
+    font-size: 10px;
+    min-height: 38px;
+    padding: 9px 12px;
+    margin-top: 16px;
+    gap: 5px;
+  }
+  .market-promo__objects {
+    right: 0;
+    top: 19%;
+    height: 68%;
+    width: 36%;
+  }
+  .market-promo__object {
+    width: 85%;
+  }
+  .market-promo__object--0 {
+    right: 7%;
+    top: 0;
+  }
+  .market-promo__object--1 {
+    right: -5%;
+    top: 46%;
+    width: 77%;
+  }
+  .market-promo__object--2 {
+    left: -8%;
+    top: 67%;
+    width: 52%;
+  }
+  .market-promo--compact .market-promo__slide {
+    min-height: 150px;
+    padding: 19px 18px;
+  }
+  .market-promo--compact .market-promo__slide h2 {
+    font-size: 21px;
+    max-width: 215px;
+  }
+  .market-promo--compact .market-promo__objects {
+    width: 27%;
+    right: 2%;
+    top: 12%;
+    height: 70%;
+  }
+  .campaign-banner {
+    border-radius: 22px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .market-promo *,
+  .main-categories * {
+    scroll-behavior: auto !important;
+    transition: none !important;
+  }
+}

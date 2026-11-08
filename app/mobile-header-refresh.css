@@ -1,0 +1,37 @@
+/* Paint to the viewport edge; only controls are inset from the display cutout. */
+html.reloo-native body{margin:0;padding-top:0}
+.reloo-native .site-header-shell{top:0!important;left:0;right:0;width:100%;margin:0!important;border-top:0;border-radius:0!important;padding-top:env(safe-area-inset-top,0px)}
+.reloo-native .site-header-shell .native-header{border-radius:0!important}
+html:not(.reloo-native) .bottom-nav{display:none!important}
+.mini-world:not(.mini-world--native){padding-bottom:0;display:flex;flex-direction:column}
+.mini-world:not(.mini-world--native)>.mini-world-nav{position:relative;bottom:auto;top:auto;order:-1;padding-bottom:8px}
+.mini-world:not(.mini-world--native)>.mini-world-header{order:-2}
+.header-weather__reading{display:flex;align-items:center;gap:7px}
+.mini-world-content{min-width:0;width:100%}
+.rental-selection{min-inline-size:0}
+.rc-trigger>span{min-width:0}
+@media(max-width:900px){
+ .app-shell .site-header-shell{top:0!important;margin:0!important;border-radius:0!important;overflow:visible}
+ .site-header-shell .native-header{border-radius:0!important}
+ .native-header--market-home{padding:8px 16px 10px!important}
+ .native-header--market-home .native-header__row{gap:6px;min-height:48px;flex-wrap:nowrap}
+ .native-header--market-home .brand-logo-link{margin-right:auto;min-width:0;max-width:112px}
+ .native-header--market-home .brand-logo-img{max-width:100%;object-fit:contain}
+ .native-header--market-home .native-icon-button{width:44px;min-width:44px;flex:0 0 44px;height:44px;background:#ffffffb8;color:#174c36}
+ .native-header--market-home .header-weather--compact{display:flex!important;justify-content:space-between;align-items:center;gap:12px;min-height:34px;margin-top:4px;padding:4px 0;border-top:1px solid #174c3615;color:#315d49;font-size:12px;background:transparent;border-radius:0}
+ .header-weather__city{display:flex;align-items:center;gap:8px;min-width:0;font-weight:600}
+ .header-weather__city small{font-size:11px;font-weight:400;color:#526e60}
+ .header-weather__reading{flex-shrink:0}
+ .header-weather__reading a{display:inline!important;font-size:10px;color:inherit;text-decoration:underline}
+ .site-header-shell:has([data-period=morning]){background:#edf8ee!important}
+ .site-header-shell:has([data-period=day]){background:#eaf6f4!important}
+ .site-header-shell:has([data-period=night]){background:#e9edf5!important}
+ .site-header-shell:has([data-weather=rain]){background:#e8f0f4!important}
+ .site-header-shell:has([data-weather=rain][data-period=night]){background:#e0e8f0!important}
+ .native-header--market-home{background:transparent!important}
+ .site-header-shell:has(.native-header--market-home)::before,.site-header-shell:has(.native-header--market-home)::after{display:none!important}
+ .app-shell:not(.has-bottom-nav) .app-main{padding-bottom:24px}
+ .sa-top-actions>a[href="/notifications"]{display:none}
+}
+@media(prefers-reduced-motion:no-preference){.site-header-shell:has(.native-header--market-home){transition:background-color 250ms ease}.native-icon-button:active{transform:scale(.96)}}
+@media(max-width:350px){.native-header--market-home{padding-inline:12px!important}.native-header--market-home .brand-logo-link{max-width:94px}.header-weather__city small{display:none}}

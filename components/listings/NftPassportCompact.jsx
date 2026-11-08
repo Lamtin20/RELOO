@@ -1,6 +1,7 @@
 "use client";
+import {usePassportStatus} from "./usePassportStatus";
 
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { ChevronRight, ShieldCheck } from "lucide-react";
 import { shortHash } from "@/lib/utils";
 import {
@@ -19,7 +20,6 @@ export function NftPassportCompact({
   ownerId,
   orders = [],
 }) {
-  const [chainOk, setChainOk] = useState(null);
   const [detailOpen, setDetailOpen] = useState(false);
 
   const hash = passport?.hash ?? "";
@@ -31,22 +31,8 @@ export function NftPassportCompact({
 
   const rentalCount = countCompletedRentals(rentalHistory);
 
-  useEffect(() => {
-    if (!passport?.hash) {
-      setChainOk(null);
-      return;
-    }
-
-    let alive = true;
-    fetch(`/api/polygon/passport?hash=${encodeURIComponent(hash)}`)
-      .then((r) => r.json())
-      .then((data) => alive && setChainOk(Boolean(data?.ok)))
-      .catch(() => alive && setChainOk(false));
-
-    return () => {
-      alive = false;
-    };
-  }, [hash, passport]);
+  const {status:chainStatus}=usePassportStatus(hash);
+  const chainOk=chainStatus==null?null:Boolean(chainStatus.ok);
 
   if (!passport) {
     return (

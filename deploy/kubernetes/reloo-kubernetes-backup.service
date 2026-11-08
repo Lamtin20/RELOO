@@ -1,0 +1,11 @@
+[Unit]
+Description=Encrypted consistent snapshot of RELOO K3s SQLite state and recovery keys
+After=k3s.service
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/python3 /srv/reloo/kubernetes/backup.py
+User=root
+UMask=0077
+TimeoutStartSec=180
+PrivateTmp=true
+NoNewPrivileges=true

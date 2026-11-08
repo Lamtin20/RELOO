@@ -1,0 +1,32 @@
+name: iOS source validation and simulator build
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  simulator:
+    runs-on: macos-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: mobile/package-lock.json
+      - run: npm ci
+        working-directory: mobile
+      - run: npx cap sync ios
+        working-directory: mobile
+      - run: xcodebuild -version
+      - name: Build existing iOS app without signing or distribution
+        run: >-
+          xcodebuild -project mobile/ios/App/App.xcodeproj -scheme App
+          -configuration Debug -sdk iphonesimulator -destination 'generic/platform=iOS Simulator'
+          -derivedDataPath output/ios-derived -resultBundlePath output/ios-simulator.xcresult
+          CODE_SIGNING_ALLOWED=NO build
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: ios-simulator-results
+          path: output/ios-simulator.xcresult

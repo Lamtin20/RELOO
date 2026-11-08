@@ -10,8 +10,8 @@ const ICONS = {
   care: Leaf,
 };
 
-export function ListingLabelChips({ listing, className = "", overlay = false }) {
-  const labels = getListingDisplayLabels(listing);
+export function ListingLabelChips({ listing, className = "", overlay = false, hideAssurance = false }) {
+  const labels = getListingDisplayLabels(listing).filter((label) => !hideAssurance || !["verified", "care"].includes(label.variant));
   if (!labels.length) return null;
 
   return (

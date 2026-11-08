@@ -20,6 +20,7 @@ const LISTING_VARIANTS = {
   rented: "blue",
   draft: "muted",
   suspended: "danger",
+  paused: "muted",
 };
 
 export const ACTIVE_ORDER_STATUSES = [

@@ -1,0 +1,6 @@
+"NSCalendarsFullAccessUsageDescription" = "RELOO needs calendar access to let you choose a local calendar and update RELOO return reminders. Personal calendar contents are not used for product recommendations.";
+"NSCalendarsUsageDescription" = "Allow RELOO to create and update return reminders in your selected local calendar.";
+"NSLocationWhenInUseUsageDescription" = "When you choose nearby areas, RELOO uses location once to suggest areas within 5 km. It does not track in the background or verify residence.";
+"NSCameraUsageDescription" = "Use the camera when you choose to photograph an item, scan a handover QR code, record a product video or verify your identity.";
+"NSMicrophoneUsageDescription" = "Use the microphone only when you choose to record a product video with sound.";
+"NSPhotoLibraryUsageDescription" = "Choose the item photos and product videos you want to upload to RELOO.";

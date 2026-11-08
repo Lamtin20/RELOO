@@ -1,0 +1,13 @@
+﻿ma_truong,ten_truong,gia_tri,bat_buoc,goi_y
+__format,Định dạng,reloo-listing-v1,,
+title,Tên món đồ,,Có,"Tên sản phẩm, model và phiên bản"
+category,Danh mục,am-thanh-anh-sang,Có,Âm thanh ánh sáng
+condition,Tình trạng,good,Có,new: Mới 100%; like_new: Như mới; good: Tốt; fair: Khá
+description,Mô tả & điều kiện thuê,,Có,Mô tả thực tế và điều kiện giao nhận
+dailyPrice,Giá thuê mỗi ngày,,Có,"Số nguyên VND, ví dụ 180000"
+marketValue,Giá trị tài sản,,Có,"Số nguyên VND, ví dụ 3500000"
+addressDetail,Chi tiết địa chỉ,,Không,"Số nhà, đường hoặc tòa nhà"
+spec.brand,Thương hiệu,,Có,"Yamaha, JBL..."
+spec.type,Loại thiết bị,,Có,"Guitar acoustic, loa kéo..."
+spec.power,Công suất / Quy mô,,Có,"500W, full-size..."
+spec.accessories,Phụ kiện kèm,,Có,"Dây đàn, micro, stand..."

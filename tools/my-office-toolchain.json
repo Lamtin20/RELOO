@@ -1,0 +1,25 @@
+{
+  "repository": "https://github.com/khanh020905/my-office",
+  "commit": "1df03ee00ff94fdb7d8f81fe1f55c39bd671e6f3",
+  "license": "MIT",
+  "files": [
+    {
+      "upstream": "src/office/people/chibi-rig.js",
+      "local": "lib/vendor/my-office/chibi-rig.js",
+      "upstreamSha256": "5c2f108abf5881286201f6840a81669d26318ee459caa603da82407e6beb32ca",
+      "adaptedSha256": "ed1e0192b53341113b73e6ed9518c9376b53de16e3957a50e3e6928657d4ca3d",
+      "changes": [
+        "Translation import points to a two-label local shim; geometry and poses unchanged"
+      ]
+    }
+  ],
+  "notInstalled": [
+    "upstream server",
+    "hooks",
+    "process cleanup",
+    "approval automation",
+    "telemetry",
+    "LAN access",
+    "startup service"
+  ]
+}

@@ -1,0 +1,6 @@
+{
+  "source": "Hồ sơ linh vật RELOOP_ Người bảo hộ niềm tin.png",
+  "sha256": "1650643d51e8f1b031ea4e4cc0685332b53ec89c8dcc81f76247e86a0feb42fc",
+  "method": "Cropped approved reference artwork; background masking only, no generated replacement.",
+  "limitations": "Master cropped from a 400×485 region. Expression/action crops are 86×98 / 105×80; no independent facial or limb rig. CSS movement animates the whole artwork, not individual hands or eyelids."
+}

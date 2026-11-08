@@ -1,0 +1,9 @@
+.r-header__register{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:10px 14px;font-size:13px;font-weight:600;color:var(--reloo-text);white-space:nowrap}.r-header__account .r-header__avatar-fallback{display:grid;place-items:center;width:32px;height:32px;border-radius:50%;background:var(--reloo-mint)}.r-header__account-menu{max-height:calc(100dvh - 90px);overflow:auto;overscroll-behavior:contain}.r-header__register:focus-visible{outline:2px solid var(--reloo-primary);outline-offset:3px}@media(max-width:900px){.r-header__register{display:none}}
+.r-header__account .r-header__avatar-fallback,.r-header__account img{flex:0 0 32px}.r-header__account-menu>div strong{overflow-wrap:anywhere}
+
+.r-header__login{min-height:44px;padding:10px 14px;border:1px solid var(--reloo-divider);border-radius:12px;background:var(--reloo-card,#fff)}
+
+.r-header__orders{display:inline-flex;align-items:center;gap:7px;min-height:44px;padding:9px 12px;border-radius:10px;font-size:13px;font-weight:600;color:var(--reloo-text);white-space:nowrap}.r-header__orders:hover{background:var(--reloo-mint)}.r-header__orders:focus-visible{outline:2px solid var(--reloo-primary);outline-offset:3px}@media(max-width:1150px){.r-header__orders>span{display:none}}
+
+.r-header__orders{min-width:44px;justify-content:center;box-sizing:border-box}
+.r-header__account-menu.r-header__account-menu--floating{position:fixed;z-index:1000}

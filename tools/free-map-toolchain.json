@@ -1,0 +1,15 @@
+{
+  "checkedAt": "2026-11-07",
+  "billing": "No paid provider, subscription or API key. Local CPU/RAM/storage still required.",
+  "repositories": [
+    {"name":"Martin","url":"https://github.com/maplibre/martin","observedCommit":"04d49de549aa87c6a99a31786667621de701e11b","image":"ghcr.io/maplibre/martin@sha256:caa63e4618ef8f326141d1a867d6ee15bddcf649260c979193bbf487b433a7e0","imageTagObserved":"1.16.0","license":"Apache-2.0 OR MIT"},
+    {"name":"tilemaker","url":"https://github.com/systemed/tilemaker","observedCommit":"278965195157034c7ea84fd126a7f36051ed346d","image":"ghcr.io/systemed/tilemaker@sha256:9cd8728a37a31c8a5205e091cedd3ff2c2c450c57e1ce3e5b58916185540ebba","imageTagObserved":"master","license":"FTWPL; verified upstream LICENCE.txt, bundled dependency/data notices remain applicable"},
+    {"name":"OSRM","url":"https://github.com/Project-OSRM/osrm-backend","observedCommit":"746c97c1c8ef7ebeb7acb9b986cf6c4e04f82caf","image":"ghcr.io/project-osrm/osrm-backend@sha256:ef49d1a83c0aa0707aad2338127f96f39af78374bb6c1b3ffa07cf13b92ac572","imageTagObserved":"v26.6.1-amd64-alpine","license":"BSD-2-Clause","note":"Pinned published amd64 image, not the newer source release; image vulnerability scan remains required"},
+    {"name":"Photon","url":"https://github.com/komoot/photon","version":"1.3.0","observedCommit":"d27cad0af83795375d1d3e4e68e9743d2d546e01","artifact":"https://github.com/komoot/photon/releases/download/1.3.0/photon-1.3.0.jar","sha256":"a89707c0045e4807b2a1180e132e68e108d998709f48b6c94b98a6e281f571a5","license":"Apache-2.0"}
+  ],
+  "datasets": [
+    {"purpose":"Regional OSM PBF for offline tiles/routing","url":"https://download.geofabrik.de/asia/vietnam-latest.osm.pbf","license":"ODbL-1.0; OpenStreetMap contributors; verify publisher checksum before import"},
+    {"purpose":"Regional Photon named-place data","url":"https://download1.graphhopper.com/public/asia/vietnam/photon-dump-vietnam-release-261101.jsonl.zst","bytes":71156888,"license":"ODbL-1.0; OpenStreetMap contributors","publisher":"GraphHopper-hosted Photon extracts","compatibility":"Provider page lists 0.7.x–1.x for release dump"}
+  ],
+  "status":"SOURCE_AND_DIGEST_METADATA_VERIFIED; RUNTIME_IMAGE_SCAN_AND_FULL_DATA_IMPORT_NOT_ACCEPTED"
+}

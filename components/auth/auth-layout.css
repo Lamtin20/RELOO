@@ -1,0 +1,22 @@
+﻿/* Desktop: one shared row height for the banner and every auth form. */
+@media (min-width: 641px) {
+  .auth-site__main {
+    min-height: calc(100svh - 76px);
+    align-items: stretch;
+  }
+  .auth-site__main > .auth-site__visual {
+    position: relative;
+    top: auto;
+    height: auto;
+    min-height: 0;
+    align-self: stretch;
+  }
+  .auth-site__visual > img {
+    position: absolute;
+    inset: 0;
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}

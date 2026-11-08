@@ -1,0 +1,11 @@
+import {readFile,mkdir,writeFile} from 'node:fs/promises';
+import {dirname,resolve} from 'node:path';
+import {encodeWebp} from '../lib/images/webp.js';
+const [source,destination]=process.argv.slice(2);
+if(!source||!destination||!destination.toLowerCase().endsWith('.webp'))throw Error('Usage: node scripts/import-web-image.mjs <source-image> <destination.webp>');
+const bytes=await readFile(resolve(source));
+if(bytes.length>15*1024*1024)throw Error('Input image exceeds 15 MB');
+const image=await encodeWebp(bytes,{maxEdge:2560,quality:88,maxBytes:750000});
+await mkdir(dirname(resolve(destination)),{recursive:true});
+await writeFile(resolve(destination),image.data,{flag:'wx'});
+console.log(`WebP saved (${image.info.width}×${image.info.height}, ${image.data.length} bytes).`);

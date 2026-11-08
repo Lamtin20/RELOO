@@ -1,0 +1,138 @@
+# Complete isolated UAT backend. No production networks, bind mounts or published DB ports.
+name: reloo-staging
+services:
+  db:
+    image: supabase/postgres:17.6.1.136
+    environment:
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?}
+      PGPASSWORD: ${POSTGRES_PASSWORD:?}
+      POSTGRES_DB: postgres
+      POSTGRES_PORT: 5432
+      PGPORT: 5432
+    volumes:
+      - uat-db:/var/lib/postgresql/data
+      - ../vietnam/roles.sql:/docker-entrypoint-initdb.d/init-scripts/99-roles.sql:ro
+    networks: [staging]
+    healthcheck:
+      test: [CMD, pg_isready, -U, postgres, -h, localhost]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+    restart: unless-stopped
+    mem_limit: 2g
+    pids_limit: 256
+  auth:
+    image: supabase/gotrue:v2.196.0
+    depends_on:
+      db: {condition: service_healthy}
+    environment:
+      GOTRUE_API_HOST: 0.0.0.0
+      GOTRUE_API_PORT: 9999
+      API_EXTERNAL_URL: https://staging-auth.reloo.vn/auth/v1
+      GOTRUE_DB_DRIVER: postgres
+      GOTRUE_DB_DATABASE_URL: postgres://supabase_auth_admin:${POSTGRES_PASSWORD:?}@db:5432/postgres
+      GOTRUE_SITE_URL: https://staging.reloo.vn
+      GOTRUE_URI_ALLOW_LIST: https://staging.reloo.vn/auth/callback,https://staging.reloo.vn/auth/callback?**
+      GOTRUE_JWT_SECRET: ${JWT_SECRET:?}
+      GOTRUE_JWT_ISSUER: https://staging-auth.reloo.vn/auth/v1
+      GOTRUE_JWT_ADMIN_ROLES: service_role
+      GOTRUE_JWT_AUD: authenticated
+      GOTRUE_JWT_DEFAULT_GROUP_NAME: authenticated
+      GOTRUE_JWT_EXP: 3600
+      GOTRUE_EXTERNAL_EMAIL_ENABLED: 'true'
+      GOTRUE_MAILER_AUTOCONFIRM: 'false'
+      GOTRUE_PASSWORD_MIN_LENGTH: 12
+      GOTRUE_SECURITY_REFRESH_TOKEN_ROTATION_ENABLED: 'true'
+      GOTRUE_EXTERNAL_GOOGLE_ENABLED: 'false'
+      GOTRUE_EXTERNAL_APPLE_ENABLED: 'false'
+      GOTRUE_SMTP_HOST: mail
+      GOTRUE_SMTP_PORT: 1025
+      GOTRUE_SMTP_ADMIN_EMAIL: uat@reloo.invalid
+      GOTRUE_SMTP_SENDER_NAME: RELOO UAT
+      GOTRUE_MAILER_URLPATHS_CONFIRMATION: /auth/v1/verify
+      GOTRUE_MAILER_URLPATHS_RECOVERY: /auth/v1/verify
+      GOTRUE_MFA_TOTP_ENROLL_ENABLED: 'true'
+      GOTRUE_MFA_TOTP_VERIFY_ENABLED: 'true'
+    networks: [staging]
+    restart: unless-stopped
+    mem_limit: 512m
+    pids_limit: 128
+    security_opt: [no-new-privileges:true]
+    cap_drop: [ALL]
+  rest:
+    image: postgrest/postgrest:v14.17
+    depends_on:
+      db: {condition: service_healthy}
+    environment:
+      PGRST_DB_URI: postgres://authenticator:${POSTGRES_PASSWORD:?}@db:5432/postgres
+      PGRST_DB_SCHEMAS: public,storage
+      PGRST_DB_ANON_ROLE: anon
+      PGRST_JWT_SECRET: ${JWT_SECRET:?}
+      PGRST_DB_MAX_ROWS: 1000
+    networks: [staging]
+    restart: unless-stopped
+    security_opt: [no-new-privileges:true]
+    cap_drop: [ALL]
+    mem_limit: 256m
+    pids_limit: 128
+  storage:
+    image: supabase/storage-api:v1.74.0
+    depends_on:
+      db: {condition: service_healthy}
+      rest: {condition: service_started}
+    environment:
+      ANON_KEY: ${NEXT_PUBLIC_SUPABASE_ANON_KEY:?}
+      SERVICE_KEY: ${SUPABASE_SERVICE_ROLE_KEY:?}
+      AUTH_JWT_SECRET: ${JWT_SECRET:?}
+      DATABASE_URL: postgres://supabase_storage_admin:${POSTGRES_PASSWORD:?}@db:5432/postgres
+      POSTGREST_URL: http://rest:3000
+      STORAGE_PUBLIC_URL: https://staging-auth.reloo.vn
+      STORAGE_BACKEND: file
+      FILE_STORAGE_BACKEND_PATH: /var/lib/storage
+      GLOBAL_S3_BUCKET: reloo-uat
+      FILE_SIZE_LIMIT: 8388608
+      TENANT_ID: reloo-uat
+      REGION: vn-uat
+      ENABLE_IMAGE_TRANSFORMATION: 'false'
+    volumes: [uat-storage:/var/lib/storage]
+    networks: [staging]
+    restart: unless-stopped
+    security_opt: [no-new-privileges:true]
+    cap_drop: [ALL]
+    mem_limit: 512m
+    pids_limit: 128
+  staging-gateway:
+    image: nginx:1.28-alpine
+    depends_on: [auth, rest, storage]
+    environment:
+      ANON_KEY: ${NEXT_PUBLIC_SUPABASE_ANON_KEY:?}
+      SERVICE_ROLE_KEY: ${SUPABASE_SERVICE_ROLE_KEY:?}
+      NGINX_ENVSUBST_FILTER: '^(ANON_KEY|SERVICE_ROLE_KEY)$'
+    volumes:
+      - ./gateway.conf.template:/etc/nginx/templates/default.conf.template:ro
+    networks: [staging]
+    restart: unless-stopped
+    mem_limit: 128m
+    pids_limit: 128
+    security_opt: [no-new-privileges:true]
+  mail:
+    image: axllent/mailpit:v1.27.8
+    environment:
+      MP_DATABASE: /data/mailpit.db
+      MP_MAX_MESSAGES: 200
+    volumes: [uat-mail:/data]
+    networks: [staging]
+    # Inbox is host-loopback only; operator accesses over SSH/Tailscale.
+    ports: ['127.0.0.1:8026:8025']
+    restart: unless-stopped
+    mem_limit: 128m
+    pids_limit: 128
+    security_opt: [no-new-privileges:true]
+networks:
+  staging:
+    name: reloo-staging-backend
+    internal: true
+volumes:
+  uat-db:
+  uat-storage:
+  uat-mail:

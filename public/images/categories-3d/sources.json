@@ -1,0 +1,72 @@
+[
+  {
+    "group": "electronics",
+    "source": "https://raw.githubusercontent.com/microsoft/fluentui-emoji/main/assets/Laptop/3D/laptop_3d.png",
+    "path": "public\\images\\categories-3d\\electronics.webp"
+  },
+  {
+    "group": "camera",
+    "source": "https://raw.githubusercontent.com/microsoft/fluentui-emoji/main/assets/Camera/3D/camera_3d.png",
+    "path": "public\\images\\categories-3d\\camera.webp"
+  },
+  {
+    "group": "home",
+    "source": "https://raw.githubusercontent.com/microsoft/fluentui-emoji/main/assets/Couch%20and%20lamp/3D/couch_and_lamp_3d.png",
+    "path": "public\\images\\categories-3d\\home.webp"
+  },
+  {
+    "group": "camping",
+    "source": "https://raw.githubusercontent.com/microsoft/fluentui-emoji/main/assets/Tent/3D/tent_3d.png",
+    "path": "public\\images\\categories-3d\\camping.webp"
+  },
+  {
+    "group": "baby",
+    "source": "https://raw.githubusercontent.com/microsoft/fluentui-emoji/main/assets/Baby%20bottle/3D/baby_bottle_3d.png",
+    "path": "public\\images\\categories-3d\\baby.webp"
+  },
+  {
+    "group": "fashion",
+    "source": "https://raw.githubusercontent.com/microsoft/fluentui-emoji/main/assets/T-shirt/3D/t-shirt_3d.png",
+    "path": "public\\images\\categories-3d\\fashion.webp"
+  },
+  {
+    "group": "vehicle",
+    "source": "https://raw.githubusercontent.com/microsoft/fluentui-emoji/main/assets/Automobile/3D/automobile_3d.png",
+    "path": "public\\images\\categories-3d\\vehicle.webp"
+  },
+  {
+    "group": "sports",
+    "source": "https://raw.githubusercontent.com/microsoft/fluentui-emoji/main/assets/Soccer%20ball/3D/soccer_ball_3d.png",
+    "path": "public\\images\\categories-3d\\sports.webp"
+  },
+  {
+    "group": "tools",
+    "source": "https://raw.githubusercontent.com/microsoft/fluentui-emoji/main/assets/Hammer%20and%20wrench/3D/hammer_and_wrench_3d.png",
+    "path": "public\\images\\categories-3d\\tools.webp"
+  },
+  {
+    "group": "office",
+    "source": "https://raw.githubusercontent.com/microsoft/fluentui-emoji/main/assets/Books/3D/books_3d.png",
+    "path": "public\\images\\categories-3d\\office.webp"
+  },
+  {
+    "group": "music",
+    "source": "https://raw.githubusercontent.com/microsoft/fluentui-emoji/main/assets/Guitar/3D/guitar_3d.png",
+    "path": "public\\images\\categories-3d\\music.webp"
+  },
+  {
+    "group": "beauty",
+    "source": "https://raw.githubusercontent.com/microsoft/fluentui-emoji/main/assets/Lipstick/3D/lipstick_3d.png",
+    "path": "public\\images\\categories-3d\\beauty.webp"
+  },
+  {
+    "group": "event",
+    "source": "https://raw.githubusercontent.com/microsoft/fluentui-emoji/main/assets/Party%20popper/3D/party_popper_3d.png",
+    "path": "public\\images\\categories-3d\\event.webp"
+  },
+  {
+    "group": "default",
+    "source": "https://raw.githubusercontent.com/microsoft/fluentui-emoji/main/assets/Package/3D/package_3d.png",
+    "path": "public\\images\\categories-3d\\default.webp"
+  }
+]

@@ -1,0 +1,10 @@
+{
+  "repository": "https://github.com/morluto/rea.git",
+  "sourceCommit": "fc935d0df3d7589363242e9e5718c94a4262f1d4",
+  "sourceCheckout": "../.tooling/rea",
+  "runtimePackage": "rea-agents",
+  "runtimeVersion": "6.5.0",
+  "skill": "reverse-engineer-anything",
+  "clients": ["codex", "cursor"],
+  "updatePolicy": "Review release/source changes and reverify before updating."
+}

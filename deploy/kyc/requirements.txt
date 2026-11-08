@@ -1,0 +1,9 @@
+deepface==0.0.102
+tensorflow==2.20.0
+tf-keras==2.20.1
+fastapi==0.115.12
+uvicorn==0.34.3
+python-multipart==0.0.20
+pytesseract==0.3.13
+Pillow==11.3.0
+mediapipe==0.10.32

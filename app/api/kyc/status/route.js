@@ -1,0 +1,3 @@
+import {requireAccount} from '@/lib/security/authorization';
+import {errorResponse} from '@/lib/server/http';
+export async function GET(request){try{const {profile,db}=await requireAccount(request,{active:false});const {identity,...status}=profile.identityStatus;const pending=await db.from('kyc_submissions').select('status,review_due_at').eq('profile_id',profile.id).is('superseded_at',null).in('status',['REVIEW','PROCESSING','QUEUED']).order('created_at',{ascending:false}).limit(1);if(pending.error)throw Error('IDENTITY_STORAGE_UNAVAILABLE');return Response.json({ok:true,identity:{...status,reviewStatus:pending.data?.[0]?.status||null,reviewDueAt:pending.data?.[0]?.review_due_at||null}},{headers:{'Cache-Control':'no-store'}});}catch(error){return errorResponse(error);}}

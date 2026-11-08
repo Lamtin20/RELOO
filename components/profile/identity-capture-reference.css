@@ -1,0 +1,47 @@
+.identity-capture-overlay{background:#142d36;padding:20px}
+.identity-reference-capture{display:flex;flex-direction:column;position:relative;background:#142d36;color:#fff;min-height:min(780px,calc(100dvh - 40px));padding:24px;overscroll-behavior:contain}
+.identity-reference-capture>header{flex-shrink:0;margin-bottom:20px;align-items:flex-start}
+.identity-reference-capture h2{font-size:18px;line-height:1.5}
+.identity-reference-capture small{color:#bfd0d2}
+.identity-reference-capture .wallet-icon-button{color:white;background:transparent;border:1px solid #6c878c;flex-shrink:0}
+.identity-reference-capture .identity-steps{grid-template-columns:repeat(4,minmax(0,1fr));gap:5px;margin-bottom:24px}
+.identity-reference-capture .identity-steps li{padding:8px 3px;border:0;border-top:3px solid #49636a;border-radius:0;color:#b9cbd0;font-size:11px}
+.identity-reference-capture .identity-steps li.active{background:transparent;color:#69d9ab;border-color:#69d9ab}
+.identity-reference-capture .identity-steps li.done{color:#69d9ab;border-color:#279f78}
+.identity-reference-capture .identity-steps li>svg{display:none}
+.identity-capture-stage{color:#79dcb2;font-size:14px;font-weight:600;text-align:center;text-transform:uppercase;margin:0 0 16px}
+.identity-reference-capture .identity-camera{flex-shrink:0;width:100%;aspect-ratio:4/3;max-height:none;border-radius:8px;background:#10252d}
+.identity-reference-capture .identity-camera.is-card{width:min(440px,48dvh,100%);align-self:center}
+.identity-reference-capture .is-card video,.identity-reference-capture .is-qr video{object-fit:cover}
+.identity-reference-capture .is-card .identity-frame{inset:auto;left:8%;top:50%;width:84%;height:auto;aspect-ratio:85.6/54;transform:translateY(-50%);box-sizing:border-box;border:2px solid #60d3a4;border-radius:12px}
+.identity-reference-capture .identity-camera.is-portrait{width:min(350px,100%);aspect-ratio:3/4;max-height:46dvh;margin:0 auto}
+.identity-reference-capture .is-portrait video{object-fit:cover}
+.identity-reference-capture .is-portrait .identity-frame{inset:3% 12%;width:auto;height:auto;aspect-ratio:auto;transform:none;border:2px solid #73d7b1;box-shadow:0 0 0 250px #142d36}
+.identity-reference-capture .identity-camera.is-qr{width:min(340px,100%);aspect-ratio:1;max-height:none;margin:0 auto}
+.identity-reference-capture .is-qr .identity-frame{inset:15%;width:auto;height:auto;aspect-ratio:1;transform:none;border:3px solid #60d3a4;border-radius:16px}
+.identity-reference-capture .is-qr .identity-frame::after{content:'';position:absolute;left:8%;right:8%;top:50%;height:2px;background:#7be5ae;box-shadow:0 0 10px #7be5ae}
+.identity-reference-capture .identity-frame{border-color:#60d3a4}
+.identity-reference-capture .has-preview .identity-frame{display:none}
+.identity-reference-capture .has-preview img{object-fit:contain}
+.identity-reference-capture .identity-loading{background:#142d36}
+.identity-reference-capture .identity-pose{background:#238968;color:white;font-size:14px;padding:10px}
+.identity-reference-capture>p{color:#cfdee0;font-size:13px;line-height:1.7}
+.identity-reference-capture .identity-help-link{align-self:center;color:#72ddb3;background:none;border:0;text-decoration:underline;text-underline-offset:4px;padding:12px;min-height:44px;font-size:14px}
+.identity-reference-capture>.identity-actions{margin-top:auto;padding-top:24px;padding-bottom:8px;flex-shrink:0;justify-content:center;flex-wrap:nowrap}
+.identity-reference-capture .identity-actions>.btn{min-height:48px;flex:1;min-width:0;font-size:14px}
+.identity-reference-capture .identity-actions>.btn-secondary{color:#8de6bf;border:1px solid #59be97;background:transparent}
+.identity-reference-capture .identity-actions>.identity-shutter{flex:0 0 64px;height:64px;min-height:64px;min-width:64px;border-radius:50%;border:4px double #142d36;background:#fff;color:#183b42;padding:0}
+.identity-reference-capture .identity-shutter svg{width:28px;height:28px}
+.identity-reference-capture .identity-shutter span{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
+.identity-reference-capture .ops-error{color:#ffd1cc;background:#582b2b;padding:10px;border-radius:8px}
+.identity-reference-capture .identity-qr-status{background:transparent;color:#cce5dc;border:0;padding:0;font-size:12px}
+.identity-capture-help{display:flex;flex-direction:column;gap:24px;flex:1;text-align:center}
+.identity-capture-help h3{font-size:20px;line-height:1.5}
+.identity-help-illustration{margin:20px auto 0;color:#77dbb4;border:2px solid #68cba4;border-radius:14px;padding:20px 35px}
+.identity-help-illustration.is-face{border-radius:50%;padding:35px 20px}
+.identity-capture-help ul{text-align:left;line-height:1.9;padding-left:22px;color:#d3e3e4;font-size:14px}
+.identity-capture-help>.btn{margin-top:auto;margin-bottom:12px;min-height:48px}
+.identity-reference-capture.show-help>:not(header):not(.identity-capture-help){display:none}
+.identity-capture-overlay>.identity-qr-popup{border-radius:18px;padding:24px;background:#fff;color:#183b36;overflow:auto}
+@media(max-width:600px){.identity-capture-overlay{padding:0}.identity-reference-capture{width:100%;height:100dvh;min-height:0;max-height:100dvh;border-radius:0;padding:calc(16px + env(safe-area-inset-top)) 16px calc(12px + env(safe-area-inset-bottom))}.identity-reference-capture h2{font-size:16px}.identity-reference-capture .identity-steps{margin-bottom:18px}.identity-reference-capture .identity-camera.is-card{width:100%;aspect-ratio:4/3;max-height:38dvh}.identity-reference-capture>.identity-actions{padding-top:20px}.identity-reference-capture>small{font-size:11px}}
+.identity-reference-capture .identity-pose-guide{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;width:min(420px,100%);margin:12px auto;color:#8da8a7}.identity-pose-example{display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:4px;padding:8px 4px;border:1px solid transparent;border-radius:14px;min-height:116px}.identity-pose-example.is-active{color:#92d8b7;background:#25463f;border-color:#92d8b7}.identity-pose-example span{font-size:12px;font-weight:600;line-height:1.4}.identity-pose-example small{font-size:10px}.identity-pose-example.is-active svg{animation:identity-pose-cue 1.8s ease-in-out infinite}@keyframes identity-pose-cue{50%{transform:scale(1.07)}}@media(prefers-reduced-motion:reduce){.identity-pose-example.is-active svg{animation:none}}@media(max-height:760px){.identity-pose-example{min-height:94px;padding:5px 3px}.identity-pose-example svg{width:44px;height:44px}}

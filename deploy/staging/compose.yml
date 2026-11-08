@@ -1,0 +1,40 @@
+# Dedicated staging application ONLY. Provision an isolated staging-gateway/backend
+# on reloo-staging-backend first. Never attach to a production network or volume.
+name: reloo-staging
+services:
+  app:
+    image: ${STAGING_IMAGE:?Use the immutable tested image digest}
+    env_file: ${STAGING_ENV_FILE:?Absolute path to the dedicated staging env file}
+    environment:
+      RELOO_ENVIRONMENT: staging
+      NODE_ENV: production
+      HOSTNAME: 0.0.0.0
+      PORT: 3000
+      RELOO_STAGING_OUTBOUND_MODE: blocked
+      RELOO_STAGING_PAYMENT_MODE: disabled
+      RELOO_STAGING_EXPIRES_AT: '2026-10-31T16:59:59Z'
+    healthcheck:
+      test: [CMD, node, -e, "fetch('http://127.0.0.1:3000/api/health',{headers:{authorization:'Basic '+Buffer.from(process.env.RELOO_STAGING_ACCESS_USER+':'+process.env.RELOO_STAGING_ACCESS_PASSWORD).toString('base64')}}).then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"]
+      interval: 30s
+      timeout: 8s
+      start_period: 60s
+      retries: 4
+    ports: ['127.0.0.1:4524:3000']
+    networks: [staging]
+    restart: unless-stopped
+    read_only: true
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    tmpfs: ['/tmp:uid=1000,gid=1000,size=256m','/app/.next/cache:uid=1000,gid=1000,size=128m']
+    volumes:
+      - staging-media:/srv/reloo-staging/media
+      - staging-evidence:/srv/reloo-staging/evidence
+    mem_limit: 2g
+    pids_limit: 256
+networks:
+  staging:
+    external: true
+    name: reloo-staging-backend
+volumes:
+  staging-media:
+  staging-evidence:

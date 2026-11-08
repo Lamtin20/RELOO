@@ -1,0 +1,7 @@
+{
+  "master": "public/brand/reloop-hero-ui.png",
+  "expressionSource": "public/brand/master-expression-sheet.png",
+  "masterSha256": "da9e30313ea27092f7a981d894c01529fd23b8b9cee5bb28fb17e147264db2e4",
+  "type": "existing raster artwork, cropped existing expression/pose sprites",
+  "limitations": "Expression sprites come from a 1024x682 sheet; low source resolution. No independently rigged limbs or facial layers."
+}

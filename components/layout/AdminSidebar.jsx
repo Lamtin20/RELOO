@@ -20,13 +20,20 @@ import {
   SlidersHorizontal,
   Megaphone,
   Boxes,
+  Database,
 } from "lucide-react";
 
 const NAV_SECTIONS = [
+  {label:'Guardian',items:[{href:'/admin/compliance',label:'Compliance Guardian',icon:ShieldAlert}]},
   {
     label: "CRM",
     items: [
-      { href: "/admin", label: "Tổng quan", icon: LayoutDashboard, exact: true },
+      {
+        href: "/admin",
+        label: "Tổng quan",
+        icon: LayoutDashboard,
+        exact: true,
+      },
       { href: "/admin/users", label: "Người dùng", icon: Users },
       { href: "/admin/orders", label: "Đơn hàng", icon: ShoppingCart },
       { href: "/admin/tickets", label: "Tickets CSKH", icon: Headset },
@@ -38,29 +45,63 @@ const NAV_SECTIONS = [
     items: [
       { href: "/admin/cms", label: "Trang nội dung", icon: FileText },
       { href: "/admin/faq", label: "FAQ", icon: HelpCircle },
-      { href: "/admin/cms?panel=banner", label: "Banner/Cấu hình", icon: ImageIcon, match: "/admin/cms" },
+      {
+        href: "/admin/cms?panel=banner",
+        label: "Banner/Cấu hình",
+        icon: ImageIcon,
+        match: "/admin/cms",
+      },
     ],
   },
   {
     label: "Ops",
     items: [
       { href: "/admin/risk", label: "Risk Ops", icon: ShieldAlert },
-      { href: "/admin/risk?tab=audit", label: "Green Audit giám sát", icon: Leaf, match: "/admin/risk" },
-      { href: "/admin/users?tab=blacklist", label: "Danh sách đen", icon: Ban, match: "/admin/users" },
+      {
+        href: "/admin/risk?tab=audit",
+        label: "Green Audit giám sát",
+        icon: Leaf,
+        match: "/admin/risk",
+      },
+      {
+        href: "/admin/users?tab=blacklist",
+        label: "Danh sách đen",
+        icon: Ban,
+        match: "/admin/users",
+      },
     ],
   },
   {
     label: "Finance",
     items: [
       { href: "/admin/finance", label: "Doanh thu", icon: LineChart },
-      { href: "/admin/finance?tab=reconcile", label: "Đối soát", icon: ReceiptText, match: "/admin/finance" },
-      { href: "/admin/finance?tab=tax", label: "Báo cáo thuế NĐ91", icon: FileSpreadsheet, match: "/admin/finance" },
+      {
+        href: "/admin/finance?tab=reconcile",
+        label: "Đối soát",
+        icon: ReceiptText,
+        match: "/admin/finance",
+      },
+      {
+        href: "/admin/finance?tab=tax",
+        label: "Báo cáo thuế NĐ91",
+        icon: FileSpreadsheet,
+        match: "/admin/finance",
+      },
     ],
   },
   {
     label: "System",
     items: [
-      { href: "/admin/settings", label: "Cài đặt sàn", icon: SlidersHorizontal },
+      {
+        href: "/admin/settings",
+        label: "Cài đặt sàn",
+        icon: SlidersHorizontal,
+      },
+      {
+        href: "/admin/market-data",
+        label: "Nguồn giá & Affiliate",
+        icon: Database,
+      },
       { href: "/admin/ads", label: "Gói Ads", icon: Megaphone },
       { href: "/admin/listings", label: "Duyệt tin đăng", icon: Boxes },
     ],
@@ -77,7 +118,7 @@ export function AdminSidebar({ onNavigate }) {
   const pathname = usePathname();
 
   return (
-    <aside className="admin-sidebar">
+    <aside className="admin-sidebar" id="reloo-admin-sidebar">
       <div className="admin-sidebar-brand">
         <img
           src="/brand/reloo-logo.png"

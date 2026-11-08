@@ -34,7 +34,7 @@ const SLIDES = [
     key: "hello",
     eyebrow: "Xin chào!",
     title: "Mình là RELOOP - trợ thủ của bạn tại RELOO",
-    body: "Sàn cho thuê ngang hàng đầu tiên tại Việt Nam có bảo chứng Blockchain, giúp bạn tin tưởng ngay từ lần đầu tiên.",
+    body: "Tìm đồ cần thuê, đăng đồ ít dùng và trao đổi trực tiếp với nhau trên RELOO. Hai bên chủ động thỏa thuận giá và giao nhận.",
     tags: [
       { icon: Handshake, label: "P2P Marketplace" },
       { icon: ShieldCheck, label: "An toàn" },
@@ -56,7 +56,7 @@ const SLIDES = [
     key: "trust",
     eyebrow: "Vì sao yên tâm?",
     title: "Kiểm tra tình trạng - lưu bằng chứng minh bạch",
-    body: "Trước khi giao, chủ đồ quay video kiểm tra tình trạng. RELOO lưu bằng chứng để đối chiếu khi trả đồ - minh bạch, không thể gian lận.",
+    body: "Hai bên cùng kiểm tra tình trạng đồ khi giao nhận, lưu ảnh và trao đổi trong chat để có thông tin đối chiếu khi trả đồ.",
     tags: [
       { icon: ScanFace, label: "eKYC 3 cấp" },
       { icon: BadgeCheck, label: "Chứng nhận tài sản số" },

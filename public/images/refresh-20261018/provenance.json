@@ -1,0 +1,280 @@
+{
+  "provider": "Vibi",
+  "baseUrl": "https://vibi.top/v1",
+  "requestedModel": "gpt-image-2",
+  "mode": "ImageGen fallback CLI",
+  "createdAt": "2026-10-17T18:09:17.255Z",
+  "promptManifest": "docs/VISUAL_REFRESH_BRIEF_20261018.md",
+  "assets": [
+    {
+      "name": "campaign-rent-wide",
+      "sourceSha256": "606950cca0aa0d3283c5981b8555018ea89cc9bbf852cdf8aa5c0360c2a3c06a",
+      "path": "public/images/refresh-20261018/campaign-rent-wide.webp",
+      "url": "/images/refresh-20261018/campaign-rent-wide.webp",
+      "width": 1600,
+      "height": 941,
+      "bytes": 164584,
+      "sha256": "2798593ddf24e58853d31886c54181921632d793bd75cabe0625328e9def6d91"
+    },
+    {
+      "name": "campaign-rent-mobile",
+      "sourceSha256": "606950cca0aa0d3283c5981b8555018ea89cc9bbf852cdf8aa5c0360c2a3c06a",
+      "path": "public/images/refresh-20261018/campaign-rent-mobile.webp",
+      "url": "/images/refresh-20261018/campaign-rent-mobile.webp",
+      "width": 800,
+      "height": 800,
+      "bytes": 113172,
+      "sha256": "356e1186fc814728bbbcf883e1955a881962dd5369ab6531b46d7d77ecf48e91"
+    },
+    {
+      "name": "campaign-sale-wide",
+      "sourceSha256": "e4b4d37e2f537b13b0c88a81f241d57a8d5c851cccd5cdc752f85d9ec50abae1",
+      "path": "public/images/refresh-20261018/campaign-sale-wide.webp",
+      "url": "/images/refresh-20261018/campaign-sale-wide.webp",
+      "width": 1600,
+      "height": 887,
+      "bytes": 171294,
+      "sha256": "ecaac293a62b2a4145e214b3c4b2fbe4899a08b796fc56ab6aee9cd8e895642c"
+    },
+    {
+      "name": "campaign-sale-mobile",
+      "sourceSha256": "e4b4d37e2f537b13b0c88a81f241d57a8d5c851cccd5cdc752f85d9ec50abae1",
+      "path": "public/images/refresh-20261018/campaign-sale-mobile.webp",
+      "url": "/images/refresh-20261018/campaign-sale-mobile.webp",
+      "width": 800,
+      "height": 800,
+      "bytes": 110128,
+      "sha256": "a35209c03aaba982d28198d3874e7f162f5bf129fb5d429228046bab1ddbfa09"
+    },
+    {
+      "name": "campaign-affiliate-wide",
+      "sourceSha256": "e23a18bae6d3c80412f9489ab69113ab9c1dddc784e7e8367d060a14b893bf25",
+      "path": "public/images/refresh-20261018/campaign-affiliate-wide.webp",
+      "url": "/images/refresh-20261018/campaign-affiliate-wide.webp",
+      "width": 1600,
+      "height": 887,
+      "bytes": 130784,
+      "sha256": "a610b62d0b5ff2089f341f702c5766b126c7747ba2e8c1859744e0602f2806dd"
+    },
+    {
+      "name": "campaign-affiliate-mobile",
+      "sourceSha256": "e23a18bae6d3c80412f9489ab69113ab9c1dddc784e7e8367d060a14b893bf25",
+      "path": "public/images/refresh-20261018/campaign-affiliate-mobile.webp",
+      "url": "/images/refresh-20261018/campaign-affiliate-mobile.webp",
+      "width": 800,
+      "height": 800,
+      "bytes": 103846,
+      "sha256": "6af51a88e1df6a6d6af2571d818e3f93133a359034562a3831d9828a79a0a535"
+    },
+    {
+      "name": "campaign-nearby-wide",
+      "sourceSha256": "22687497e346e7a7c9141a3206e1eaf1457847ff91dd05e1e27d1a3409511ae9",
+      "path": "public/images/refresh-20261018/campaign-nearby-wide.webp",
+      "url": "/images/refresh-20261018/campaign-nearby-wide.webp",
+      "width": 1600,
+      "height": 887,
+      "bytes": 195430,
+      "sha256": "4eb5f53ae297dccc2942818c9503ef8e8ace3413cc04fdb15b2f0a2860e5b14b"
+    },
+    {
+      "name": "category-electronics",
+      "sourceSha256": "bc8d878254c43a1a7b88b795acb916b44c14ed9affb1908add1c55107ef4a61b",
+      "path": "public/images/refresh-20261018/category-electronics.webp",
+      "url": "/images/refresh-20261018/category-electronics.webp",
+      "width": 384,
+      "height": 384,
+      "bytes": 10688,
+      "sha256": "2d4f12a7fbed6d37ee0f7535009558d597ddf53897318ef241e64f1ab6fcbd41"
+    },
+    {
+      "name": "category-camera",
+      "sourceSha256": "9bf9f23afe4a6ddf2efa9e4e46b4d2fa53f2b4a2441b3830d040e92207c25772",
+      "path": "public/images/refresh-20261018/category-camera.webp",
+      "url": "/images/refresh-20261018/category-camera.webp",
+      "width": 384,
+      "height": 384,
+      "bytes": 18076,
+      "sha256": "fab9c00f7b9e9ff40239644501e913d3f771bd7bcfa22f46c23d140c5c130b0d"
+    },
+    {
+      "name": "category-home",
+      "sourceSha256": "861732f90c4af5e2d319747c16845e90a21915c36461386cd51ec2cebaaa716a",
+      "path": "public/images/refresh-20261018/category-home.webp",
+      "url": "/images/refresh-20261018/category-home.webp",
+      "width": 384,
+      "height": 384,
+      "bytes": 7144,
+      "sha256": "8f1f2e29d6259c77c8a1c168108c8fb120b047eb74162108e3ede700143679cf"
+    },
+    {
+      "name": "category-camping",
+      "sourceSha256": "50b361f73f05b787b2e8fd77a34d23e073f94dc38af58181fd3a14a6a3813d9f",
+      "path": "public/images/refresh-20261018/category-camping.webp",
+      "url": "/images/refresh-20261018/category-camping.webp",
+      "width": 384,
+      "height": 384,
+      "bytes": 11448,
+      "sha256": "08a53dfbe5d86446cff4bd996e63e8cd69194609f2727de907282d0c218b928b"
+    },
+    {
+      "name": "category-baby",
+      "sourceSha256": "c14af56745196aef8d0e20980aba2339b2c5262839a1e6c12585679ccd09351c",
+      "path": "public/images/refresh-20261018/category-baby.webp",
+      "url": "/images/refresh-20261018/category-baby.webp",
+      "width": 384,
+      "height": 384,
+      "bytes": 14376,
+      "sha256": "3aa4768f231d904a197e8176e0d625ae1eed6777f6841689c81457a83a1e133e"
+    },
+    {
+      "name": "category-fashion",
+      "sourceSha256": "90bd60b47e4e64e5e30586c8bd5eca0e9536d5f33bf6a6a72a2983caf7a14b32",
+      "path": "public/images/refresh-20261018/category-fashion.webp",
+      "url": "/images/refresh-20261018/category-fashion.webp",
+      "width": 384,
+      "height": 384,
+      "bytes": 15174,
+      "sha256": "74ab890f8acc3bcec8254162b69662a2a9dec41888749f39eae742dfe1e18fd4"
+    },
+    {
+      "name": "category-vehicle",
+      "sourceSha256": "afd0f1c3ce2c7117aae53cf984e7d531c8cfe9724d0270417c1b0d89811ccb38",
+      "path": "public/images/refresh-20261018/category-vehicle.webp",
+      "url": "/images/refresh-20261018/category-vehicle.webp",
+      "width": 384,
+      "height": 384,
+      "bytes": 23570,
+      "sha256": "ce3644bbea317471fa5a6f063cb1745a47dc504952b2dc910c3f0c6ce6c932bb"
+    },
+    {
+      "name": "category-sports",
+      "sourceSha256": "2500c3c04029fd6e13ab1992ac1be965dab48601067936409c31fe33b7585ac8",
+      "path": "public/images/refresh-20261018/category-sports.webp",
+      "url": "/images/refresh-20261018/category-sports.webp",
+      "width": 384,
+      "height": 384,
+      "bytes": 9092,
+      "sha256": "3871152f899c8b26b64db7161b91a80e1a36775c5d93d55cf272842c2fda5a5a"
+    },
+    {
+      "name": "category-tools",
+      "sourceSha256": "5a73a9dccf309979083f8889c9185992946d9072f45cf42a9d63ab5992030b1c",
+      "path": "public/images/refresh-20261018/category-tools.webp",
+      "url": "/images/refresh-20261018/category-tools.webp",
+      "width": 384,
+      "height": 384,
+      "bytes": 14980,
+      "sha256": "d2948537a2e38faa9d3d2c5c9e3e084b4c32797b5273bbd455ca8fd9f4b5fba6"
+    },
+    {
+      "name": "category-office",
+      "sourceSha256": "53f3c4caac668f11e6bfc2d0c4b09c65ae3accfe4c9d430d95300aa80ef76363",
+      "path": "public/images/refresh-20261018/category-office.webp",
+      "url": "/images/refresh-20261018/category-office.webp",
+      "width": 384,
+      "height": 384,
+      "bytes": 7370,
+      "sha256": "c02000112e1c6a0312a92ad15499962db3837436f6a466de9dcf6e932fd41da8"
+    },
+    {
+      "name": "category-music",
+      "sourceSha256": "0f485fedcf54586b6fda2a4ba34d7d4237601f83940e4c6af9ed6b3778e352f7",
+      "path": "public/images/refresh-20261018/category-music.webp",
+      "url": "/images/refresh-20261018/category-music.webp",
+      "width": 384,
+      "height": 384,
+      "bytes": 9142,
+      "sha256": "eb7244a70defce3b00d9d5402176066c4af48f0734db318e49958cfcd94b3b48"
+    },
+    {
+      "name": "category-beauty",
+      "sourceSha256": "4e399b63c8207273eb2fba11062cf282542063cd94ab6887012f2f3041151678",
+      "path": "public/images/refresh-20261018/category-beauty.webp",
+      "url": "/images/refresh-20261018/category-beauty.webp",
+      "width": 384,
+      "height": 384,
+      "bytes": 6472,
+      "sha256": "114d00a3db9395dd50b74dbe8c31df3bd15a5a24e6b0a70a82a59f47e05b4d5a"
+    },
+    {
+      "name": "category-event",
+      "sourceSha256": "33dc0cb44fdaa734e04b29322c886ed3e2e177653529b389fa1f062e2a2e5971",
+      "path": "public/images/refresh-20261018/category-event.webp",
+      "url": "/images/refresh-20261018/category-event.webp",
+      "width": 384,
+      "height": 384,
+      "bytes": 27492,
+      "sha256": "c44a96a800e82d0b10178ffc8160cab176ae5cb1e5e2ed94c614fbb8d34693f3"
+    },
+    {
+      "name": "category-default",
+      "sourceSha256": "d039cfe355d108d9322a4bc70ab3392efb5f00a2759ba7603158232d7d33b820",
+      "path": "public/images/refresh-20261018/category-default.webp",
+      "url": "/images/refresh-20261018/category-default.webp",
+      "width": 384,
+      "height": 384,
+      "bytes": 5900,
+      "sha256": "567934ae66d92b762f467076557495c66d2a80e87ad7fde7d7dc1624023d5d98"
+    },
+    {
+      "name": "benefit-upfront",
+      "sourceSha256": "4afcf8aab0048501c975d35e80f124d4caa3a07c8652c7c15252d9c2409c0679",
+      "path": "public/images/refresh-20261018/benefit-upfront.webp",
+      "url": "/images/refresh-20261018/benefit-upfront.webp",
+      "width": 640,
+      "height": 640,
+      "bytes": 44932,
+      "sha256": "cf4ef840e26aaa69f60978447e3a15fb1993314a221e922a3a07720ff7847893"
+    },
+    {
+      "name": "benefit-flexibility",
+      "sourceSha256": "ed818c288bc3a65737db21abd5b757463a47da79c9161f45513002ca42b05e75",
+      "path": "public/images/refresh-20261018/benefit-flexibility.webp",
+      "url": "/images/refresh-20261018/benefit-flexibility.webp",
+      "width": 640,
+      "height": 640,
+      "bytes": 105046,
+      "sha256": "e6100e3c4ff8638aea3504442a075a9c36abf1bfe1eb55c69226aa1ae96c6b9a"
+    },
+    {
+      "name": "benefit-try-before-buy",
+      "sourceSha256": "7784c1a002c70dc7d8a5aa2e69c94196a1feb089ecc5466aa5e64a66a19b9b17",
+      "path": "public/images/refresh-20261018/benefit-try-before-buy.webp",
+      "url": "/images/refresh-20261018/benefit-try-before-buy.webp",
+      "width": 640,
+      "height": 640,
+      "bytes": 77386,
+      "sha256": "bc660b5f29da68e84308ca06f8998bd90ef9b579d1be518601e4b2a3121fd0f4"
+    },
+    {
+      "name": "benefit-space",
+      "sourceSha256": "44eeb190dbc6896cf55396b992eeb7918a848198493835c1fa0fce53fdf04e54",
+      "path": "public/images/refresh-20261018/benefit-space.webp",
+      "url": "/images/refresh-20261018/benefit-space.webp",
+      "width": 640,
+      "height": 640,
+      "bytes": 82128,
+      "sha256": "f85b16c7d971a7b6b773202faf54bf7342c67c505d120bee72b4409ec46e29c5"
+    },
+    {
+      "name": "benefit-choice",
+      "sourceSha256": "4d012b80cde8ee7bdf8dd77b6c46fa28e2f42a5d1e9867a75412ca999ed9183a",
+      "path": "public/images/refresh-20261018/benefit-choice.webp",
+      "url": "/images/refresh-20261018/benefit-choice.webp",
+      "width": 640,
+      "height": 640,
+      "bytes": 93668,
+      "sha256": "5a3625d9917d9215819f5772dea871c7b625a66de8cee2ac802f08086da7dd35"
+    },
+    {
+      "name": "benefit-reuse",
+      "sourceSha256": "cdc8defb7b89fed6878cbadd3061f9cf44d5bbbb32c2baa80f9de9d0ff63e6fb",
+      "path": "public/images/refresh-20261018/benefit-reuse.webp",
+      "url": "/images/refresh-20261018/benefit-reuse.webp",
+      "width": 640,
+      "height": 640,
+      "bytes": 66532,
+      "sha256": "6f8b5fe5edf919a1385b12b4be3ea6f7bec84689ccef2b0679cd3d17640d55b3"
+    }
+  ]
+}

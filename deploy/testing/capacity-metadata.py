@@ -1,0 +1,6 @@
+import subprocess,json,pathlib,time
+def run(a):return subprocess.check_output(a,text=True)
+def inspect(n):return json.loads(run(['docker','inspect',n]))[0]
+app=inspect('reloo-web-app-1');sandbox=inspect('reloo-capacity-app');rest=inspect('reloo-vn-rest-1');auth=inspect('reloo-vn-auth-1')
+env=dict(v.split('=',1) for v in rest['Config']['Env'])
+print(json.dumps({'at':time.time(),'cpu':run(['lscpu']).splitlines()[:16],'memory':pathlib.Path('/proc/meminfo').read_text().splitlines()[:3],'diskC':run(['df','-B1','/mnt/c']),'productionBuild':run(['docker','exec','reloo-web-app-1','cat','.next/BUILD_ID']).strip(),'productionImage':app['Image'],'sandboxImage':sandbox['Image'],'sameImage':app['Image']==sandbox['Image'],'productionAppMemoryLimit':app['HostConfig']['Memory'],'sandboxAppMemoryLimit':sandbox['HostConfig']['Memory'],'postgres':run(['docker','exec','reloo-vn-db-1','psql','-U','postgres','-d','postgres','-Atc','show max_connections;']),'restImage':rest['Config']['Image'],'restMaxRows':env.get('PGRST_DB_MAX_ROWS'),'authImage':auth['Config']['Image'],'internalSandbox':json.loads(run(['docker','network','inspect','reloo-capacity-test']))[0]['Internal'],'kubernetes':run(['k3s','kubectl','--server=https://100.107.146.119:6443','get','pods,hpa','-n','reloo'])},indent=2))

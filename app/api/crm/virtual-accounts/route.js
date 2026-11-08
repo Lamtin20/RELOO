@@ -1,0 +1,4 @@
+import {requirePermission} from '@/lib/operations/permissions';
+import {errorResponse,HttpError,assertOrigin} from '@/lib/server/http';
+export async function GET(request){try{const {db}=await requirePermission(request,'accounting.read');const {data,error}=await db.from('customer_va_links').select('id,profile_id,bank_account_id,masked_va,bank_name,status,expires_at,created_at').order('created_at',{ascending:false}).limit(200);if(error)throw error;return Response.json({ok:true,accounts:data},{headers:{'Cache-Control':'no-store'}});}catch(e){return errorResponse(e);}}
+export async function POST(request){try{assertOrigin(request);await requirePermission(request,'accounting.write');throw new HttpError(410,'Cấp VA đã chuyển sang phân hệ SePay mới, có kiểm tra ngân hàng và hạn căn cước.','USE_SEPAY_WORKSPACE');}catch(e){return errorResponse(e);}}

@@ -1,0 +1,55 @@
+# All open-source/self-hosted. No public service ports, paid accounts or API keys.
+# Pre-provision data offline; this compose file never downloads the planet or imports at startup.
+services:
+  map-tiles:
+    image: ghcr.io/maplibre/martin@sha256:caa63e4618ef8f326141d1a867d6ee15bddcf649260c979193bbf487b433a7e0
+    command: ["--config", "/etc/martin.yml"]
+    user: "1000:1000"
+    volumes:
+      - ./martin.yml:/etc/martin.yml:ro
+      - ${RELOO_MAP_DATA_DIR:?dedicated prepared map data required}/tiles:/data/tiles:ro
+      - ${RELOO_MAP_DATA_DIR:?}/fonts:/data/fonts:ro
+    networks: [maps]
+    read_only: true
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    tmpfs: [/tmp:size=64m,uid=1000,gid=1000]
+    mem_limit: 512m
+    cpus: 1
+    pids_limit: 64
+    restart: unless-stopped
+  map-geocoder:
+    image: eclipse-temurin@sha256:0b99b3376fbb50dbf9c0af8535fdd5b8eb0d3fdfc8b1e4967f383b6919f6901a
+    command: ["java", "-Xms256m", "-Xmx1536m", "-XX:ActiveProcessorCount=2", "-jar", "/opt/photon.jar", "serve", "-listen-ip", "0.0.0.0", "-listen-port", "2322", "-data-dir", "/data", "-max-results", "5", "-max-reverse-results", "5"]
+    user: "1000:1000"
+    volumes:
+      - ${RELOO_MAP_DATA_DIR:?}/photon-1.3.0.jar:/opt/photon.jar:ro
+      - ${RELOO_MAP_DATA_DIR:?}/geocoder:/data
+    networks: [maps]
+    read_only: true
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    tmpfs: [/tmp:size=128m,uid=1000,gid=1000]
+    mem_limit: 2304m
+    cpus: 2
+    pids_limit: 256
+    restart: unless-stopped
+  map-router:
+    image: ghcr.io/project-osrm/osrm-backend@sha256:ef49d1a83c0aa0707aad2338127f96f39af78374bb6c1b3ffa07cf13b92ac572
+    command: ["osrm-routed", "--algorithm", "mld", "--max-table-size", "10", "--max-viaroute-size", "2", "/data/vietnam.osrm"]
+    user: "1000:1000"
+    volumes:
+      - ${RELOO_MAP_DATA_DIR:?}/routing:/data:ro
+    networks: [maps]
+    read_only: true
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    tmpfs: [/tmp:size=32m,uid=1000,gid=1000]
+    mem_limit: 2g
+    cpus: 1
+    pids_limit: 64
+    restart: unless-stopped
+networks:
+  maps:
+    name: reloo-map-private
+    internal: true

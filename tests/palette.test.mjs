@@ -1,0 +1,2 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {RELOO_PALETTE,contrastRatio} from '../lib/design/palette.js';
+test('RELOO text and action palette maintains normal-text contrast',()=>{const p=RELOO_PALETTE;for(const [fg,bg] of [['brand','surface'],['brandHover','surface'],['ink','surface'],['muted','surface'],['ink','mint'],['blue','blueSurface'],['amber','amberSurface'],['surface','violet'],['danger','surface']])assert.ok(contrastRatio(p[fg].value,p[bg].value)>=4.5,fg+'/'+bg);});

@@ -1,0 +1,5 @@
+// Manual reviews cannot be replaced by an arbitrary log marked PASS.
+export const manualChecks=new Set(['legal-approval','asset-provenance','risk-triage',...Array.from({length:20},(_,i)=>'RULE-'+String(i+1).padStart(3,'0')),'RELOO-RENTAL','RELOO-JOBS','RELOO-STAYS','RELOO-PAYMENTS','RELOO-TRUST','RELOO-WORLD']);
+export function validReviewArtifact(value,{id,sourceHash,now=Date.now()}={}){
+ return !!value&&value.schemaVersion===1&&value.checkId===id&&value.sourceHash===sourceHash&&value.decision==='APPROVED'&&typeof value.reviewer?.name==='string'&&value.reviewer.name.trim().length>=3&&typeof value.reviewer?.role==='string'&&value.reviewer.role.trim().length>=3&&typeof value.scope==='string'&&value.scope.trim().length>=20&&Array.isArray(value.evidence)&&value.evidence.length>0&&value.evidence.every(e=>typeof e==='string'&&e.trim().length>5)&&Number.isFinite(Date.parse(value.reviewedAt))&&Date.parse(value.reviewedAt)<=now&&Number.isFinite(Date.parse(value.expiresAt))&&Date.parse(value.expiresAt)>now;
+}

@@ -166,6 +166,16 @@ textarea {
   font-size: inherit;
 }
 
+@media (max-width: 1024px), (hover: none) and (pointer: coarse) {
+  input:not([type="checkbox"]):not([type="radio"]),
+  select,
+  textarea,
+  [contenteditable]:not([contenteditable="false"]) {
+    /* Prevent Safari focus zoom, including searches inside dropdowns. */
+    font-size: 16px !important;
+  }
+}
+
 button {
   cursor: pointer;
   border: none;
@@ -4401,6 +4411,8 @@ svg {
   background: var(--surface);
 }
 
+.explore-loc-field { min-width: 0; }
+
 .explore-loc-field label,
 .explore-radius-field label {
   display: block;
@@ -4930,7 +4942,7 @@ svg {
 
 @media (max-width: 640px) {
   .explore-location {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
     gap: 18px;
     padding-block: 16px 8px;
   }

@@ -1,0 +1,12 @@
+[Unit]
+Description=Weekly RELOO Vietnam Photon data check
+
+[Timer]
+OnCalendar=Mon *-*-* 00:00:00 Asia/Ho_Chi_Minh
+Persistent=true
+AccuracySec=1s
+RandomizedDelaySec=0
+Unit=reloo-photon-update.service
+
+[Install]
+WantedBy=timers.target

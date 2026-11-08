@@ -1,0 +1,14 @@
+{
+  "model": "gpt-image-2",
+  "mode": "skill imagegen CLI",
+  "baseUrl": "https://vibi.top/v1",
+  "background": "white",
+  "generated": [
+    "upfront",
+    "flexibility",
+    "try-before-buy",
+    "space",
+    "choice",
+    "reuse"
+  ]
+}

@@ -1,0 +1,9 @@
+'use client';
+import {useEffect,useState} from 'react';
+import Link from 'next/link';
+import {useLocale} from '@/components/settings/LocaleProvider';
+export default function MapOperations(){
+ const [data,setData]=useState(null),[failed,setFailed]=useState(false),{locale}=useLocale(),en=locale==='en-US';
+ useEffect(()=>{const controller=new AbortController();fetch('/api/admin/maps',{signal:controller.signal,cache:'no-store'}).then(async response=>{if(!response.ok)throw Error();setData(await response.json())}).catch(()=>{if(!controller.signal.aborted)setFailed(true)});return()=>controller.abort()},[]);
+ return <section className="container"><h1>{en?'Map operations':'Vận hành bản đồ'}</h1>{failed?<p role="alert">{en?'Access or map data unavailable.':'Chưa có quyền truy cập hoặc dữ liệu bản đồ.'}</p>:!data?<p role="status">{en?'Loading…':'Đang tải…'}</p>:<><dl><dt>{en?'Provider':'Nhà cung cấp'}</dt><dd>{data.configuration.provider}</dd><dt>{en?'Photon data update':'Lịch cập nhật Photon'}</dt><dd>{en?'Monday 00:00':'Thứ Hai 00:00'} | Asia/Ho_Chi_Minh</dd><dt>{en?'Latest check':'Lần kiểm tra gần nhất'}</dt><dd>{data.photonUpdate?.outcome??'UNAVAILABLE'} | {data.photonUpdate?.checkedAt??'--'}</dd><dt>{en?'Timer activation':'Trạng thái bật lịch'}</dt><dd>{data.photonUpdate?.timerEnabled??'NOT_VERIFIED'}</dd><dt>PostGIS</dt><dd>{data.databaseReady?'READY':'NOT_READY'}</dd><dt>{en?'Projected features':'Điểm công khai gần đúng'}</dt><dd>{data.projectedFeatures??'NOT_TESTED'}</dd><dt>{en?'Background tracking':'Theo dõi nền'}</dt><dd>OFF</dd></dl><p>{en?'Provider activation requires reviewed configuration. No secrets are shown here.':'Kích hoạt nhà cung cấp cần cấu hình được duyệt. Trang này không hiển thị khóa bí mật.'}</p><Link href="/ban-do">{en?'Open map':'Mở bản đồ'}</Link></>}</section>;
+}

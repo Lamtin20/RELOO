@@ -1,0 +1,32 @@
+{
+  "appId": "vn.reloo.app",
+  "appName": "RELOO",
+  "webDir": "www",
+  "server": {
+    "url": "https://reloo.vn",
+    "cleartext": false,
+    "errorPath": "offline.html"
+  },
+  "android": {
+    "allowMixedContent": false,
+    "webContentsDebuggingEnabled": false
+  },
+  "ios": {
+    "contentInset": "never",
+    "allowsLinkPreview": false,
+    "preferredContentMode": "mobile",
+    "webContentsDebuggingEnabled": false
+  },
+  "plugins": {
+    "SplashScreen": {
+      "launchShowDuration": 0,
+      "backgroundColor": "#087F56",
+      "showSpinner": false,
+      "launchAutoHide": true
+    },
+    "StatusBar": {
+      "style": "LIGHT",
+      "backgroundColor": "#087F56"
+    }
+  }
+}

@@ -1,0 +1,3 @@
+"use client";
+import {useEffect,useState} from 'react';
+export function BannerPlacement({placement,fallback=null}){const [result,setResult]=useState(null);useEffect(()=>{let gone=false;fetch('/api/banners?placement='+placement).then(r=>r.json()).then(r=>{if(!gone)setResult({placement,banner:r.banner});}).catch(()=>{});return()=>{gone=true;};},[placement]);const banner=result?.placement===placement?result.banner:null;if(!banner)return fallback;return <aside className={`campaign-banner campaign-banner--${placement}`} aria-label="Quảng cáo"><a href={banner.href}><picture><source media="(max-width: 767px)" srcSet={`/api/media/${banner.mobile_id}`}/><img src={`/api/media/${banner.desktop_id}`} alt={banner.alt} loading="lazy"/></picture></a></aside>;}

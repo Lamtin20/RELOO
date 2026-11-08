@@ -1,0 +1,36 @@
+# Offline preparation only, on an isolated build machine. Never run on production under load.
+services:
+  build-tiles:
+    image: ghcr.io/systemed/tilemaker@sha256:9cd8728a37a31c8a5205e091cedd3ff2c2c450c57e1ce3e5b58916185540ebba
+    profiles: [build-data]
+    network_mode: none
+    command: ["/data/source/vietnam.osm.pbf", "--output", "/data/tiles/vietnam.mbtiles", "--config", "/usr/src/app/resources/config-openmaptiles.json", "--process", "/usr/src/app/resources/process-openmaptiles.lua", "--store", "/data/scratch"]
+    volumes: ["${RELOO_MAP_DATA_DIR:?dedicated data directory required}:/data"]
+    working_dir: /data
+    mem_limit: 4g
+    cpus: 2
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+  build-route:
+    image: ghcr.io/project-osrm/osrm-backend@sha256:ef49d1a83c0aa0707aad2338127f96f39af78374bb6c1b3ffa07cf13b92ac572
+    profiles: [build-data]
+    network_mode: none
+    entrypoint: [/bin/sh, -ec]
+    command: ["test ! -e /data/routing/vietnam.osrm.properties; osrm-extract -p /opt/car.lua /data/routing/vietnam.osm.pbf; osrm-partition /data/routing/vietnam.osrm; osrm-customize /data/routing/vietnam.osrm"]
+    volumes: ["${RELOO_MAP_DATA_DIR:?}:/data"]
+    mem_limit: 6g
+    cpus: 2
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+  import-places:
+    image: eclipse-temurin@sha256:0b99b3376fbb50dbf9c0af8535fdd5b8eb0d3fdfc8b1e4967f383b6919f6901a
+    profiles: [build-data]
+    network_mode: none
+    entrypoint: [/bin/sh, -ec]
+    command: ["test ! -e /data/geocoder/photon_data; java -Xms256m -Xmx1536m -XX:ActiveProcessorCount=2 -jar /data/photon-1.3.0.jar import -data-dir /data/geocoder -import-file /data/source/vietnam-261101.jsonl -languages vi,en -j 2"]
+    user: "1000:1000"
+    volumes: ["${RELOO_MAP_DATA_DIR:?}:/data"]
+    mem_limit: 2304m
+    cpus: 2
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]

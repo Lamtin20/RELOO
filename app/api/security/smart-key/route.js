@@ -1,0 +1,15 @@
+import {cookies} from 'next/headers';
+import {requireAccount} from '@/lib/security/authorization';
+import {verifiedCrmClaims} from '@/lib/operations/crm-auth';
+import {SMART_COOKIE,SMART_SESSION_SECONDS,createSmartReceipt,requireSmartKey} from '@/lib/security/smart-key';
+import {assertOrigin,errorResponse,HttpError,readJson,rateLimit} from '@/lib/server/http';
+const options={httpOnly:true,secure:process.env.NODE_ENV==='production',sameSite:'strict',path:'/',maxAge:SMART_SESSION_SECONDS};
+export async function GET(request){try{const account=await requireAccount(request,{active:false});let authorized=false;try{await requireSmartKey(request,account);authorized=true;}catch(e){if(!['SMART_KEY_REQUIRED'].includes(e.code))throw e;}return Response.json({ok:true,authorized,factors:(account.authUser.factors||[]).filter(f=>f.factor_type==='totp'&&f.status==='verified').map(f=>({id:f.id}))},{headers:{'Cache-Control':'private,no-store'}});}catch(e){return errorResponse(e);}}
+export async function POST(request){try{
+ assertOrigin(request);const account=await requireAccount(request,{active:false});if(request.headers.has('authorization'))throw new HttpError(400,'Dùng phiên đăng nhập ứng dụng để xác thực.');rateLimit(request,'smart-key:'+account.profile.id,6);const input=await readJson(request,2000);
+ if(input.action==='ENROLL'){if(account.authUser.factors?.some(f=>f.factor_type==='totp'&&f.status==='verified'))throw new HttpError(409,'Tài khoản đã có ứng dụng xác thực.');for(const f of account.authUser.factors||[])if(f.factor_type==='totp'&&f.status==='unverified'&&f.friendly_name==='RELOO Smart Key')await account.client.auth.mfa.unenroll({factorId:f.id});const r=await account.client.auth.mfa.enroll({factorType:'totp',friendlyName:'RELOO Smart Key',issuer:'RELOO'});if(r.error)throw new HttpError(503,'Chưa tạo được Smart Key.');return Response.json({ok:true,factorId:r.data.id,qrCode:r.data.totp.qr_code,secret:r.data.totp.secret},{headers:{'Cache-Control':'private,no-store'}});}
+ if(input.action!=='VERIFY'||typeof input.code!=='string'||!/^\d{6}$/.test(input.code||'')||!account.authUser.factors?.some(f=>f.id===input.factorId&&f.factor_type==='totp'))throw new HttpError(400,'Nhập mã Smart Key 6 số.');
+ const r=await account.client.auth.mfa.challengeAndVerify({factorId:input.factorId,code:input.code});if(r.error)throw new HttpError(401,'Smart Key chưa đúng hoặc đã hết hạn.');
+ const claims=await verifiedCrmClaims(account,request,r.data.access_token);if(claims.aal!=='aal2')throw new HttpError(403,'Phiên xác thực chưa hoàn tất.');const receipt=createSmartReceipt({subject:account.authUser.id,sessionId:claims.session_id,profileId:account.profile.id,factorId:input.factorId});
+ const saved=await account.db.from('smart_key_sessions').insert({id:receipt.id,profile_id:account.profile.id,auth_session_id:claims.session_id,expires_at:new Date(receipt.expiresAt).toISOString()});if(saved.error)throw new HttpError(503,'Chưa lưu được phiên Smart Key.');(await cookies()).set(SMART_COOKIE,receipt.value,options);return Response.json({ok:true,authorized:true});
+ }catch(e){return errorResponse(e);}}

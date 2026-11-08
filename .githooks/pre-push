@@ -1,0 +1,5 @@
+#!/bin/sh
+node --test tests/compliance-guardian.test.mjs || exit 1
+node scripts/check-source-secrets.mjs || exit 1
+node compliance/run.mjs || exit 1
+# Full release gate runs before packaging/publishing, not on ordinary WIP push.

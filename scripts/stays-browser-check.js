@@ -1,0 +1,61 @@
+// Run through: playwright-cli -s=stays run-code --filename scripts/stays-browser-check.js
+async page => {
+ const base='http://127.0.0.1:4522',root='output/playwright/stays';
+ const checks=[];
+ const check=(name,ok)=>{if(!ok)throw Error(name);checks.push(name)};
+ await page.goto(base+'/dat-phong');
+ await page.getByRole('button',{name:'Xem phòng',exact:true}).first().waitFor();
+ const consent=page.getByRole('button',{name:'Chỉ cookie cần thiết',exact:true});if(await consent.isVisible())await consent.click();
+ for(const width of [1440,768,390,320]){
+  await page.setViewportSize({width,height:900});
+  await page.screenshot({path:root+'/search-'+width+'.png',fullPage:true});
+  check('search-no-horizontal-overflow-'+width,await page.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth));
+ }
+ await page.setViewportSize({width:390,height:844});
+ await page.getByRole('combobox',{name:'Số khách',exact:true}).selectOption('4');
+ await page.getByRole('combobox',{name:'Điểm đến',exact:true}).selectOption('Hà Nội');
+ await page.getByRole('status').filter({hasText:'Không có phòng phù hợp'}).waitFor();
+ await page.screenshot({path:root+'/empty.png',fullPage:true});checks.push('empty-state');
+ await page.getByRole('combobox',{name:'Điểm đến',exact:true}).selectOption('');
+ await page.getByRole('combobox',{name:'Số khách',exact:true}).selectOption('2');
+ await page.getByRole('button',{name:'Xem phòng',exact:true}).first().click();
+ await page.getByRole('button',{name:'Kiểm tra giá và phòng',exact:true}).waitFor();
+ await page.screenshot({path:root+'/detail-mobile.png',fullPage:true});
+ await page.getByRole('button',{name:'Kiểm tra giá và phòng',exact:true}).click();
+ await page.getByRole('heading',{name:'Kiểm tra thông tin',exact:true}).waitFor();
+ check('consent-required',!(await page.getByRole('button',{name:'Giữ phòng thử · 10 phút',exact:true}).isEnabled()));
+ await page.screenshot({path:root+'/review-mobile.png',fullPage:true});
+ await page.getByRole('checkbox',{name:'Tôi đã đọc thời gian, tổng giá và chính sách thử nghiệm.'}).check();
+ await page.getByRole('button',{name:'Giữ phòng thử · 10 phút',exact:true}).click();
+ await page.getByRole('button',{name:'Thanh toán thử',exact:true}).waitFor();
+ const orderUrl=page.url();check('order-deep-link',orderUrl.includes('order='));
+ await page.screenshot({path:root+'/held-mobile.png',fullPage:true});
+ await page.getByRole('button',{name:'Thanh toán thử',exact:true}).click();
+ await page.getByText('Đã xác nhận thử',{exact:true}).first().waitFor();
+ await page.screenshot({path:root+'/confirmed-mobile.png',fullPage:true});checks.push('search-review-hold-payment-order');
+ await page.reload();await page.getByText('Đã xác nhận thử',{exact:true}).first().waitFor();checks.push('order-survives-reload');
+ await page.context().setOffline(true);
+ await page.getByRole('button',{name:'Thử lại',exact:true}).click();
+ await page.getByRole('alert').filter({hasText:'Chưa thể xử lý'}).waitFor();checks.push('offline-error');
+ await page.screenshot({path:root+'/offline.png',fullPage:true});
+ await page.context().setOffline(false);
+ await page.getByRole('button',{name:'Thử lại',exact:true}).click();
+ await page.getByRole('button',{name:'Xem điều kiện hủy',exact:true}).click();
+ await page.getByRole('button',{name:'Xác nhận hủy thử',exact:true}).waitFor();
+ await page.screenshot({path:root+'/cancellation-preview.png',fullPage:true});
+ await page.getByRole('button',{name:'Xác nhận hủy thử',exact:true}).click();
+ await page.getByText('Đã hủy thử',{exact:true}).first().waitFor();
+ await page.getByText('Đã thanh toán thử · Đã hoàn tiền thử',{exact:true}).waitFor();
+ await page.screenshot({path:root+'/cancelled-refunded.png',fullPage:true});checks.push('cancel-preview-and-test-refund');
+ await page.getByRole('button',{name:'Đơn của tôi',exact:true}).click();
+ await page.getByRole('heading',{name:'Đơn của tôi',exact:true}).waitFor();checks.push('my-bookings');
+ await page.evaluate(()=>{localStorage.setItem('reloo-ui-language:guest','en-US');});
+ await page.goto(base+'/dat-phong');
+ await page.getByRole('heading',{name:'A stay that feels just right.',exact:true}).waitFor();
+ await page.screenshot({path:root+'/english-mobile.png',fullPage:true});checks.push('english-existing-locale-provider');
+ await page.evaluate(()=>{localStorage.setItem('reloo-ui-language:guest','vi-VN');});
+ await page.goto(base+'/dat-phong/quan-ly');
+ await page.getByRole('heading',{name:'RELOO Garden Studio',exact:true}).waitFor();
+ await page.screenshot({path:root+'/partner-mobile.png',fullPage:true});checks.push('partner-workspace-render');
+ return {checks,orderUrl,mode:'local synthetic PGlite, no external payments',finishedAt:new Date().toISOString()};
+}

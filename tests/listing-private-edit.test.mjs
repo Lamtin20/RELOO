@@ -1,0 +1,4 @@
+﻿import test from 'node:test';import assert from 'node:assert/strict';import {needsPrivateAddressRefresh} from '../lib/server/listing-privacy.js';
+const existing={location_details:{province:{code:1,name:'City'},street:'Private street',house:'120',coords:{lat:10,lng:20}}};
+test('an old or redacted editor cannot erase private fields silently',()=>{assert(needsPrivateAddressRefresh(existing,{locationDetails:{province:{code:1,name:'City'}}}));assert(needsPrivateAddressRefresh(existing,{locationDetails:null}));});
+test('unchanged private fields remain compatible; loaded owner form can explicitly update them',()=>{assert(!needsPrivateAddressRefresh(existing,{locationDetails:{...existing.location_details}}));assert(!needsPrivateAddressRefresh(existing,{ownerDetailsAvailable:true,locationDetails:{province:{code:1},street:'New street'}}));assert(needsPrivateAddressRefresh(existing,{ownerDetailsAvailable:'true',locationDetails:{}}));});

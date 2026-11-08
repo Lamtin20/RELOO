@@ -1,0 +1,32 @@
+# syntax=docker/dockerfile:1.7
+FROM python:3.12-slim
+ENV PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1 PYTHONPATH=/opt/agent-reach
+WORKDIR /app
+ADD --checksum=sha256:fcd21410d817ce4829bb028824d54e5288dc036d21ad2076a3f9ef72f58ba539 https://codeload.github.com/Panniantong/Agent-Reach/tar.gz/14c213405669414492bda0f8d52cc6531d062c45 /tmp/upstream.tar.gz
+RUN python - <<'PY'
+import pathlib,tarfile,shutil,sys,importlib
+target=pathlib.Path('/opt/agent-reach');target.mkdir(parents=True)
+with tarfile.open('/tmp/upstream.tar.gz') as archive:
+    for member in archive.getmembers():
+        parts=pathlib.PurePosixPath(member.name).parts
+        if len(parts)<2 or parts[1] not in ('agent_reach','LICENSE'):continue
+        relative=pathlib.PurePosixPath(*parts[1:]);destination=target/relative
+        if not destination.resolve().is_relative_to(target) or member.issym() or member.islnk():raise RuntimeError('Unsafe upstream archive')
+        if member.isdir():destination.mkdir(parents=True,exist_ok=True)
+        elif member.isfile():
+            destination.parent.mkdir(parents=True,exist_ok=True)
+            with archive.extractfile(member) as source,destination.open('wb') as out:shutil.copyfileobj(source,out)
+pathlib.Path('/tmp/upstream.tar.gz').unlink()
+assert (target/'agent_reach/__init__.py').is_file()
+sys.path.insert(0,str(target));importlib.invalidate_caches()
+# Avoid importing the unrelated social/video registry. WebChannel and its
+# transitive modules use the standard library; no setup or session code runs.
+(target/'agent_reach/channels/__init__.py').write_text('"""RELOO web-only integration; upstream registry intentionally disabled."""\n')
+from agent_reach.channels.web import WebChannel
+assert WebChannel().name=='web'
+PY
+COPY deploy/listing-ai/research_service.py deploy/listing-ai/manufacturer-policy.json deploy/listing-ai/AGENT_REACH_LICENSE.txt ./
+USER 1000:1000
+EXPOSE 8011
+HEALTHCHECK --interval=30s --timeout=3s CMD python -c "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8011/health',timeout=2)"
+CMD ["python","research_service.py"]

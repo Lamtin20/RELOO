@@ -1,0 +1,4 @@
+import {createSupabaseServerClient} from '@/lib/supabase/server';
+import {phoneCredential} from '@/lib/auth/phone-credentials';
+import {assertOrigin,errorResponse,HttpError,rateLimit,readJson} from '@/lib/server/http';
+export async function POST(request){try{assertOrigin(request);rateLimit(request,'phone-verify',8);const body=await readJson(request),{e164}=phoneCredential(body.phone);if(typeof body.token!=='string'||!/^\d{6}$/.test(body.token))throw new HttpError(400,'Nhập mã xác nhận gồm 6 chữ số.');const auth=await createSupabaseServerClient();if(!auth)throw new HttpError(503,'Dịch vụ tài khoản chưa sẵn sàng.');const {data,error}=await auth.auth.verifyOtp({phone:e164,token:body.token,type:'sms'});if(error||!data.session)throw new HttpError(400,'Mã không đúng hoặc đã hết hạn. Hãy kiểm tra hoặc gửi lại mã.','OTP_INVALID');return Response.json({ok:true,next:'/auth/complete'},{headers:{'Cache-Control':'no-store'}});}catch(e){return errorResponse(e);}}

@@ -37,12 +37,8 @@ export function BankPicker({ banks = [], value, onChange, disabled = false, id =
     };
   }, [open]);
 
-  useEffect(() => {
-    if (open) {
-      setQuery("");
-      setActiveIndex(0);
-    }
-  }, [open]);
+  function openPicker(){setQuery('');setActiveIndex(0);setOpen(true);}
+
 
   useEffect(() => {
     if (!open || !listRef.current) return;
@@ -59,7 +55,7 @@ export function BankPicker({ banks = [], value, onChange, disabled = false, id =
     if (disabled) return;
     if (e.key === "Enter" || e.key === " " || e.key === "ArrowDown") {
       e.preventDefault();
-      setOpen(true);
+      openPicker();
     }
   }
 
@@ -89,7 +85,7 @@ export function BankPicker({ banks = [], value, onChange, disabled = false, id =
         aria-haspopup="listbox"
         aria-expanded={open}
         aria-controls={listboxId}
-        onClick={() => !disabled && setOpen((v) => !v)}
+        onClick={() => {if(!disabled){if(open)setOpen(false);else openPicker();}}}
         onKeyDown={onTriggerKeyDown}
       >
         {value ? (

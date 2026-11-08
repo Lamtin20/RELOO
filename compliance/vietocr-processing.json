@@ -1,0 +1,22 @@
+{
+  "version": 1,
+  "status": "IMPLEMENTED_NOT_APPROVED_FOR_PRODUCTION",
+  "purpose": "Identity verification: read original captured card expiry and compare image text with independent QR in the final review after face capture",
+  "fields": ["nationalId", "fullName", "dateOfBirth", "expiryDate"],
+  "necessity": "Compare only existing identity fields; do not collect unrelated attributes printed on the card",
+  "noticeVersion": "RELOO_KYC_OCR_FINAL_V6",
+  "choice": "Unchecked processing choice before capture and final information acknowledgement. No marketing consent bundled",
+  "storage": "Raw OCR text in request memory only. Automatically read expiry uses existing encrypted/verified identity fields and existing evidence retention. Short-lived capture-bound encrypted receipt in current UI memory; no localStorage, analytics or model training",
+  "withdrawal": "Abort client request and clear displayed candidates; in-flight local inference may finish before request memory is reclaimed",
+  "sharing": "Authenticated first-party private KYC service in VN only; no document transfer to upstream GitHub/model hosts",
+  "controller": "Current verified business configuration; endpoint blocks if legalName/address/privacyEmail are missing",
+  "upstream": {
+    "repository": "https://github.com/pbcquoc/vietocr",
+    "commit": "fe8c3a7fc714aec57ab81cec844eb3adf0c1636c",
+    "licenseFile": "deploy/kyc/licenses/VietOCR-LICENSE",
+    "codeLicense": "Apache-2.0 according to LICENSE/README; setup.py classifier discrepancy requires review",
+    "weights": "https://vocr.vn/data/vietocr/vgg_seq2seq.pth",
+    "weightsCommercialRights": "NEEDS_OWNER_LEGAL_REVIEW"
+  },
+  "approval": "NEEDS_LEGAL_REVIEW; no legal/model-rights approval invented"
+}

@@ -23,7 +23,6 @@ function useCountUp(target, duration = 800) {
 
   useEffect(() => {
     if (target <= 0) {
-      setValue(0);
       return;
     }
 
@@ -41,7 +40,7 @@ function useCountUp(target, duration = 800) {
     return () => cancelAnimationFrame(frameId);
   }, [target, duration]);
 
-  return value;
+  return target<=0?0:value;
 }
 
 function computeOwnerStats(owner, listings, orders) {

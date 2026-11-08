@@ -1,0 +1,31 @@
+services:
+  identity-ocr:
+    build:
+      context: ./deploy/kyc
+      dockerfile: Dockerfile.ocr
+    environment:
+      KYC_SERVICE_TOKEN: ${KYC_SERVICE_TOKEN:?Set the private KYC token}
+      RELOO_VIETOCR_ENABLED: "1"
+      RELOO_VIETOCR_WEIGHTS_SHA256: 0921503a41375a0584268e23ef3d414ea478a8fe8777865c7745d38f2d0bc5db
+    volumes:
+      - /srv/reloo/data/vietocr:/models/vietocr:ro
+    networks: [identity-ocr]
+    restart: unless-stopped
+    cpus: 2
+    mem_limit: 3g
+    pids_limit: 256
+    security_opt: [no-new-privileges:true]
+    cap_drop: [ALL]
+    read_only: true
+    tmpfs:
+      - /tmp:size=256m,uid=1000,gid=1000
+  app:
+    networks:
+      identity-ocr: {}
+    environment:
+      KYC_OCR_SERVICE_URL: http://identity-ocr:8000
+      RELOO_KYC_AUTO_EXPIRY: ${RELOO_KYC_AUTO_EXPIRY:-0}
+networks:
+  identity-ocr:
+    name: reloo-identity-ocr-private
+    internal: true

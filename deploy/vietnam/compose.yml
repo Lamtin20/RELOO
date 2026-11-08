@@ -1,0 +1,130 @@
+name: reloo-vn
+services:
+  db:
+    image: supabase/postgres:17.6.1.136
+    restart: unless-stopped
+    environment:
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?}
+      PGPASSWORD: ${POSTGRES_PASSWORD:?}
+      POSTGRES_DB: postgres
+      POSTGRES_PORT: 5432
+      PGPORT: 5432
+      JWT_EXP: 3600
+    volumes:
+      - /srv/reloo/data/vn-db:/var/lib/postgresql/data
+      - ./roles.sql:/docker-entrypoint-initdb.d/init-scripts/99-roles.sql:ro
+    healthcheck:
+      test: [CMD, pg_isready, -U, postgres, -h, localhost]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+    command: [postgres, -c, config_file=/etc/postgresql/postgresql.conf, -c, log_min_messages=fatal]
+  auth:
+    image: supabase/gotrue:v2.196.0
+    restart: unless-stopped
+    depends_on:
+      db: {condition: service_healthy}
+    environment:
+      GOTRUE_API_HOST: 0.0.0.0
+      GOTRUE_API_PORT: 9999
+      API_EXTERNAL_URL: https://auth.reloo.vn/auth/v1
+      GOTRUE_DB_DRIVER: postgres
+      GOTRUE_DB_DATABASE_URL: postgres://supabase_auth_admin:${POSTGRES_PASSWORD}@db:5432/postgres
+      GOTRUE_SITE_URL: https://reloo.vn
+      GOTRUE_URI_ALLOW_LIST: 'https://reloo.vn/auth/callback,https://reloo.vn/auth/callback\?**,https://crm.reloo.vn/auth/callback,https://crm.reloo.vn/auth/callback\?**'
+      GOTRUE_JWT_ADMIN_ROLES: service_role
+      GOTRUE_JWT_AUD: authenticated
+      GOTRUE_JWT_DEFAULT_GROUP_NAME: authenticated
+      GOTRUE_JWT_EXP: 3600
+      GOTRUE_JWT_SECRET: ${JWT_SECRET:?}
+      GOTRUE_JWT_ISSUER: https://auth.reloo.vn/auth/v1
+      GOTRUE_EXTERNAL_EMAIL_ENABLED: ${ENABLE_EMAIL_SIGNUP:-false}
+      GOTRUE_MAILER_AUTOCONFIRM: 'false'
+      GOTRUE_PASSWORD_MIN_LENGTH: 8
+      GOTRUE_SECURITY_REFRESH_TOKEN_ROTATION_ENABLED: 'true'
+      GOTRUE_SECURITY_REFRESH_TOKEN_REUSE_INTERVAL: 10
+
+
+      GOTRUE_RATE_LIMIT_TOKEN_REFRESH: 300
+      GOTRUE_RATE_LIMIT_VERIFY: 30
+      GOTRUE_MFA_TOTP_ENROLL_ENABLED: 'true'
+      GOTRUE_MFA_TOTP_VERIFY_ENABLED: 'true'
+      GOTRUE_PASSKEY_ENABLED: 'true'
+      GOTRUE_WEBAUTHN_RP_ID: reloo.vn
+      GOTRUE_WEBAUTHN_RP_DISPLAY_NAME: RELOO
+      GOTRUE_WEBAUTHN_RP_ORIGINS: https://reloo.vn
+      GOTRUE_EXTERNAL_GOOGLE_ENABLED: ${GOOGLE_ENABLED:-false}
+      GOTRUE_EXTERNAL_GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID:-}
+      GOTRUE_EXTERNAL_GOOGLE_SECRET: ${GOOGLE_CLIENT_SECRET:-}
+      GOTRUE_EXTERNAL_GOOGLE_REDIRECT_URI: https://auth.reloo.vn/auth/v1/callback
+      GOTRUE_EXTERNAL_APPLE_ENABLED: ${APPLE_ENABLED:-false}
+      GOTRUE_EXTERNAL_APPLE_CLIENT_ID: ${APPLE_CLIENT_ID:-}
+      GOTRUE_EXTERNAL_APPLE_SECRET: ${APPLE_CLIENT_SECRET:-}
+      GOTRUE_EXTERNAL_APPLE_REDIRECT_URI: https://auth.reloo.vn/auth/v1/callback
+      GOTRUE_SMTP_HOST: ${SMTP_HOST:-}
+      GOTRUE_SMTP_PORT: ${SMTP_PORT:-587}
+      GOTRUE_SMTP_USER: ${SMTP_USER:-}
+      GOTRUE_SMTP_PASS: ${SMTP_PASS:-}
+      GOTRUE_SMTP_ADMIN_EMAIL: ${SMTP_ADMIN_EMAIL:-support@reloo.vn}
+      GOTRUE_SMTP_SENDER_NAME: RELOO
+      GOTRUE_MAILER_URLPATHS_CONFIRMATION: /auth/v1/verify
+      GOTRUE_MAILER_URLPATHS_RECOVERY: /auth/v1/verify
+      GOTRUE_MAILER_URLPATHS_EMAIL_CHANGE: /auth/v1/verify
+    healthcheck:
+      test: [CMD, wget, -q, --spider, http://localhost:9999/health]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+  rest:
+    image: postgrest/postgrest:v14.17
+    restart: unless-stopped
+    depends_on:
+      db: {condition: service_healthy}
+    environment:
+      PGRST_DB_URI: postgres://authenticator:${POSTGRES_PASSWORD}@db:5432/postgres
+      PGRST_DB_SCHEMAS: public,storage
+      PGRST_DB_ANON_ROLE: anon
+      PGRST_JWT_SECRET: ${JWT_SECRET:?}
+      PGRST_DB_MAX_ROWS: 1000
+      PGRST_DB_USE_LEGACY_GUCS: 'false'
+  storage:
+    image: supabase/storage-api:v1.74.0
+    restart: unless-stopped
+    depends_on:
+      db: {condition: service_healthy}
+      rest: {condition: service_started}
+    environment:
+      ANON_KEY: ${ANON_KEY:?}
+      SERVICE_KEY: ${SERVICE_ROLE_KEY:?}
+      AUTH_JWT_SECRET: ${JWT_SECRET:?}
+      DATABASE_URL: postgres://supabase_storage_admin:${POSTGRES_PASSWORD}@db:5432/postgres
+      POSTGREST_URL: http://rest:3000
+      STORAGE_PUBLIC_URL: https://auth.reloo.vn
+      STORAGE_BACKEND: file
+      FILE_STORAGE_BACKEND_PATH: /var/lib/storage
+      GLOBAL_S3_BUCKET: reloo
+      FILE_SIZE_LIMIT: 8388608
+      TENANT_ID: reloo
+      REGION: vn-local
+      ENABLE_IMAGE_TRANSFORMATION: 'false'
+      REQUEST_ALLOW_X_FORWARDED_PATH: 'true'
+    volumes:
+      - /srv/reloo/data/vn-storage:/var/lib/storage
+  gateway:
+    image: nginx:1.28-alpine
+    restart: unless-stopped
+    depends_on: [auth, rest, storage]
+    environment:
+      ANON_KEY: ${ANON_KEY:?}
+      SERVICE_ROLE_KEY: ${SERVICE_ROLE_KEY:?}
+      NGINX_ENVSUBST_FILTER: '^(ANON_KEY|SERVICE_ROLE_KEY)$'
+    volumes:
+      - ./gateway.conf.template:/etc/nginx/templates/default.conf.template:ro
+    networks:
+      default: {}
+      homelab:
+        aliases: [reloo-auth-gateway]
+networks:
+  homelab:
+    external: true
+    name: reloo_frontend

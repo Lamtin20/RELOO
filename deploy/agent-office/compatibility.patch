@@ -1,0 +1,41 @@
+diff --git a/Dockerfile b/Dockerfile
+index 68416f7..7333a60 100644
+--- a/Dockerfile
++++ b/Dockerfile
+@@ -1,15 +1,19 @@
+ # office server: static Go binary (modernc sqlite, no CGO).
+ FROM golang:1.27.3-alpine AS build
++RUN apk add --no-cache git bash procps \
++ && adduser -D builder && mkdir -p /src /out && chown builder /src /out
++USER builder
++ENV GOPATH=/home/builder/go GOCACHE=/home/builder/.cache/go-build
+ WORKDIR /src
+-COPY go.mod go.sum ./
++COPY --chown=builder go.mod go.sum ./
+ RUN go mod download
+-COPY . .
++COPY --chown=builder . .
+ ARG VERSION=dev
+-RUN go vet ./... && go test ./... \
++RUN go vet ./... && go test -p 1 ./... \
+  && CGO_ENABLED=0 go build -trimpath -ldflags "-s -w -X main.version=${VERSION}" -o /out/office ./cmd/office
+ 
+ FROM alpine:3.22
+-RUN apk add --no-cache ca-certificates tzdata \
++RUN apk add --no-cache ca-certificates tzdata git bash procps \
+  && adduser -D -u 10001 office \
+  && mkdir -p /data && chown office /data
+ COPY --from=build /out/office /usr/local/bin/office
+diff --git a/internal/team/library.go b/internal/team/library.go
+index 9e1af14..dd3de2e 100644
+--- a/internal/team/library.go
++++ b/internal/team/library.go
+@@ -118,6 +118,8 @@ func readLibrary(name string) (LibraryAgent, error) {
+ 	if err != nil {
+ 		return LibraryAgent{}, err
+ 	}
++	// Source archives checked out on Windows can contain CRLF frontmatter.
++	raw = bytes.ReplaceAll(raw, []byte("\r\n"), []byte("\n"))
+ 	head, body, ok := bytes.Cut(bytes.TrimPrefix(raw, []byte("---\n")), []byte("\n---\n"))
+ 	if !ok || !bytes.HasPrefix(raw, []byte("---\n")) {
+ 		return LibraryAgent{}, fmt.Errorf("team: library %s: no frontmatter", name)

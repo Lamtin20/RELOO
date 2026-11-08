@@ -1,0 +1,16 @@
+services:
+  app:
+    security_opt: [no-new-privileges:true]
+    cap_drop: [ALL]
+    read_only: true
+    tmpfs:
+      - /tmp:size=256m,uid=1000,gid=1000
+      - /app/.next/cache:size=128m,uid=1000,gid=1000
+    pids_limit: 256
+    mem_limit: 2g
+  worker:
+    security_opt: [no-new-privileges:true]
+    cap_drop: [ALL]
+    read_only: true
+    tmpfs:
+      - /tmp:size=256m,uid=1000,gid=1000

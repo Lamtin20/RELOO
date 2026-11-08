@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import {useJsonResource} from "@/lib/hooks/useJsonResource";
 import { Loader2, MapPin, Phone, User } from "lucide-react";
 
 /**
@@ -15,73 +15,12 @@ export function GoshipAddressForm({
   readOnlyContact = false,
   disabled = false,
 }) {
-  const [cities, setCities] = useState([]);
-  const [districts, setDistricts] = useState([]);
-  const [wards, setWards] = useState([]);
-  const [loadingCities, setLoadingCities] = useState(true);
-  const [loadingDistricts, setLoadingDistricts] = useState(false);
-  const [loadingWards, setLoadingWards] = useState(false);
-  const [loadError, setLoadError] = useState(null);
-
-  useEffect(() => {
-    let alive = true;
-    setLoadingCities(true);
-    fetch("/api/goship/cities")
-      .then((r) => r.json())
-      .then((res) => {
-        if (!alive) return;
-        if (res.ok) setCities(res.data ?? []);
-        else setLoadError(res.error || "Không tải được tỉnh/thành");
-      })
-      .catch(() => alive && setLoadError("Lỗi kết nối Goship"))
-      .finally(() => alive && setLoadingCities(false));
-    return () => {
-      alive = false;
-    };
-  }, []);
-
-  useEffect(() => {
-    if (!value?.city?.id) {
-      setDistricts([]);
-      setWards([]);
-      return;
-    }
-
-    let alive = true;
-    setLoadingDistricts(true);
-    fetch(`/api/goship/cities/${encodeURIComponent(value.city.id)}/districts`)
-      .then((r) => r.json())
-      .then((res) => {
-        if (!alive) return;
-        setDistricts(res.ok ? (res.data ?? []) : []);
-      })
-      .finally(() => alive && setLoadingDistricts(false));
-
-    return () => {
-      alive = false;
-    };
-  }, [value?.city?.id]);
-
-  useEffect(() => {
-    if (!value?.district?.id) {
-      setWards([]);
-      return;
-    }
-
-    let alive = true;
-    setLoadingWards(true);
-    fetch(`/api/goship/districts/${encodeURIComponent(value.district.id)}/wards`)
-      .then((r) => r.json())
-      .then((res) => {
-        if (!alive) return;
-        setWards(res.ok ? (res.data ?? []) : []);
-      })
-      .finally(() => alive && setLoadingWards(false));
-
-    return () => {
-      alive = false;
-    };
-  }, [value?.district?.id]);
+  const cityResource=useJsonResource('/api/goship/cities');
+  const districtResource=useJsonResource(value?.city?.id?`/api/goship/cities/${encodeURIComponent(value.city.id)}/districts`:null);
+  const wardResource=useJsonResource(value?.city?.id&&value?.district?.id?`/api/goship/districts/${encodeURIComponent(value.district.id)}/wards`:null);
+  const cities=cityResource.data?.data||[],districts=districtResource.data?.data||[],wards=wardResource.data?.data||[];
+  const loadingCities=cityResource.loading,loadingDistricts=districtResource.loading,loadingWards=wardResource.loading;
+  const loadError=cityResource.error||districtResource.error||wardResource.error;
 
   function patch(partial) {
     onChange?.({ ...value, ...partial });

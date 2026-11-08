@@ -1,0 +1,29 @@
+:root{
+ --reloo-primary:#087f5b;--reloo-primary-hover:#056445;--reloo-text:#173b2d;--reloo-text-secondary:#536d60;
+ --reloo-canvas:#edf3ef;--reloo-card:#fff;--reloo-divider:#ccdcd1;--reloo-mint:#ddf4e5;
+ --reloo-trust:#225fad;--reloo-trust-surface:#e2edff;--reloo-offer:#8d5216;--reloo-offer-surface:#ffe3aa;--reloo-video:#513294;--reloo-error:#b42336;
+ --green:var(--reloo-primary);--green-dark:var(--reloo-primary-hover);--ink:var(--reloo-text);--muted:var(--reloo-text-secondary);--border:var(--reloo-divider);--bg:var(--reloo-canvas);--surface:var(--reloo-card);--danger:var(--reloo-error);
+ --reloo-card-shadow:0 5px 18px #173b2d0c;
+}
+.auth-password-help{display:flex;justify-content:flex-end;margin-top:5px;margin-bottom:7px;font-size:13px}.auth-password-help a{color:var(--reloo-primary);font-weight:600;min-height:30px;display:flex;align-items:center}
+.app-shell,.reloo-native .app-shell{background:var(--reloo-canvas)}
+.market-home,.reloo-native .market-home{background:var(--reloo-canvas)!important}
+.market-category-area,.market-discover{background:var(--reloo-card);border:1px solid #dae6de;border-radius:24px;box-shadow:var(--reloo-card-shadow);padding:22px!important;margin-block:20px}
+.market-home .market-discover{border-top:1px solid #dae6de}
+.rental-benefits{background:var(--reloo-mint);border-color:#bbddc6;box-shadow:var(--reloo-card-shadow)}
+.rental-benefits article{background:#ffffffc9;border-radius:20px;padding:22px 18px;border:1px solid #c6e2cf}
+.rental-benefits header p,.rental-benefits article p,.rental-benefits>small{color:var(--reloo-text-secondary)}
+.market-extras-grid .market-income,.market-service-pair .market-income{background:var(--reloo-mint);border:1px solid #b9dfc7}
+.market-extras-grid .market-safety,.market-service-pair .market-safety{background:var(--reloo-trust-surface);color:var(--reloo-trust);border:1px solid #c2d5f3}
+.market-extras-grid .market-cashback,.market-home .market-cashback{background:var(--reloo-offer-surface);color:var(--reloo-offer);border:1px solid #f0c981}
+.market-extras-grid .market-shorts,.market-home .market-shorts{background:linear-gradient(120deg,#35336b,var(--reloo-video));border:1px solid #61508e}
+.market-home .lc__title{color:var(--reloo-text)}.market-home .lc__location{color:var(--reloo-text-secondary)}
+.market-post{box-shadow:var(--reloo-card-shadow);border-color:var(--reloo-divider)}
+.rental-benefits article>img{width:min(100%,280px);height:auto;aspect-ratio:1;object-fit:contain;border-radius:20px;background:radial-gradient(ellipse at center,#e1f3e7 0%,#f5faf7 72%);filter:none}
+@media(max-width:900px){.rental-benefits article>img{width:100%;height:auto;max-width:180px}}
+.site-header-shell,.reloo-native .site-header-shell,.app-shell--home .site-header-shell,.app-shell--explore .site-header-shell{border-radius:0 0 28px 28px!important;border-bottom:1px solid var(--reloo-divider);box-shadow:0 5px 18px #173b2d12;isolation:isolate;background:#f5fff8!important}
+.native-header{border-radius:0 0 28px 28px!important;background:linear-gradient(110deg,#fff,#e4f7e9)}
+.desktop-market-header .r-header{border-radius:0 0 28px 28px;background:#f5fff8}.desktop-market-header .r-header__nav-row{border-radius:0 0 28px 28px;background:#fff}
+.native-header--explore{background:linear-gradient(110deg,#fff,var(--reloo-trust-surface))}.native-header--cashback{background:linear-gradient(110deg,#fff,#fff0c9)}
+.native-header--account,.native-header--income{background:linear-gradient(110deg,#fff,var(--reloo-mint))}
+@media(max-width:900px){.market-category-area,.market-discover{padding:18px 14px!important;margin-block:18px;border-radius:21px}.market-home{padding-inline:12px}.rental-benefits article{padding:14px 9px;border-radius:17px}.site-header-shell .native-header{border-radius:0 0 28px 28px!important}.reloo-native .app-main{background:var(--reloo-canvas)!important}}

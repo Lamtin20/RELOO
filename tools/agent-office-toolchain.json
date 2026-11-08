@@ -1,0 +1,9 @@
+{
+  "repository": "https://github.com/tung1998/agent-office.git",
+  "commit": "8a2e19fde3a50295f0da2344f791918e85c62e1f",
+  "license": "MIT",
+  "checkout": "../.tooling/agent-office",
+  "go": "1.27.3",
+  "publicHost": "agent.reloo.vn",
+  "policy": "No default credentials, Docker socket, production checkout or unrestricted command runner exposed to agents."
+}

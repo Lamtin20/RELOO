@@ -1,0 +1,12 @@
+{
+  "repository": "https://github.com/pbcquoc/vietocr",
+  "commit": "fe8c3a7fc714aec57ab81cec844eb3adf0c1636c",
+  "architecture": "vgg19_bn/seq2seq",
+  "codeLicense": "Apache-2.0 LICENSE; setup.py classifier discrepancy recorded",
+  "weightsUrl": "https://vocr.vn/data/vietocr/vgg_seq2seq.pth",
+  "weightsBytes": 89575371,
+  "weightsSha256": "0921503a41375a0584268e23ef3d414ea478a8fe8777865c7745d38f2d0bc5db",
+  "hashBasis": "Observed first-party HTTPS artifact fetched for isolated research on 2026-10-25; not an upstream signed attestation",
+  "weightsRights": "NEEDS_OWNER_LEGAL_REVIEW",
+  "productionEnabled": false
+}

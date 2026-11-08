@@ -1,0 +1,32 @@
+alter table news_autopilot_settings add column if not exists metered_budget_enabled boolean not null default false;
+alter table news_autopilot_api_calls add column if not exists reserved_vnd integer not null default 16000;
+alter table news_autopilot_api_calls add column if not exists settled_vnd integer;
+alter table news_autopilot_api_calls add column if not exists billing_before jsonb;
+alter table news_autopilot_api_calls add column if not exists billing_after jsonb;
+alter table news_autopilot_api_calls add column if not exists result_value jsonb;
+create table if not exists news_autopilot_budget_adjustments(day date primary key,amount_vnd integer not null check(amount_vnd>=0),note text not null);
+alter table news_autopilot_budget_adjustments enable row level security;
+revoke all on news_autopilot_budget_adjustments from public,anon,authenticated;
+grant all on news_autopilot_budget_adjustments to service_role;
+create or replace function reloo_news_reserve_api_call(p_id uuid,p_run uuid,p_candidate uuid,p_kind text,p_model text)returns uuid language plpgsql security definer set search_path=public as $$
+declare s news_autopilot_settings;used integer;used_money bigint;reservation integer;start_day timestamptz;local_day date;
+begin
+ perform pg_advisory_xact_lock(hashtextextended('reloo-news-api-budget',0));
+ select * into s from news_autopilot_settings where id;
+ if not s.paid_api_enabled or not s.metered_budget_enabled or s.provider<>'VIBI' or s.daily_budget_vnd is null or s.daily_api_call_limit=0 then raise exception 'NEWS_PAID_NOT_ENABLED';end if;
+ if not exists(select 1 from news_autopilot_lease where id and owner=p_run and expires_at>now())then raise exception 'NEWS_LEASE_EXPIRED';end if;
+ if p_kind='IMAGE' and not s.paid_image_enabled then raise exception 'NEWS_PAID_IMAGE_DISABLED';end if;
+ if p_kind not in('TEXT','IMAGE') or p_kind='TEXT' and p_model<>'claude-sonnet-4-6' or p_kind='IMAGE' and p_model<>'gpt-image-2' then raise exception 'NEWS_MODEL_NOT_VERIFIED';end if;
+ if not exists(select 1 from news_autopilot_candidates where id=p_candidate and status in('GENERATING','READY'))then raise exception 'NEWS_CANDIDATE_INVALID';end if;
+ if exists(select 1 from news_autopilot_api_calls where status='UNCERTAIN' or status='RESERVED' and run_id<>p_run)then raise exception 'NEWS_BILLING_UNCERTAIN';end if;
+ local_day=(now() at time zone 'Asia/Ho_Chi_Minh')::date;start_day=local_day::timestamp at time zone 'Asia/Ho_Chi_Minh';
+ select count(*),coalesce(sum(coalesce(settled_vnd,reserved_vnd)),0) into used,used_money from news_autopilot_api_calls where created_at>=start_day;
+ if used>=s.daily_api_call_limit then raise exception 'NEWS_API_CALL_LIMIT';end if;
+ used_money=used_money+coalesce((select amount_vnd from news_autopilot_budget_adjustments where day=local_day),0);
+ reservation=case when p_kind='TEXT' then 16000 else 10000 end;
+ if used_money+reservation>s.daily_budget_vnd then raise exception 'NEWS_API_BUDGET_WAIT';end if;
+ insert into news_autopilot_api_calls(id,run_id,candidate_id,kind,model,reserved_vnd)values(p_id,p_run,p_candidate,p_kind,p_model,reservation);
+ return p_id;
+end$$;
+revoke all on function reloo_news_reserve_api_call(uuid,uuid,uuid,text,text) from public,anon,authenticated;
+grant execute on function reloo_news_reserve_api_call(uuid,uuid,uuid,text,text) to service_role;

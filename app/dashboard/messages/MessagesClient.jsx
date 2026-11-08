@@ -1,4 +1,5 @@
 "use client";
+import {HandoverPointPreview} from '@/components/location/HandoverPointPreview';
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
@@ -15,26 +16,58 @@ import {
   Camera,
   Smile,
   Mic,
+  ShieldCheck,
+  FileCheck2,
   X,
 } from "lucide-react";
 import { useAuth, useChat, useOrders, useReloo } from "@/lib/store";
 import { EmptyState, Money } from "@/components/ui";
 import { ChatLocationSheet } from "@/components/chat/ChatLocationSheet";
+import { RentalAgreements } from "@/components/owner/RentalAgreements";
 import { useChatSocket } from "@/lib/hooks/useChatSocket";
 import { formatTimeAgo, generateId, getInquiryThreadId } from "@/lib/utils";
+import {SupportConversationEntry} from '@/components/support/SupportConversationEntry';
 
 const QUICK_REPLIES = [
-  "Sản phẩm này còn không?",
-  "Bạn có giao hàng không?",
+  "Món này còn không ạ?",
+  "Bạn có thể giao đồ không ạ?",
   "Cho mình xin địa chỉ nhận",
   "Khi nào có thể nhận đồ?",
 ];
 
 const CHAT_EMOJIS = [
-  "😀", "😂", "🥰", "😍", "😊", "😎", "🤔", "😅",
-  "😢", "😡", "👍", "👎", "🙏", "👋", "❤️", "💚",
-  "🔥", "✨", "💯", "🎉", "👏", "🤝", "📦", "✅",
-  "❌", "⏰", "📍", "📷", "🎤", "💬", "🛒", "⭐",
+  "😀",
+  "😂",
+  "🥰",
+  "😍",
+  "😊",
+  "😎",
+  "🤔",
+  "😅",
+  "😢",
+  "😡",
+  "👍",
+  "👎",
+  "🙏",
+  "👋",
+  "❤️",
+  "💚",
+  "🔥",
+  "✨",
+  "💯",
+  "🎉",
+  "👏",
+  "🤝",
+  "📦",
+  "✅",
+  "❌",
+  "⏰",
+  "📍",
+  "📷",
+  "🎤",
+  "💬",
+  "🛒",
+  "⭐",
 ];
 
 function formatRecordTime(seconds) {
@@ -77,7 +110,9 @@ function MessageBubble({ msg, mine, avatar, counterpartyId }) {
         <Mic size={16} />
         <audio controls src={msg.mediaUrl} preload="metadata" />
         {msg.duration != null && (
-          <span className="zalo-msg__audio-dur">{formatRecordTime(msg.duration)}</span>
+          <span className="zalo-msg__audio-dur">
+            {formatRecordTime(msg.duration)}
+          </span>
         )}
       </div>
     );
@@ -102,13 +137,21 @@ function MessageBubble({ msg, mine, avatar, counterpartyId }) {
   }
 
   const seen =
-    mine && counterpartyId && Array.isArray(msg.readBy) && msg.readBy.includes(counterpartyId);
+    mine &&
+    counterpartyId &&
+    Array.isArray(msg.readBy) &&
+    msg.readBy.includes(counterpartyId);
 
   return (
-    <div className={`zalo-msg-row ${mine ? "zalo-msg-row--mine" : "zalo-msg-row--theirs"}`}>
-      {!mine && avatar && <img src={avatar} alt="" className="zalo-msg-row__avatar" />}
+    <div
+      className={`zalo-msg-row ${mine ? "zalo-msg-row--mine" : "zalo-msg-row--theirs"}`}
+    >
+      {!mine && avatar && (
+        <img src={avatar} alt="" className="zalo-msg-row__avatar" />
+      )}
       <div className={bubbleClass}>
         {content}
+        {msg.handoverLocation&&<HandoverPointPreview location={msg.handoverLocation}/>}
         <div className="zalo-msg__meta">
           <time>{formatTimeAgo(msg.createdAt)}</time>
           {mine && msg.type !== "system" && (
@@ -141,6 +184,9 @@ export default function MessagesPageClient() {
 
   const [activeThreadId, setActiveThreadId] = useState(null);
   const [draft, setDraft] = useState("");
+  const [threadQuery, setThreadQuery] = useState("");
+  const [threadFilter, setThreadFilter] = useState("ALL");
+  const [chatError, setChatError] = useState("");
   const [mobileList, setMobileList] = useState(true);
   const [isDesktop, setIsDesktop] = useState(false);
   const [toolsOpen, setToolsOpen] = useState(false);
@@ -178,15 +224,19 @@ export default function MessagesPageClient() {
     const threadParam = searchParams.get("thread");
     const listingParam = searchParams.get("listing");
     if (listingParam && user) {
-      actions.ensureInquiryThread(listingParam, user.id);
+      actions
+        .ensureInquiryThread(listingParam, user.id)
+        .catch((error) => setChatError(error.message));
     }
-    if (threadParam) {
-      setActiveThreadId(threadParam);
+    const selected =
+      threadParam ||
+      (listingParam && user ? getInquiryThreadId(listingParam, user.id) : null);
+    if (!selected) return;
+    const timer = setTimeout(() => {
+      setActiveThreadId(selected);
       setMobileList(false);
-    } else if (listingParam && user) {
-      setActiveThreadId(getInquiryThreadId(listingParam, user.id));
-      setMobileList(false);
-    }
+    }, 0);
+    return () => clearTimeout(timer);
   }, [searchParams, user, actions]);
 
   const threads = useMemo(() => {
@@ -200,7 +250,7 @@ export default function MessagesPageClient() {
         (m) =>
           m.senderId !== user.id &&
           m.type !== "system" &&
-          !(m.readBy?.includes(user.id))
+          !m.readBy?.includes(user.id),
       ).length;
       return {
         thread,
@@ -213,25 +263,37 @@ export default function MessagesPageClient() {
         unreadCount,
       };
     });
-  }, [user, getUserThreads, getThreadListing, getThreadCounterparty, state.chatThreads]);
+  }, [
+    user,
+    getUserThreads,
+    getThreadListing,
+    getThreadCounterparty,
+    state.chatThreads,
+  ]);
 
   const effectiveThreadId =
     activeThreadId ?? (isDesktop ? threads[0]?.thread.id : null);
 
-  const { connected, isUserOnline, typingInThread, emitMessage, emitRead, emitTyping } =
-    useChatSocket({
-      userId: user?.id,
-      activeThreadId: effectiveThreadId,
-      onMessageNew: (payload) => {
-        if (!payload?.threadId || !payload?.message) return;
-        if (payload.message.senderId === user?.id) return;
-        receiveChatMessage(payload.threadId, payload.message);
-      },
-      onMessageRead: (payload) => {
-        if (!payload?.threadId || !payload?.readerId) return;
-        markMessagesReadBy(payload.threadId, payload.readerId, payload.readAt);
-      },
-    });
+  const {
+    connected,
+    isUserOnline,
+    typingInThread,
+    emitMessage,
+    emitRead,
+    emitTyping,
+  } = useChatSocket({
+    userId: user?.id,
+    activeThreadId: effectiveThreadId,
+    onMessageNew: (payload) => {
+      if (!payload?.threadId || !payload?.message) return;
+      if (payload.message.senderId === user?.id) return;
+      receiveChatMessage(payload.threadId, payload.message);
+    },
+    onMessageRead: (payload) => {
+      if (!payload?.threadId || !payload?.readerId) return;
+      markMessagesReadBy(payload.threadId, payload.readerId, payload.readAt);
+    },
+  });
 
   const displayThread = useMemo(() => {
     if (!effectiveThreadId) return null;
@@ -249,7 +311,13 @@ export default function MessagesPageClient() {
     const readAt = new Date().toISOString();
     markMessagesReadBy(effectiveThreadId, user.id, readAt);
     emitRead({ threadId: effectiveThreadId, readerId: user.id, readAt });
-  }, [effectiveThreadId, user?.id, displayThread?.messages.length, markMessagesReadBy, emitRead]);
+  }, [
+    effectiveThreadId,
+    user?.id,
+    displayThread?.messages.length,
+    markMessagesReadBy,
+    emitRead,
+  ]);
 
   useEffect(() => {
     if (!effectiveThreadId) return;
@@ -302,7 +370,10 @@ export default function MessagesPageClient() {
 
   async function startRecording() {
     if (isRecording || !displayThread) return;
-    if (typeof navigator === "undefined" || !navigator.mediaDevices?.getUserMedia) {
+    if (
+      typeof navigator === "undefined" ||
+      !navigator.mediaDevices?.getUserMedia
+    ) {
       window.alert("Trình duyệt không hỗ trợ ghi âm.");
       return;
     }
@@ -357,7 +428,9 @@ export default function MessagesPageClient() {
         setRecordingTime(recordingTimeRef.current);
       }, 1000);
     } catch {
-      window.alert("Không thể ghi âm. Vui lòng cho phép quyền truy cập microphone.");
+      window.alert(
+        "Không thể ghi âm. Vui lòng cho phép quyền truy cập microphone.",
+      );
       cleanupRecording();
     }
   }
@@ -387,7 +460,7 @@ export default function MessagesPageClient() {
     }
   }
 
-  function pushMessage(message) {
+  async function pushMessage(message) {
     if (!displayThread || !user) return;
     const msg = {
       id: generateId("msg"),
@@ -396,13 +469,18 @@ export default function MessagesPageClient() {
       ...message,
       senderId: message.senderId ?? user.id,
     };
-    sendChatMessage(displayThread.thread.id, msg);
-    emitMessage({ threadId: displayThread.thread.id, message: msg });
+    try {
+      const saved = await sendChatMessage(displayThread.thread.id, msg);
+      emitMessage({ threadId: displayThread.thread.id, message: saved });
+      setChatError("");
+    } catch (error) {
+      setChatError(error.message);
+    }
   }
 
-  function sendText(text) {
+  async function sendText(text) {
     if (!text.trim()) return;
-    pushMessage({ type: "text", text: text.trim() });
+    await pushMessage({ type: "text", text: text.trim() });
     setDraft("");
   }
 
@@ -466,8 +544,9 @@ export default function MessagesPageClient() {
       <div className="messages-shell">
         <div className="messages-page messages-page--empty">
           <header className="zalo-list-header">
-            <h1>Trao đổi</h1>
+            <h1>Tin nhắn</h1>
           </header>
+          <SupportConversationEntry />
           <EmptyState
             icon="MessageCircle"
             title="Chưa có cuộc trao đổi"
@@ -484,65 +563,127 @@ export default function MessagesPageClient() {
   }
 
   return (
-    <div className={`messages-shell ${chatOpen ? "messages-shell--chat-open" : ""}`}>
+    <div
+      className={`messages-shell ${chatOpen ? "messages-shell--chat-open" : ""}`}
+    >
       <div className="messages-page">
         <aside className={`zalo-list ${chatOpen ? "zalo-list--hidden" : ""}`}>
+          <SupportConversationEntry />
           <header className="zalo-list-header zalo-list-header--with-back">
-            <button type="button" className="zalo-chat__back zalo-chat__back--always" onClick={() => router.back()} aria-label="Quay lại">
+            <button
+              type="button"
+              className="zalo-chat__back zalo-chat__back--always"
+              onClick={() => router.back()}
+              aria-label="Quay lại"
+            >
               <ArrowLeft size={22} />
             </button>
             <div>
-              <h1>Trao đổi</h1>
+              <h1>Tin nhắn</h1>
               <p>
                 {threads.length} cuộc hội thoại
                 {connected ? (
-                  <span className="zalo-socket-status zalo-socket-status--on"> · Realtime</span>
+                  <span className="zalo-socket-status zalo-socket-status--on">
+                    {" "}
+                    · Đã kết nối
+                  </span>
                 ) : (
                   <span className="zalo-socket-status"> · Đang kết nối...</span>
                 )}
               </p>
             </div>
           </header>
-          <div className="zalo-list__items">
-            {threads.map((item) => (
+          <div className="commerce-chat-filters">
+            <input
+              aria-label="Tìm cuộc trò chuyện"
+              placeholder="Tìm cuộc trò chuyện"
+              value={threadQuery}
+              onChange={(e) => setThreadQuery(e.target.value)}
+            />
+            <div>
               <button
-                key={item.thread.id}
                 type="button"
-                className={`zalo-list-item ${
-                  displayThread?.thread.id === item.thread.id ? "is-active" : ""
-                } ${item.unread ? "is-unread" : ""}`.trim()}
-                onClick={() => openThread(item.thread.id)}
+                aria-pressed={threadFilter === "ALL"}
+                onClick={() => setThreadFilter("ALL")}
               >
-                <div className="zalo-list-item__avatar-wrap">
-                  <img src={item.counterparty?.avatar} alt="" className="zalo-list-item__avatar" />
-                  {isUserOnline(item.counterparty?.id) && (
-                    <span className="zalo-presence-dot" title="Đang trực tuyến" />
-                  )}
-                </div>
-                <div className="zalo-list-item__body">
-                  <div className="zalo-list-item__top">
-                    <strong>{item.counterparty?.name ?? "Người dùng"}</strong>
-                    <span>{formatTimeAgo(item.lastAt)}</span>
-                  </div>
-                  <div className="zalo-list-item__product">
-                    {item.thread.type === "inquiry" ? (
-                      <ShoppingBag size={12} />
-                    ) : (
-                      <Tag size={12} />
-                    )}
-                    {item.listing?.title ?? "Sản phẩm"}
-                  </div>
-                  <p className="zalo-list-item__preview">{item.lastMessage}</p>
-                </div>
-                {item.unreadCount > 0 && (
-                  <span className="zalo-list-item__badge">{item.unreadCount}</span>
-                )}
+                Tất cả
               </button>
-            ))}
+              <button
+                type="button"
+                aria-pressed={threadFilter === "UNREAD"}
+                onClick={() => setThreadFilter("UNREAD")}
+              >
+                Chưa đọc
+              </button>
+            </div>
+          </div>
+          <div className="zalo-list__items">
+            {threads
+              .filter(
+                (item) =>
+                  (threadFilter !== "UNREAD" || item.unreadCount > 0) &&
+                  (
+                    (item.counterparty?.name || "") +
+                    " " +
+                    (item.listing?.title || "")
+                  )
+                    .toLocaleLowerCase("vi")
+                    .includes(threadQuery.trim().toLocaleLowerCase("vi")),
+              )
+              .map((item) => (
+                <button
+                  key={item.thread.id}
+                  type="button"
+                  className={`zalo-list-item ${
+                    displayThread?.thread.id === item.thread.id
+                      ? "is-active"
+                      : ""
+                  } ${item.unread ? "is-unread" : ""}`.trim()}
+                  onClick={() => openThread(item.thread.id)}
+                >
+                  <div className="zalo-list-item__avatar-wrap">
+                    <img
+                      src={item.counterparty?.avatar}
+                      alt=""
+                      className="zalo-list-item__avatar"
+                    />
+                    {isUserOnline(item.counterparty?.id) && (
+                      <span
+                        className="zalo-presence-dot"
+                        title="Đang trực tuyến"
+                      />
+                    )}
+                  </div>
+                  <div className="zalo-list-item__body">
+                    <div className="zalo-list-item__top">
+                      <strong>{item.counterparty?.name ?? "Người dùng"}</strong>
+                      <span>{formatTimeAgo(item.lastAt)}</span>
+                    </div>
+                    <div className="zalo-list-item__product">
+                      {item.thread.type === "inquiry" ? (
+                        <ShoppingBag size={12} />
+                      ) : (
+                        <Tag size={12} />
+                      )}
+                      {item.listing?.title ?? "Sản phẩm"}
+                    </div>
+                    <p className="zalo-list-item__preview">
+                      {item.lastMessage}
+                    </p>
+                  </div>
+                  {item.unreadCount > 0 && (
+                    <span className="zalo-list-item__badge">
+                      {item.unreadCount}
+                    </span>
+                  )}
+                </button>
+              ))}
           </div>
         </aside>
 
-        <section className={`zalo-chat ${showChatPanel ? "zalo-chat--visible" : ""}`}>
+        <section
+          className={`zalo-chat ${showChatPanel ? "zalo-chat--visible" : ""}`}
+        >
           {!displayThread ? (
             <div className="zalo-chat__placeholder">
               <MessageCircle size={48} strokeWidth={1.25} />
@@ -551,10 +692,19 @@ export default function MessagesPageClient() {
           ) : (
             <>
               <header className="zalo-chat__header">
-                <button type="button" className="zalo-chat__back zalo-chat__back--always" onClick={handleHeaderBack} aria-label="Quay lại">
+                <button
+                  type="button"
+                  className="zalo-chat__back zalo-chat__back--always"
+                  onClick={handleHeaderBack}
+                  aria-label="Quay lại"
+                >
                   <ArrowLeft size={22} />
                 </button>
-                <img src={displayThread.counterparty?.avatar} alt="" className="zalo-chat__header-avatar" />
+                <img
+                  src={displayThread.counterparty?.avatar}
+                  alt=""
+                  className="zalo-chat__header-avatar"
+                />
                 <div className="zalo-chat__header-info">
                   <strong>
                     {displayThread.counterparty?.name}
@@ -568,7 +718,8 @@ export default function MessagesPageClient() {
                       : isUserOnline(displayThread.counterparty?.id)
                         ? "Đang trực tuyến"
                         : `Hoạt động ${formatTimeAgo(
-                            displayThread.counterparty?.lastActive ?? displayThread.lastAt
+                            displayThread.counterparty?.lastActive ??
+                              displayThread.lastAt,
                           )}`}
                   </span>
                 </div>
@@ -583,7 +734,7 @@ export default function MessagesPageClient() {
               </header>
 
               {displayThread.listing && (
-                <Link href={`/product/${displayThread.listing.id}`} className="zalo-product-card">
+                <div className="zalo-product-card">
                   <div
                     className="zalo-product-card__thumb"
                     style={{
@@ -594,18 +745,71 @@ export default function MessagesPageClient() {
                   />
                   <div className="zalo-product-card__info">
                     <p>{displayThread.listing.title}</p>
-                    <Money amount={displayThread.listing.dailyPrice} suffix="/ngày" />
+                    <Money
+                      amount={
+                        displayThread.listing.transactionMode === "SALE"
+                          ? displayThread.listing.salePrice
+                          : displayThread.listing.dailyPrice
+                      }
+                      suffix={
+                        displayThread.listing.transactionMode === "SALE"
+                          ? "giá bán"
+                          : "/ngày"
+                      }
+                    />
                     {listingUnavailable && (
-                      <span className="zalo-product-card__note">Tin không còn hiển thị</span>
+                      <span className="zalo-product-card__note">
+                        Tin không còn hiển thị
+                      </span>
                     )}
                   </div>
-                </Link>
+                  <Link
+                    className="chat-product-rent"
+                    href={
+                      displayThread.listing.transactionMode === "SALE"
+                        ? `/purchase/${displayThread.listing.id}`
+                        : `/rent/${displayThread.listing.id}`
+                    }
+                  >
+                    <ShoppingBag size={17} />{" "}
+                    {displayThread.listing.transactionMode === "SALE"
+                      ? "Mua ngay"
+                      : "Chọn ngày thuê"}
+                  </Link>
+                </div>
               )}
 
+              <details className="chat-safety-note">
+                <summary>
+                  <ShieldCheck size={16} />
+                  Trao đổi trên RELOO để lưu bằng chứng giao dịch
+                </summary>
+                <p>
+                  Xác nhận giá, thời gian thuê, tình trạng món đồ và giao nhận
+                  trong cuộc trò chuyện. Lịch sử này giúp hai bên và bộ phận hỗ
+                  trợ đối chiếu khi phát sinh tranh chấp. Không chia sẻ mật
+                  khẩu, mã OTP hoặc ảnh căn cước trong chat.{" "}
+                  <Link href="/cms/help">Quy trình khiếu nại</Link>
+                </p>
+              </details>
+              <details className="chat-agreement-tool">
+                <summary>
+                  <FileCheck2 size={16} />
+                  Thỏa thuận & lịch sử thuê
+                </summary>
+                <RentalAgreements
+                  key={displayThread.thread.id}
+                  threadId={displayThread.thread.id}
+                  compact
+                />
+              </details>
               <div className="zalo-chat__body" ref={bodyRef}>
                 {displayThread.messages.length === 0 ? (
                   <div className="zalo-chat__empty">
-                    <p>Gửi tin nhắn đầu tiên cho {displayThread.counterparty?.name}</p>
+                    <p>
+                      Gửi tin nhắn đầu tiên cho{" "}
+                      {displayThread.counterparty?.name}
+                    </p>
                   </div>
                 ) : (
                   displayThread.messages.map((msg) => (
@@ -621,13 +825,34 @@ export default function MessagesPageClient() {
               </div>
 
               <div className="zalo-chat__quick">
-                {QUICK_REPLIES.map((text) => (
-                  <button key={text} type="button" className="zalo-chat__chip" onClick={() => sendText(text)}>
+                {(displayThread.listing?.transactionMode === "SALE"
+                  ? [
+                      "Món này còn không ạ?",
+                      "Tình trạng thực tế thế nào ạ?",
+                      "Mình muốn trao đổi giá món này.",
+                    ]
+                  : QUICK_REPLIES
+                ).map((text) => (
+                  <button
+                    key={text}
+                    type="button"
+                    className="zalo-chat__chip"
+                    onClick={() => setDraft(text)}
+                  >
                     {text}
                   </button>
                 ))}
               </div>
 
+              {chatError && (
+                <p
+                  className="feature-error"
+                  role="alert"
+                  style={{ paddingInline: 16 }}
+                >
+                  {chatError}
+                </p>
+              )}
               <form className="zalo-compose" onSubmit={handleSend}>
                 <input
                   ref={mediaInputRef}
@@ -725,7 +950,8 @@ export default function MessagesPageClient() {
                       <textarea
                         value={draft}
                         onChange={(e) => setDraft(e.target.value)}
-                        placeholder="Aa"
+                        placeholder="Nhắn cho chủ đồ…"
+                        aria-label="Nội dung tin nhắn"
                         rows={1}
                         onKeyDown={(e) => {
                           if (e.key === "Enter" && !e.shiftKey) {
@@ -744,7 +970,11 @@ export default function MessagesPageClient() {
                       <Smile size={20} />
                     </button>
                     {draft.trim() ? (
-                      <button type="submit" className="zalo-inputbar__send" aria-label="Gửi">
+                      <button
+                        type="submit"
+                        className="zalo-inputbar__send"
+                        aria-label="Gửi"
+                      >
                         <Send size={18} />
                       </button>
                     ) : (
@@ -762,13 +992,21 @@ export default function MessagesPageClient() {
 
                 {toolsOpen && !isRecording && (
                   <div className="zalo-toolkit">
-                    <button type="button" className="zalo-toolkit__item" onClick={() => mediaInputRef.current?.click()}>
+                    <button
+                      type="button"
+                      className="zalo-toolkit__item"
+                      onClick={() => mediaInputRef.current?.click()}
+                    >
                       <span className="zalo-toolkit__icon zalo-toolkit__icon--media">
                         <ImageIcon size={22} />
                       </span>
                       <span>Hình và video</span>
                     </button>
-                    <button type="button" className="zalo-toolkit__item" onClick={() => setLocationOpen(true)}>
+                    <button
+                      type="button"
+                      className="zalo-toolkit__item"
+                      onClick={() => setLocationOpen(true)}
+                    >
                       <span className="zalo-toolkit__icon zalo-toolkit__icon--loc">
                         <MapPin size={22} />
                       </span>

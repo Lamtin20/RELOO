@@ -1,0 +1,17 @@
+# Bright commerce interface — 12/10/2026
+
+Category artwork now uses 14 pre-existing 3D product illustrations from [Microsoft Fluent Emoji](https://github.com/microsoft/fluentui-emoji), licensed under MIT. Assets are optimized, transparent WebP files in `public/images/categories-3d`; the upstream license and per-file source URLs are preserved in that directory. These are licensed illustrations, not generated images or copied competitor assets. The original line-art files remain available but are no longer referenced by category artwork.
+
+Home shows only the primary categories in a horizontal row. Selecting a category opens Explore with a group filter. Child categories appear only inside “Xem tất cả”; the existing dialog retains focus management and Android Back handling. Explore clears the group filter when a specific category is selected and shows the selected group title.
+
+App headers now use a route-specific title, section label, color and action: saved products in Explore, account settings in Account, listing management when posting, income for cashback, messaging for orders, and help on security pages. Rental/purchase requests and edit routes have meaningful titles and fallback destinations. Both bottom corners are rounded. The same mobile header is used on mobile web; desktop retains its desktop navigation. The chat and immersive product/Shorts headers retain their specialized structure.
+
+First-party promotional banners cover rental, sale and affiliate discovery with distinct bright backgrounds and 3D product compositions. They do not advertise invented discounts or guaranteed cashback. Manual dots/swipe navigation respects reduced motion; there is no automatic animation loop. CRM-published ads override the first-party fallback. New responsive CRM advertising positions are `home_categories` and `home_bottom`, in addition to existing home_top/home_middle. No database migration is required because banner placement is text.
+
+Validation: 128 tests passed, production build passed, targeted lint had zero errors (existing raw-image warnings remain). Browser widths 320/390/768/1440 showed no document overflow and zero child-category panels on home. Banner selection and category dialog expansion/dismissal passed. Final server/Samsung release checks are recorded below after deployment.
+
+Deployed and installed: Android `1.0.1-beta.20261012.2316`, versionCode `29863696`. The server app is healthy; all 32 release files matched the source audit. Source/database backups are preserved under `/srv/reloo/backups/bright-design-20261012`.
+
+Physical Samsung SM-N950N review: viewport/document width 411px, 14 main categories, zero child-category panels on home, first visible 3D images loaded, both header corners 26px. “Xem tất cả” expanded the electronics group; Android hardware Back closed it, retained the home route and restored focus. Explore, cashback, posting, safety, news, account and purchase-order headers showed their correct titles with no horizontal overflow. The security/clip routes presented the authentication guard in that session; their header mapping was unit-tested, but the authenticated visual state was not revalidated there. Screenshots are saved under `output/playwright/samsung-bright-*`.
+
+Actual partner advertisements can be uploaded/published/scheduled in the existing CRM banner manager. Until a campaign is published, the new first-party banners promote real RELOO rental/sale/affiliate entry points, without inventing partner offers. No user transaction or message was submitted during review.

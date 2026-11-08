@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Save, ShieldCheck } from "lucide-react";
 import { useReloo } from "@/lib/store";
 import { RELOO_CARE_PLANS } from "@/lib/constants";
@@ -101,10 +101,10 @@ function PlanEditor({ planId, form, onChange }) {
 
 export function RelooCareCmsPanel() {
   const { state, actions } = useReloo();
-  const [forms, setForms] = useState({});
+
   const [savedAt, setSavedAt] = useState(null);
 
-  useEffect(() => {
+  const defaults=(()=>{
     const stored = state.settings?.relooCarePlanDetails ?? {};
     const next = {};
     for (const planId of Object.keys(RELOO_CARE_PLANS)) {
@@ -120,8 +120,11 @@ export function RelooCareCmsPanel() {
         shortDescription: cms.shortDescription ?? RELOO_CARE_PLANS[planId].description,
       };
     }
-    setForms(next);
-  }, [state.settings]);
+    return next;
+  })();
+  const [draft,setDraft]=useState(null);
+  const forms=draft?.settings===state.settings?draft.value:defaults;
+  const setForms=update=>setDraft({settings:state.settings,value:typeof update==='function'?update(forms):update});
 
   function updatePlan(planId, patch) {
     setForms((prev) => ({

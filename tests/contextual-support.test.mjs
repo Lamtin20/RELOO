@@ -1,0 +1,56 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {readFile} from 'node:fs/promises';import {PGlite} from '@electric-sql/pglite';
+import {advisorContext,advisorIntent,safeAiSelection,contactInput,composeAdvisor,redactAdvisorText,rankAdvisorProducts} from '../lib/support/advisor.js';
+import {invitationEligible} from '../lib/support/engagement.js';
+import {rememberSupportReference,restoreSupportReference} from '../lib/support/session-reference.js';
+test('conversation reference is opaque, time-limited and never transferred across actors',()=>{
+ const data=new Map(),storage={setItem:(k,v)=>data.set(k,v),getItem:k=>data.get(k)},id='10000000-0000-4000-8000-000000000001';
+ rememberSupportReference(storage,id,null,1000);assert.equal(restoreSupportReference(storage,null,2000),id);assert.equal(restoreSupportReference(storage,'other',2000),null);assert.equal(restoreSupportReference(storage,null,1000+86400000),null);assert.equal(restoreSupportReference(storage,null,900),null);
+});
+test('contextual invitations respect separate opt-in, consent refusal, GPC, active time and frequency',()=>{
+ const sample={allowed:true,analytics:true,marketing:true,elapsed:20,productPages:2,productSeconds:45};
+ assert.equal(invitationEligible(sample),'product');
+ for(const patch of [{allowed:false},{analytics:false},{marketing:false},{gpc:true},{visible:false},{elapsed:14},{invites:1},{dismissedAt:Date.now()}])assert.equal(invitationEligible({...sample,...patch}),null);
+ assert.equal(invitationEligible({...sample,productPages:0,priceViews:2,priceSeconds:30}),'price');
+});
+test('advisor context and grounded selection never admit arbitrary URLs, private prices or model instructions',()=>{
+ assert.equal(advisorContext('https://evil.invalid/a').path,'/');assert.equal(advisorContext('/product/test?token=secret').listingId,null);assert.equal(advisorContext('/product/uat-demo-camera').listingId,'uat-demo-camera');
+ assert.equal(safeAiSelection({intent:'refund',productIds:[]},[]),null);assert.equal(safeAiSelection({intent:'rent',productIds:['private']},[]),null);
+ assert.equal(advisorIntent('trả trễ'), 'late');assert.equal(advisorIntent('tiền cọc'), 'deposit');assert.equal(advisorIntent('nhân viên'),'handoff');
+ assert.equal(advisorIntent('cần thêm', [{role:'USER',body:'tìm phòng'}]),'stays');
+ assert.throws(()=>contactInput({email:'x@example.invalid',consent:false,noticeVersion:'advisor-contact-v1'}),/CONSENT/);
+ assert.throws(()=>contactInput({email:'bad',consent:true,noticeVersion:'advisor-contact-v1'}),/INVALID/);
+ assert.equal(contactInput({email:'x@example.invalid',consent:true,noticeVersion:'advisor-contact-v1'}).email,'x@example.invalid');
+ assert.ok(!redactAdvisorText('OTP 123456; test@example.invalid; 0912345678').includes('123456'));
+ const a=composeAdvisor({intent:'rent',products:[{id:'demo',title:'Demo',dailyPrice:700000,unit:'WEEK'}]});assert.ok(a.answer.includes('/ tuần'));assert.equal(a.products[0].unit,'WEEK');
+ assert.ok(composeAdvisor({intent:'stays'}).answer.includes('chưa nhận đặt phòng thật'));
+ assert.deepEqual(rankAdvisorProducts([{id:'a',title:'Máy ảnh',category:'may-anh'},{id:'b',title:'Lều',category:'camping'}],'Tôi cần thuê máy ảnh').map(p=>p.id),['a']);
+ assert.deepEqual(rankAdvisorProducts([{id:'b',title:'Lều',category:'camping'}],'Tôi cần thuê piano'),[]);
+});
+test('support SQL isolates guests, preserves retries, pauses AI for staff, withdraws contacts and purges expiry',async()=>{
+ const db=new PGlite();await db.exec(`create role anon;create role authenticated;create role service_role;create table profiles(id text primary key);create table crm_staff(profile_id text,enabled boolean);create table crm_records(id uuid default gen_random_uuid(),module text,title text,status text,created_by text,data jsonb);create table support_conversations(id uuid primary key,profile_id text,title text,status text default 'OPEN',created_at timestamptz default now());create table support_messages(id uuid default gen_random_uuid(),conversation_id uuid references support_conversations(id),role text,body text,model text,created_at timestamptz default now());`);
+ await db.exec(await readFile('supabase/migrations/20261024100000_contextual_support.sql','utf8'));
+ const id='10000000-0000-4000-8000-000000000001',request='20000000-0000-4000-8000-000000000001',guest='a'.repeat(64);
+ await db.query("insert into support_conversations(id,title,guest_hash,expires_at) values($1,'test',$2,now()+interval '7 days')",[id,guest]);
+ const commit=(key,data,owner=guest,hash='same')=>db.query('select reloo_support_commit(null,$1,$2,$3,$4,$5)',[owner,id,key,hash,JSON.stringify(data)]);
+ const turn={action:'message',message:'test',answer:'grounded',model:'RELOO_RULES',response:{ok:true}};
+ await assert.rejects(commit(request,turn,'b'.repeat(64)),/DENIED/);
+ await assert.rejects(commit(request,turn,null),/DENIED/);
+ await commit(request,turn);await commit(request,turn);assert.equal((await db.query('select count(*)::int n from support_messages')).rows[0].n,2);
+ await assert.rejects(commit(request,turn,guest,'changed'),/CONFLICT/);
+ await commit('20000000-0000-4000-8000-000000000002',{action:'handoff',contactEncrypted:'ciphertext-only',response:{ok:true,handoff:true}});
+ assert.equal((await db.query('select count(*)::int n from crm_records')).rows[0].n,1);
+ await assert.rejects(commit('20000000-0000-4000-8000-000000000003',turn),/HANDOFF/);
+ await commit('20000000-0000-4000-8000-000000000000',{action:'customer-message',message:'Customer can still reply',response:{ok:true,queued:true}});
+ assert.equal((await db.query("select count(*)::int n from support_messages where role='ASSISTANT'")).rows[0].n,1);
+ await assert.rejects(db.query('select reloo_support_withdraw(null,$1,$2)',['wrong',id]),/DENIED/);
+ await assert.rejects(db.query('select reloo_support_withdraw(null,null,$1)',[id]),/DENIED/);
+ await db.query('select reloo_support_withdraw(null,$1,$2)',[guest,id]);assert.equal((await db.query("select data ? 'contactEncrypted' as present from crm_records")).rows[0].present,false);
+ await db.exec("insert into crm_staff values('staff',true)");await db.query("select reloo_support_staff('staff',$1,'reply','Hi',$2)",[id,'30000000-0000-4000-8000-000000000001']);
+ assert.equal((await db.query('select status from support_conversations')).rows[0].status,'HUMAN');
+ await assert.rejects(commit('20000000-0000-4000-8000-000000000004',turn),/HANDOFF/);
+ await db.query("select reloo_support_staff('staff',$1,'resume','',$2)",[id,'30000000-0000-4000-8000-000000000002']);
+ await commit('20000000-0000-4000-8000-000000000004',turn);
+ await db.exec("update support_conversations set expires_at=now()-interval '1 day';select reloo_purge_support()");assert.equal((await db.query('select count(*)::int n from support_messages')).rows[0].n,0);
+ const grants=await db.query("select count(*)::int n from information_schema.routine_privileges where routine_schema='public' and grantee in ('PUBLIC','anon','authenticated') and routine_name like 'reloo_support%'");assert.equal(grants.rows[0].n,0);
+ await db.close();
+});

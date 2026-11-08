@@ -1,0 +1,62 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {readFile} from 'node:fs/promises';
+import {PGlite} from '@electric-sql/pglite';
+import {chooseRecipients,itemMatches,validPoint} from '../lib/nearby-requests/policy.js';
+import {renderEmail} from '../lib/email/templates.js';
+const request={profile_id:'sender',province_code:79,category:'camera',mode:'RENT',title:'Máy ảnh Sony A6400'};
+const asset={id:'camera',category:'camera',status:'available',title:'Máy ảnh Sony A6400 kèm ống kính',listing_data:{transactionMode:'RENTAL'}};
+test('matching respects item, sale/rent, province, radius, exclusion, nearest first and fallback',()=>{
+ assert.equal(validPoint({lat:10.8,lng:106.7}),true);assert.equal(validPoint({lat:null,lng:106.7}),false);
+ const member=(id,km,assets=[],province_code=79)=>({profile_id:id,distance_km:km,province_code,assets});
+ let result=chooseRecipients(request,[member('sender',0,[asset]),member('wrong-province',1,[asset],1),member('far',10.1,[asset]),member('owner2',8,[asset]),member('owner1',3,[asset]),member('community',1)]);
+ assert.equal(result.kind,'OWNERS');assert.deepEqual(result.members.map(m=>m.profile_id),['owner1','owner2']);
+ assert.equal(itemMatches({...request,mode:'BUY'},asset),false);
+ assert.equal(itemMatches(request,{...asset,is_locked:true}),false);
+ assert.equal(itemMatches(request,{...asset,title:'Máy khoan Bosch'}),false);
+ result=chooseRecipients(request,[member('a',10),member('b',1)]);assert.equal(result.kind,'COMMUNITY');assert.deepEqual(result.members.map(m=>m.profile_id),['b','a']);
+ assert.equal(chooseRecipients(request,Array.from({length:70},(_,i)=>member(String(i),1))).members.length,50);
+});
+test('email escapes user content, only embeds internal images and never leaks coordinates',()=>{
+ const content=renderEmail({kind:'nearby',body:'<script>alert(1)</script>',nearby:{...request,title:'<img onerror=bad>',mode:'RENT',images:['https://evil.invalid/x'],province_name:'TP.HCM',latitude:10.7654321,longitude:106.7654321,distance_km:2.3},link:'/needs/123'});
+ assert.ok(!content.html.includes('<script>'));assert.ok(!content.html.includes('https://evil.invalid'));assert.ok(!content.html.includes('10.7654321'));assert.ok(content.html.includes('Tắt email'));assert.ok(content.html.includes('2.3 km'));
+});
+test('database creates one job, bounds daily sends, enforces geography and locks down browser access',async()=>{
+ const db=new PGlite();
+ try{
+ await db.exec(`create role anon;create role authenticated;create role service_role;
+ create table profiles(id text primary key,email text,activation_status text,deleted_at timestamptz);
+ create table assets(id text primary key,owner_id text,title text,category text,status text,is_locked boolean,listing_data jsonb);
+ create table automation_jobs(id serial primary key,kind text,payload jsonb);
+ create function reloo_emit_notification(text,text,text,text,text,text) returns void language plpgsql as $$ begin return;end $$;
+ create function reloo_assert_active(text) returns void language plpgsql as $$ begin if not exists(select 1 from profiles where id=$1 and activation_status='ACTIVE') then raise exception 'INACTIVE';end if;end $$;
+ insert into profiles values('sender','s@example.test','ACTIVE',null),('owner','o@example.test','ACTIVE',null),('cross','c@example.test','ACTIVE',null),('far','f@example.test','ACTIVE',null),('off','n@example.test','ACTIVE',null);`);
+ await db.exec(await readFile('deploy/vietnam/nearby-requests.sql','utf8'));
+ await db.exec(`insert into nearby_member_locations(profile_id,province_code,province_name,latitude,longitude,email_enabled) values('owner',79,'HCM',10.81,106.7,true),('cross',1,'Other',10.81,106.7,true),('far',79,'HCM',11.81,106.7,true),('off',79,'HCM',10.81,106.7,false);`);
+ const payload={title:'Sony A6400',description:'Tìm máy ảnh cuối tuần',category:'camera',mode:'RENT',province_code:79,province_name:'HCM',latitude:10.8,longitude:106.7,images:[]};
+ const id='11111111-1111-4111-8111-111111111111';
+ const create=i=>db.query('select reloo_create_nearby_request($1,$2,$3::jsonb)',['sender',i,JSON.stringify(payload)]);
+ await create(id);await create(id);assert.equal((await db.query('select count(*)::int as n from automation_jobs')).rows[0].n,1);
+ assert.deepEqual((await db.query('select profile_id from reloo_nearby_candidates($1)',[id])).rows.map(r=>r.profile_id),['owner']);
+ await db.exec("update profiles set activation_status='RESTRICTED' where id='sender'");
+ assert.equal((await db.query('select profile_id from reloo_nearby_candidates($1)',[id])).rows.length,0);
+ await db.exec("update profiles set activation_status='ACTIVE' where id='sender'");
+ await db.query('select reloo_queue_nearby_deliveries($1,$2,$3::jsonb)',[id,'COMMUNITY',JSON.stringify([{profile_id:'owner'},{profile_id:'far'}])]);
+ await db.query('select reloo_queue_nearby_deliveries($1,$2,$3::jsonb)',[id,'COMMUNITY',JSON.stringify([{profile_id:'owner'}])]);
+ assert.equal((await db.query('select count(*)::int as n from nearby_request_deliveries')).rows[0].n,1);
+ assert.equal((await db.query('select reloo_claim_nearby_email($1,$2) as claimed',[id,'owner'])).rows[0].claimed,true);
+ assert.equal((await db.query('select reloo_claim_nearby_email($1,$2) as claimed',[id,'owner'])).rows[0].claimed,false);
+ await db.query('insert into assets values($1,$2,$3,$4,$5,false,$6::jsonb)',['sony','owner','Sony A6400','camera','available',JSON.stringify({transactionMode:'RENTAL'})]);
+ await db.query('select reloo_offer_nearby_request($1,$2,$3)',['owner',id,'sony']);
+ assert.equal((await db.query('select count(*)::int as n from nearby_request_offers')).rows[0].n,1);
+ await assert.rejects(db.query('select reloo_offer_nearby_request($1,$2,$3)',['cross',id,'sony']),/NEARBY_OFFER_FORBIDDEN/);
+ await db.query("update nearby_requests set status='CLOSED' where id=$1",[id]);
+ await assert.rejects(db.query('select reloo_offer_nearby_request($1,$2,$3)',['owner',id,'sony']),/NEARBY_OFFER_FORBIDDEN/);
+ await create('22222222-2222-4222-8222-222222222222');await create('33333333-3333-4333-8333-333333333333');await assert.rejects(create('44444444-4444-4444-8444-444444444444'),/NEARBY_DAILY_LIMIT/);
+ await db.exec(`insert into nearby_request_deliveries(request_id,profile_id,distance_km,kind,status) values('22222222-2222-4222-8222-222222222222','owner',1,'COMMUNITY','SENT'),('33333333-3333-4333-8333-333333333333','owner',1,'COMMUNITY','FAILED');
+ insert into nearby_requests(id,profile_id,title,description,category,mode,province_code,province_name,latitude,longitude) values('44444444-4444-4444-8444-444444444444','sender','Test request','Test description','camera','RENT',79,'HCM',10.8,106.7);
+ insert into nearby_request_deliveries(request_id,profile_id,distance_km,kind) values('44444444-4444-4444-8444-444444444444','owner',1,'COMMUNITY');`);
+ assert.equal((await db.query('select reloo_claim_nearby_email($1,$2) as claimed',['44444444-4444-4444-8444-444444444444','owner'])).rows[0].claimed,false);
+ assert.equal((await db.query(`select has_table_privilege('anon','nearby_requests','SELECT') as allowed`)).rows[0].allowed,false);
+ }finally{await db.close();}
+});

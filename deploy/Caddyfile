@@ -1,0 +1,8 @@
+# Direct public-IP deployment only: ports 80/443 must reach this machine.
+reloo.vn {
+  encode zstd gzip
+  reverse_proxy 127.0.0.1:3000
+}
+www.reloo.vn {
+  redir https://reloo.vn{uri} permanent
+}

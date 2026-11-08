@@ -1,0 +1,215 @@
+{
+  "commit": "14c213405669414492bda0f8d52cc6531d062c45",
+  "brands": [
+    "Marshall",
+    "Apple",
+    "Samsung",
+    "Sony",
+    "Canon",
+    "Nikon",
+    "DJI",
+    "Fujifilm",
+    "Panasonic",
+    "Olympus",
+    "OM System",
+    "GoPro",
+    "Insta360",
+    "Dell",
+    "HP",
+    "Lenovo",
+    "ASUS",
+    "Acer",
+    "MSI",
+    "Microsoft",
+    "LG",
+    "Xiaomi",
+    "OPPO",
+    "Vivo",
+    "Google",
+    "Nothing",
+    "OnePlus",
+    "Bose",
+    "JBL",
+    "Epson",
+    "BenQ",
+    "Anker",
+    "Logitech",
+    "Razer",
+    "Nintendo",
+    "Valve"
+  ],
+  "categories": [
+    "am-thanh",
+    "may-anh",
+    "may-quay",
+    "livestream",
+    "dien-tu",
+    "laptop-pc",
+    "dien-thoai",
+    "gaming",
+    "may-chieu"
+  ],
+  "hosts": [
+    "marshall.com",
+    "apple.com",
+    "samsung.com",
+    "sony.com",
+    "sony.com.vn",
+    "sony.co.uk",
+    "sony-asia.com",
+    "canon.com",
+    "canon.com.vn",
+    "canon-europe.com",
+    "nikon.com",
+    "nikonusa.com",
+    "dji.com",
+    "fujifilm.com",
+    "panasonic.com",
+    "explore.omsystem.com",
+    "gopro.com",
+    "insta360.com",
+    "dell.com",
+    "hp.com",
+    "lenovo.com",
+    "asus.com",
+    "acer.com",
+    "msi.com",
+    "microsoft.com",
+    "lg.com",
+    "mi.com",
+    "oppo.com",
+    "vivo.com",
+    "store.google.com",
+    "support.google.com",
+    "nothing.tech",
+    "oneplus.com",
+    "bose.com",
+    "jbl.com",
+    "epson.com",
+    "epson.com.vn",
+    "benq.com",
+    "anker.com",
+    "logitech.com",
+    "razer.com",
+    "nintendo.com",
+    "steampowered.com"
+  ],
+  "brandHosts": {
+    "Marshall": [
+      "marshall.com"
+    ],
+    "Apple": [
+      "apple.com"
+    ],
+    "Samsung": [
+      "samsung.com"
+    ],
+    "Sony": [
+      "sony.com",
+      "sony.com.vn",
+      "sony.co.uk",
+      "sony-asia.com"
+    ],
+    "Canon": [
+      "canon.com",
+      "canon.com.vn",
+      "canon-europe.com"
+    ],
+    "Nikon": [
+      "nikon.com",
+      "nikonusa.com"
+    ],
+    "DJI": [
+      "dji.com"
+    ],
+    "Fujifilm": [
+      "fujifilm.com"
+    ],
+    "Panasonic": [
+      "panasonic.com"
+    ],
+    "Olympus": [
+      "explore.omsystem.com"
+    ],
+    "OM System": [
+      "explore.omsystem.com"
+    ],
+    "GoPro": [
+      "gopro.com"
+    ],
+    "Insta360": [
+      "insta360.com"
+    ],
+    "Dell": [
+      "dell.com"
+    ],
+    "HP": [
+      "hp.com"
+    ],
+    "Lenovo": [
+      "lenovo.com"
+    ],
+    "ASUS": [
+      "asus.com"
+    ],
+    "Acer": [
+      "acer.com"
+    ],
+    "MSI": [
+      "msi.com"
+    ],
+    "Microsoft": [
+      "microsoft.com"
+    ],
+    "LG": [
+      "lg.com"
+    ],
+    "Xiaomi": [
+      "mi.com"
+    ],
+    "OPPO": [
+      "oppo.com"
+    ],
+    "Vivo": [
+      "vivo.com"
+    ],
+    "Google": [
+      "store.google.com",
+      "support.google.com"
+    ],
+    "Nothing": [
+      "nothing.tech"
+    ],
+    "OnePlus": [
+      "oneplus.com"
+    ],
+    "Bose": [
+      "bose.com"
+    ],
+    "JBL": [
+      "jbl.com"
+    ],
+    "Epson": [
+      "epson.com",
+      "epson.com.vn"
+    ],
+    "BenQ": [
+      "benq.com"
+    ],
+    "Anker": [
+      "anker.com"
+    ],
+    "Logitech": [
+      "logitech.com"
+    ],
+    "Razer": [
+      "razer.com"
+    ],
+    "Nintendo": [
+      "nintendo.com"
+    ],
+    "Valve": [
+      "steampowered.com"
+    ]
+  }
+}

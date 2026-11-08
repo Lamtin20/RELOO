@@ -1,0 +1,44 @@
+{
+  "schemaVersion": 1,
+  "recordedAt": "2026-10-23",
+  "source": "User-authored product instructions in this workspace session",
+  "status": "OWNER_DIRECTION_RECORDED_LEGAL_REVIEW_PENDING",
+  "company": {
+    "legalName": null,
+    "taxId": null,
+    "registrationNumber": null,
+    "address": null,
+    "representative": null,
+    "supportEmail": null,
+    "privacyEmail": null,
+    "workflow": "Enter verified official information in existing CRM; canonical API refreshes current surfaces, not historical contract snapshots",
+    "currentController": null,
+    "currentAccountablePerson": null,
+    "legalApproval": null
+  },
+  "customerData": {
+    "ownerIntent": "Collect enough to verify customers and preserve evidence; internal operations and competent authorities for disputes",
+    "implementationBoundary": "Purpose-specific minimum collection, real recipient/processor mapping, no assumption of banking powers",
+    "retentionIntent": "Until account deletion for data still necessary; separate reviewed schedules for raw verification, logs, optional tracking and legally retained records",
+    "deletionIntent": "Explain impact, authenticate request, capture confirmation, erase eligible PII automatically and retain minimal asset history where justified",
+    "unapprovedBlanketBankModel": true,
+    "legalBasisReview": "NEEDS_LEGAL_REVIEW",
+    "noticeApproval": null,
+    "retentionApproval": null
+  },
+  "assets": {
+    "ownerStatement": "Tất cả là bản thương mại được đăng tải và được phép dùng",
+    "status": "OWNER_ATTESTED_COMMERCIAL_USE",
+    "scope": "Current asset registry file identities; not future uploads or rights outside the stated commercial-use assertion",
+    "licenseDocumentsProvided": false,
+    "independentVerification": "PENDING",
+    "modificationAndRedistributionRights": "NOT_SPECIFIED",
+    "legalApproval": null
+  },
+  "publication": {
+    "intent": "Publish after review by counsel and competent authorities where the procedure requires it",
+    "reviewer": null,
+    "authorityDecision": null,
+    "status": "DRAFT_NOT_SUBMITTED_NOT_APPROVED"
+  }
+}

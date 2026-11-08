@@ -1,0 +1,14 @@
+[Unit]
+Description=Encrypted RELOO database, media and configuration backup
+After=docker.service
+Requires=docker.service
+OnFailure=reloo-security-alert@%n.service
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/sbin/reloo-security-backup
+User=root
+UMask=0077
+Nice=15
+IOSchedulingClass=idle
+TimeoutStartSec=1800

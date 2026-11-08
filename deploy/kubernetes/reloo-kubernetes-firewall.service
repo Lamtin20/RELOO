@@ -1,0 +1,10 @@
+[Unit]
+Description=Restrict Kubernetes management and overlay ports to private interfaces
+After=docker.service tailscaled.service
+Before=k3s.service
+[Service]
+Type=oneshot
+ExecStart=/bin/bash /srv/reloo/kubernetes/firewall.sh
+RemainAfterExit=yes
+[Install]
+WantedBy=multi-user.target

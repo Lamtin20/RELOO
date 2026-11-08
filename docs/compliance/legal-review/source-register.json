@@ -1,0 +1,243 @@
+{
+  "checkedAt": "2026-10-23",
+  "method": "Direct HTTPS official sources; web search unavailable HTTP500; selected scan pages read visually",
+  "sources": [
+    {
+      "docid": "183188",
+      "url": "https://vanban.chinhphu.vn/?pageid=27160&docid=183188",
+      "title": "Luật số 91/2015/QH13 của Quốc hội: Bộ Luật Dân sự",
+      "retrievedAt": "2026-10-23",
+      "sha256": "a9daea950e0269eaddab09a7276afa562e804ef73c39b3411e91ff20b82f3abf",
+      "metadata": "Số ký hiệu 91/2015/QH13 Ngày ban hành 24-11-2015 Ngày có hiệu lực 01-01-2017 Loại văn bản Luật Cơ quan ban hành Quốc hội Người ký Nguyễn Sinh Hùng Trích yếu Bộ Luật Dân sự",
+      "pdfLinks": [
+        "https://datafiles.chinhphu.vn/cpp/files/vbpq/2016/01/91.signed.pdf",
+        "https://datafiles.chinhphu.vn/cpp/files/vbpq/2016/01/91_.pdf"
+      ],
+      "status": "OFFICIAL_PAGE_RETRIEVED_FULL_APPLICABILITY_PENDING",
+      "reviewScope": "Official metadata retrieved; current consolidated validity, complete amendments and service applicability require counsel",
+      "pdfEvidence": null
+    },
+    {
+      "docid": "14765",
+      "url": "https://vanban.chinhphu.vn/?pageid=27160&docid=14765",
+      "title": "Luật số 36/2005/QH11 của Quốc hội: Luật Thương mại",
+      "retrievedAt": "2026-10-23",
+      "sha256": "ea29c2b5fdde5962accd1a7d1816bedee12c3add15a56633c58fefed12a5dfcc",
+      "metadata": "Số ký hiệu 36/2005/QH11 Ngày ban hành 27-06-2005 Loại văn bản Luật Cơ quan ban hành Quốc hội Người ký Nguyễn Văn An Trích yếu Luật Thương mại",
+      "pdfLinks": [],
+      "status": "OFFICIAL_PAGE_RETRIEVED_FULL_APPLICABILITY_PENDING",
+      "reviewScope": "Official metadata retrieved; current consolidated validity, complete amendments and service applicability require counsel",
+      "pdfEvidence": null
+    },
+    {
+      "docid": "208421",
+      "url": "https://vanban.chinhphu.vn/?pageid=27160&docid=208421",
+      "title": "Luật số 20/2023/QH15 của Quốc hội: Luật Giao dịch điện tử",
+      "retrievedAt": "2026-10-23",
+      "sha256": "e03d3fb4309bf5e255a221440a1d119c950605db6191be304bf43f739b859994",
+      "metadata": "Số ký hiệu 20/2023/QH15 Ngày ban hành 22-06-2023 Ngày có hiệu lực 01-07-2024 Loại văn bản Luật Cơ quan ban hành Quốc hội Người ký Vương Đình Huệ Trích yếu Luật Giao dịch điện tử",
+      "pdfLinks": [
+        "https://datafiles.chinhphu.vn/cpp/files/vbpq/2023/8/luat20-2023-qh15..pdf"
+      ],
+      "status": "OFFICIAL_PAGE_RETRIEVED_FULL_APPLICABILITY_PENDING",
+      "reviewScope": "Official metadata retrieved; current consolidated validity, complete amendments and service applicability require counsel",
+      "pdfEvidence": null
+    },
+    {
+      "docid": "208363",
+      "url": "https://vanban.chinhphu.vn/?pageid=27160&docid=208363",
+      "title": "Luật số 19/2023/QH15 của Quốc hội: Luật Bảo vệ quyền lợi người tiêu dùng",
+      "retrievedAt": "2026-10-23",
+      "sha256": "6cfeb30177ec34b348b696c5df11f7892f3917f898937187c6594e776f17299a",
+      "metadata": "Số ký hiệu 19/2023/QH15 Ngày ban hành 20-06-2023 Ngày có hiệu lực 01-07-2024 Loại văn bản Luật Cơ quan ban hành Quốc hội Người ký Vương Đình Huệ Trích yếu Luật Bảo vệ quyền lợi người tiêu dùng",
+      "pdfLinks": [
+        "https://datafiles.chinhphu.vn/cpp/files/vbpq/2023/7/luat19_2023.pdf"
+      ],
+      "status": "OFFICIAL_PAGE_RETRIEVED_FULL_APPLICABILITY_PENDING",
+      "reviewScope": "Official metadata retrieved; current consolidated validity, complete amendments and service applicability require counsel",
+      "pdfEvidence": {
+        "docid": "208363",
+        "pdf": "https://datafiles.chinhphu.vn/cpp/files/vbpq/2023/7/luat19_2023.pdf",
+        "sha256": "d9d8d76b585eaf81c5e59f51f2c309a7c1e3797ee2b165d4c2fd38d83ad50a19",
+        "pages": 54,
+        "characters": 108884,
+        "scanOnly": false
+      }
+    },
+    {
+      "docid": "216503",
+      "url": "https://vanban.chinhphu.vn/?pageid=27160&docid=216503",
+      "title": "Luật số 122/2025/QH15 của Quốc hội: Luật Thương mại điện tử",
+      "retrievedAt": "2026-10-23",
+      "sha256": "09e235c8236be65575a9547130b087dbb7a4dfe9738b8a99cef12ac18e74b458",
+      "metadata": "Số ký hiệu 122/2025/QH15 Ngày ban hành 10-12-2025 Ngày có hiệu lực 01-07-2026 Loại văn bản Luật Cơ quan ban hành Quốc hội Người ký Trần Thanh Mẫn Trích yếu Luật Thương mại điện tử",
+      "pdfLinks": [
+        "https://datafiles.chinhphu.vn/cpp/files/vbpq/2026/01/luat122.2025.qh15.pdf"
+      ],
+      "status": "OFFICIAL_PAGE_RETRIEVED_FULL_APPLICABILITY_PENDING",
+      "reviewScope": "Official metadata retrieved; current consolidated validity, complete amendments and service applicability require counsel",
+      "pdfEvidence": {
+        "docid": "216503",
+        "pdf": "https://datafiles.chinhphu.vn/cpp/files/vbpq/2026/01/luat122.2025.qh15.pdf",
+        "sha256": "10eb9faf1384bebaff64c30beccdc4dbd2713dc251f5d1c2714c6514c9b58e44",
+        "pages": 28,
+        "characters": 27,
+        "scanOnly": true
+      }
+    },
+    {
+      "docid": "218747",
+      "url": "https://vanban.chinhphu.vn/?pageid=27160&docid=218747",
+      "title": "Nghị định số 248/2026/NĐ-CP của Chính phủ: Quy định chi tiết một số điều của Luật Thương mại điện tử",
+      "retrievedAt": "2026-10-23",
+      "sha256": "ecfd860600289d09dac844ed52da74f17f5f9294b6b351aea7a1bd08413a2aa7",
+      "metadata": "Số ký hiệu 248/2026/NĐ-CP Ngày ban hành 30-06-2026 Ngày có hiệu lực 01-07-2026 Loại văn bản Nghị định Cơ quan ban hành Chính phủ Người ký Phạm Gia Túc Trích yếu Quy định chi tiết một số điều của Luật Thương mại điện tử",
+      "pdfLinks": [
+        "https://datafiles.chinhphu.vn/cpp/files/vbpq/2026/7/248-ndcp.signed.pdf"
+      ],
+      "status": "OFFICIAL_PAGE_RETRIEVED_FULL_APPLICABILITY_PENDING",
+      "reviewScope": "Official metadata retrieved; current consolidated validity, complete amendments and service applicability require counsel",
+      "pdfEvidence": {
+        "docid": "218747",
+        "pdf": "https://datafiles.chinhphu.vn/cpp/files/vbpq/2026/7/248-ndcp.signed.pdf",
+        "sha256": "9829949d91358428be627a613474efebb31748175d133c70410b02118e8c7f3e",
+        "pages": 93,
+        "characters": 241,
+        "scanOnly": true
+      }
+    },
+    {
+      "docid": "204191",
+      "url": "https://vanban.chinhphu.vn/?pageid=27160&docid=204191",
+      "title": "Nghị định số 85/2021/NĐ-CP của Chính phủ: Sửa đổi, bổ sung một số điều của Nghị định số 52/2013/NĐ-CP ngày 16 tháng 5 năm 2013 của Chính phủ về thương mại điện tử",
+      "retrievedAt": "2026-10-23",
+      "sha256": "4b4d386a3af56522f19c3abef423040fbdf259cb0dc3ac453e2bf8fbbe8b8a64",
+      "metadata": "Số ký hiệu 85/2021/NĐ-CP Ngày ban hành 25-09-2021 Ngày có hiệu lực 01-01-2022 Loại văn bản Nghị định Cơ quan ban hành Chính phủ Người ký Lê Văn Thành Trích yếu Sửa đổi, bổ sung một số điều của Nghị định số 52/2013/NĐ-CP ngày 16 tháng 5 năm 2013 của Chính phủ về thương mại điện tử",
+      "pdfLinks": [
+        "https://datafiles.chinhphu.vn/cpp/files/vbpq/2021/09/85.signed.pdf"
+      ],
+      "status": "OFFICIAL_PAGE_RETRIEVED_FULL_APPLICABILITY_PENDING",
+      "reviewScope": "Official metadata retrieved; current consolidated validity, complete amendments and service applicability require counsel",
+      "pdfEvidence": null
+    },
+    {
+      "docid": "214590",
+      "url": "https://vanban.chinhphu.vn/?pageid=27160&docid=214590",
+      "title": "Luật số 91/2025/QH15 của Quốc hội: Luật Bảo vệ dữ liệu cá nhân",
+      "retrievedAt": "2026-10-23",
+      "sha256": "0843e50ebe757e8bee65247b3bb7c48465669fee1f2f97fbf54bb65a6e13f6d3",
+      "metadata": "Số ký hiệu 91/2025/QH15 Ngày ban hành 26-06-2025 Ngày có hiệu lực 01-01-2026 Loại văn bản Luật Cơ quan ban hành Quốc hội Người ký Trần Thanh Mẫn Trích yếu Luật Bảo vệ dữ liệu cá nhân",
+      "pdfLinks": [
+        "https://datafiles.chinhphu.vn/cpp/files/vbpq/2025/7/91qh.signed.pdf"
+      ],
+      "status": "OFFICIAL_PAGE_RETRIEVED_FULL_APPLICABILITY_PENDING",
+      "reviewScope": "Official metadata retrieved; current consolidated validity, complete amendments and service applicability require counsel",
+      "pdfEvidence": {
+        "docid": "214590",
+        "pdf": "https://datafiles.chinhphu.vn/cpp/files/vbpq/2025/7/91qh.signed.pdf",
+        "sha256": "c3b87f994cedcedb69d38c590dcca2bb7700aab65e518a2a3a5ffbf22048b9ee",
+        "pages": 23,
+        "characters": 171,
+        "scanOnly": true
+      }
+    },
+    {
+      "docid": "216387",
+      "url": "https://vanban.chinhphu.vn/?pageid=27160&docid=216387",
+      "title": "Nghị định số 356/2025/NĐ-CP của Chính phủ: Quy định chi tiết một số điều và biện pháp thi hành Luật Bảo vệ dữ liệu cá nhân",
+      "retrievedAt": "2026-10-23",
+      "sha256": "122dcf6e684e5d2405bf599af33c37e848adc89fee0a2dd656dece22d6f48a7a",
+      "metadata": "Số ký hiệu 356/2025/NĐ-CP Ngày ban hành 31-12-2025 Ngày có hiệu lực 01-01-2026 Loại văn bản Nghị định Cơ quan ban hành Chính phủ Người ký Nguyễn Hòa Bình Trích yếu Quy định chi tiết một số điều và biện pháp thi hành Luật Bảo vệ dữ liệu cá nhân",
+      "pdfLinks": [
+        "https://datafiles.chinhphu.vn/cpp/files/vbpq/2026/01/356-nd.signed.pdf"
+      ],
+      "status": "OFFICIAL_PAGE_RETRIEVED_FULL_APPLICABILITY_PENDING",
+      "reviewScope": "Official metadata retrieved; current consolidated validity, complete amendments and service applicability require counsel",
+      "pdfEvidence": {
+        "docid": "216387",
+        "pdf": "https://datafiles.chinhphu.vn/cpp/files/vbpq/2026/01/356-nd.signed.pdf",
+        "sha256": "5b36a060c22db1df6c32b8c66da63b0c36571a1f7fa01765e719baac215b6c12",
+        "pages": 71,
+        "characters": 219,
+        "scanOnly": true
+      }
+    },
+    {
+      "docid": "210262",
+      "url": "https://vanban.chinhphu.vn/?pageid=27160&docid=210262",
+      "title": "Nghị định số 52/2024/NĐ-CP của Chính phủ: Quy định về thanh toán không dùng tiền mặt",
+      "retrievedAt": "2026-10-23",
+      "sha256": "ac08766d7d53ec88b8bdc2ac6058962339ce5cce92adadb9b423ebde60136fbf",
+      "metadata": "Số ký hiệu 52/2024/NĐ-CP Ngày ban hành 15-05-2024 Ngày có hiệu lực 01-07-2024 Loại văn bản Nghị định Cơ quan ban hành Chính phủ Người ký Lê Minh Khái Trích yếu Quy định về thanh toán không dùng tiền mặt",
+      "pdfLinks": [
+        "https://datafiles.chinhphu.vn/cpp/files/vbpq/2024/5/52-nd-cp.signed.pdf"
+      ],
+      "status": "OFFICIAL_PAGE_RETRIEVED_FULL_APPLICABILITY_PENDING",
+      "reviewScope": "Official metadata retrieved; current consolidated validity, complete amendments and service applicability require counsel",
+      "pdfEvidence": {
+        "docid": "210262",
+        "pdf": "https://datafiles.chinhphu.vn/cpp/files/vbpq/2024/5/52-nd-cp.signed.pdf",
+        "sha256": "a0a4bf2c640ebf5c2bc6dee0f7aee6f879a1019d02ca693a9bb294367f2983af",
+        "pages": 71,
+        "characters": 219,
+        "scanOnly": true
+      }
+    },
+    {
+      "docid": "213179",
+      "url": "https://vanban.chinhphu.vn/?pageid=27160&docid=213179",
+      "title": "Nghị định số 70/2025/NĐ-CP của Chính phủ: Sửa đổi, bổ sung một số điều của Nghị định số 123/2020/NĐ-CP ngày 19 tháng 10 năm 2020 của Chính phủ quy định về hóa đơn, chứng từ",
+      "retrievedAt": "2026-10-23",
+      "sha256": "4dc53fa129bca91c973a956da3321b330b5dc563f7cd6ece5a3ccb8c93841a48",
+      "metadata": "Số ký hiệu 70/2025/NĐ-CP Ngày ban hành 20-03-2025 Ngày có hiệu lực 01-06-2025 Loại văn bản Nghị định Cơ quan ban hành Chính phủ Người ký Hồ Đức Phớc Trích yếu Sửa đổi, bổ sung một số điều của Nghị định số 123/2020/NĐ-CP ngày 19 tháng 10 năm 2020 của Chính phủ quy định về hóa đơn, chứng từ",
+      "pdfLinks": [
+        "https://datafiles.chinhphu.vn/cpp/files/vbpq/2025/3/70-nd-cp.signed.pdf"
+      ],
+      "status": "OFFICIAL_PAGE_RETRIEVED_FULL_APPLICABILITY_PENDING",
+      "reviewScope": "Official metadata retrieved; current consolidated validity, complete amendments and service applicability require counsel",
+      "pdfEvidence": null
+    },
+    {
+      "docid": "213883",
+      "url": "https://vanban.chinhphu.vn/?pageid=27160&docid=213883",
+      "title": "Nghị định số 117/2025/NĐ-CP của Chính phủ: Quy định quản lý thuế đối với hoạt động kinh doanh trên nền tảng thương mại điện tử, nền tảng số của hộ, cá nhân",
+      "retrievedAt": "2026-10-23",
+      "sha256": "aa082fbf1501dc4f083dd7036ca68635c617f754f454d4b160223263c2a98a9d",
+      "metadata": "Số ký hiệu 117/2025/NĐ-CP Ngày ban hành 09-06-2025 Ngày có hiệu lực 01-07-2025 Loại văn bản Nghị định Cơ quan ban hành Chính phủ Người ký Hồ Đức Phớc Trích yếu Quy định quản lý thuế đối với hoạt động kinh doanh trên nền tảng thương mại điện tử, nền tảng số của hộ, cá nhân",
+      "pdfLinks": [
+        "https://datafiles.chinhphu.vn/cpp/files/vbpq/2025/6/117-ndcp.signed.pdf"
+      ],
+      "status": "OFFICIAL_PAGE_RETRIEVED_FULL_APPLICABILITY_PENDING",
+      "reviewScope": "Official metadata retrieved; current consolidated validity, complete amendments and service applicability require counsel",
+      "pdfEvidence": {
+        "docid": "213883",
+        "pdf": "https://datafiles.chinhphu.vn/cpp/files/vbpq/2025/6/117-ndcp.signed.pdf",
+        "sha256": "95cc30e442f8771cd32b4e7168e4899f37e89aba13e8e6a6c629ebe8e03aa8e7",
+        "pages": 23,
+        "characters": 171,
+        "scanOnly": true
+      }
+    },
+    {
+      "docid": "183198",
+      "url": "https://vanban.chinhphu.vn/?pageid=27160&docid=183198",
+      "title": "Luật số 88/2015/QH13 của Quốc hội: Luật Kế toán",
+      "retrievedAt": "2026-10-23",
+      "sha256": "bacc72c8409a2e7db78fa6edd57761a627cd2b55b0106ffc286805d10c1e6273",
+      "metadata": "Số ký hiệu 88/2015/QH13 Ngày ban hành 20-11-2015 Ngày có hiệu lực 01-01-2017 Loại văn bản Luật Cơ quan ban hành Quốc hội Người ký Nguyễn Sinh Hùng Trích yếu Luật Kế toán",
+      "pdfLinks": [
+        "https://datafiles.chinhphu.vn/cpp/files/vbpq/2016/01/88.signed.pdf"
+      ],
+      "status": "OFFICIAL_PAGE_RETRIEVED_FULL_APPLICABILITY_PENDING",
+      "reviewScope": "Official metadata retrieved; current consolidated validity, complete amendments and service applicability require counsel",
+      "pdfEvidence": {
+        "docid": "183198",
+        "pdf": "https://datafiles.chinhphu.vn/cpp/files/vbpq/2016/01/88.signed.pdf",
+        "sha256": "1fd9336a3a6f4d90676db5889bdb409af9c75c96c9c256143197908a7bfcca50",
+        "pages": 35,
+        "characters": 181,
+        "scanOnly": true
+      }
+    }
+  ]
+}

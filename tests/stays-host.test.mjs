@@ -1,0 +1,60 @@
+import {test} from 'node:test';
+import assert from 'node:assert/strict';
+import {listingLink,parseStayIcal,sampleStayIcal,hostAutomationPreview,checkinGuideAccess} from '../lib/stays/host-rules.js';
+import {createStayFixture,stayCommand} from '../lib/stays/test-database.mjs';
+import {DEMO_ACTOR,demoStays} from '../lib/stays/catalog.js';
+test('link draft is allowlisted, never claims AI completion and removes tracking values',()=>{
+ const draft=listingLink('https://www.airbnb.com/rooms/123?token=private');assert.equal(draft.url,'https://www.airbnb.com/rooms/123');assert.equal(draft.aiConnected,false);
+ for(const url of ['http://airbnb.com/rooms/1','https://airbnb.com.evil.example/rooms/1','https://127.0.0.1/rooms/1','https://user:password@airbnb.com/rooms/1','https://booking.com:444/hotel/a','https://airbnb.com/'])assert.throws(()=>listingLink(url));
+});
+test('iCal parser: exclusive all-day dates, UTC, VN, PII omission, explicit cancellation and unsupported recurrence',()=>{
+ const e=parseStayIcal(sampleStayIcal)[0];assert.equal(e.startsAt,'2027-11-04T17:00:00.000Z');assert.equal(e.endsAt,'2027-11-06T17:00:00.000Z');
+ const wrap=x=>'BEGIN:VCALENDAR\r\n'+x+'\r\nEND:VCALENDAR';
+ const body='BEGIN:VEVENT\r\nUID:one\r\nDTSTART:20271105T070000Z\r\nDTEND:20271105T090000Z\r\nSUMMARY:Private name\r\nDESCRIPTION:Private phone\r\nEND:VEVENT';
+ assert.equal(parseStayIcal(wrap(body))[0].endsAt,'2027-11-05T09:00:00.000Z');
+ assert.ok(!JSON.stringify(parseStayIcal(wrap(body))).includes('Private'));
+ assert.equal(parseStayIcal(wrap(body.replace('DTSTART:20271105T070000Z','DTSTART;TZID=Asia/Ho_Chi_Minh:20271105T140000')))[0].startsAt,'2027-11-05T07:00:00.000Z');
+ for(const bad of [body.replace('DTSTART:20271105T070000Z','DTSTART:20271105T070000'),body.replace('UID:one','UID:one\r\nRRULE:FREQ=DAILY'),body.replace('20271105T070000Z','20270230T070000Z'),body.replace('UID:one',''),body+'\r\n'+body])assert.throws(()=>parseStayIcal(wrap(bad)));
+ assert.deepEqual(parseStayIcal(wrap('BEGIN:VEVENT\r\nUID:one\r\nSTATUS:CANCELLED\r\nEND:VEVENT')),[{uid:'one',cancelled:true}]);
+});
+test('automation preview never emits codes or sends; review only after completed stays',()=>{
+ const base={status:'CONFIRMED',payment_status:'PAID',ends_at:'2027-11-05T04:00:00Z'};
+ assert.equal(hostAutomationPreview(base).checkin.code,null);assert.equal(hostAutomationPreview(base).review.eligible,false);
+ assert.equal(hostAutomationPreview({...base,status:'COMPLETED'}).review.eligible,true);
+ assert.equal(hostAutomationPreview({...base,status:'CANCELLED'}).cleaning,null);
+ assert.equal(hostAutomationPreview({...base,payment_status:'UNPAID'}).checkin.eligible,false);
+});
+test('checkin guide: method requirements, release window, cancelled and ended bookings',()=>{
+ const starts=Date.parse('2027-11-05T07:00:00Z');
+ const data={method:'FULL_SELF',hasGuide:true,hasCodes:true,releaseHours:2,order:{status:'CONFIRMED',payment_status:'PAID',starts_at:new Date(starts).toISOString(),ends_at:new Date(starts+86400000).toISOString()},now:starts-3*3600000};
+ assert.equal(checkinGuideAccess(data).reason,'TOO_EARLY');
+ assert.equal(checkinGuideAccess({...data,now:starts-2*3600000}).allowed,true);
+ assert.equal(checkinGuideAccess({...data,hasGuide:false}).reason,'GUIDE_REQUIRED');
+ assert.equal(checkinGuideAccess({...data,hasCodes:false}).reason,'CODE_REQUIRED');
+ assert.equal(checkinGuideAccess({...data,method:'PARTIAL_SELF',hasCodes:false,releaseHours:0}).allowed,true);
+ for(const status of ['CANCELLED','EXPIRED','NO_SHOW','COMPLETED'])assert.equal(checkinGuideAccess({...data,order:{...data.order,status},releaseHours:0}).allowed,false);
+ assert.equal(checkinGuideAccess({...data,now:starts+86400000}).reason,'STAY_ENDED');
+ assert.throws(()=>checkinGuideAccess({...data,releaseHours:5}),/INVALID_ARRIVAL_POLICY/);
+});
+test('host SQL: source-scoped dedupe, atomic import rollback, cancellation, cleaning and tenant scope',async t=>{
+ const db=await createStayFixture();t.after(()=>db.close());
+ const unitId='40000000-0000-4000-8000-000000000001',stranger='10000000-0000-4000-8000-000000000009';
+ const host=async(op,input={},actor=DEMO_ACTOR)=>(await db.query('select reloo_stay_host($1,$2,$3) as d',[actor,op,JSON.stringify({unitId,...input})])).rows[0].d;
+ await assert.rejects(host('calendar',{},stranger),/FORBIDDEN/);
+ const params={source:'Airbnb · DEMO',events:parseStayIcal(sampleStayIcal)};
+ await host('ical-apply',params);await host('ical-apply',params);
+ assert.equal((await host('calendar')).blocks.length,1);
+ await assert.rejects(stayCommand(db,DEMO_ACTOR,'quote',{roomTypeId:demoStays[0].roomTypeId,checkIn:'2027-11-05',checkOut:'2027-11-06',guests:2}),/SOLD_OUT/);
+ await assert.rejects(host('external-reservation',{source:'Direct',uid:'direct-1',startsAt:'2027-11-05T14:00:00+07:00',endsAt:'2027-11-06T11:00:00+07:00',amount:500000}),/SLOT_CONFLICT/);
+ await assert.rejects(host('ical-apply',{source:'Booking.com · DEMO',events:[{uid:'valid',startsAt:'2027-12-01T07:00:00Z',endsAt:'2027-12-02T04:00:00Z'},...params.events]}),/SLOT_CONFLICT/);
+ assert.equal((await host('calendar')).blocks.length,1);
+ await host('ical-apply',{source:'Airbnb · DEMO',events:[]});assert.equal((await host('calendar')).blocks.length,1);
+ await assert.rejects(host('cleaning-buffer',{minutes:30}),/ACTIVE_INVENTORY/);
+ await host('ical-apply',{source:'Airbnb · DEMO',events:[{uid:params.events[0].uid,cancelled:true}]});
+ await host('cleaning-buffer',{minutes:45});
+ await host('external-reservation',{source:'Direct',uid:'direct-1',startsAt:'2027-11-05T14:00:00+07:00',endsAt:'2027-11-06T11:00:00+07:00',amount:500000});
+ let cal=await host('calendar');assert.equal(cal.blocks.length,1);assert.equal(Date.parse(cal.blocks[0].blockedUntil)-Date.parse(cal.blocks[0].endsAt),45*60000);
+ await host('external-reservation',{source:'Direct',uid:'direct-1',startsAt:'2027-11-05T14:00:00+07:00',endsAt:'2027-11-06T11:00:00+07:00',amount:500000});
+ cal=await host('calendar');assert.equal(cal.blocks.length,1);
+ for(const role of ['anon','authenticated'])assert.equal((await db.query("select has_function_privilege($1,'public.reloo_stay_host(uuid,text,jsonb)','EXECUTE') as allowed",[role])).rows[0].allowed,false);
+});

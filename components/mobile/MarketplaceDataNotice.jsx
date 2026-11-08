@@ -1,0 +1,3 @@
+"use client";
+import {useState} from 'react';import {useListings} from '@/lib/store';import {useLocale} from '@/components/settings/LocaleProvider';import {mobileExperienceCopy} from '@/lib/i18n/mobile-experience';
+export function MarketplaceDataNotice(){const {dbError,dbLoading,retryListings}=useListings(),{locale}=useLocale(),t=mobileExperienceCopy[locale]||mobileExperienceCopy['vi-VN'],[busy,setBusy]=useState(false);if(!dbError)return null;return <div className="marketplace-data-notice container" role="status"><span>{t.dataError}</span><button type="button" disabled={busy||dbLoading} onClick={async()=>{setBusy(true);try{await retryListings();}finally{setBusy(false);}}}>{t.retry}</button></div>;}

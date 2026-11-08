@@ -1,0 +1,3 @@
+import {requireAccount} from '@/lib/security/authorization';import {assertOrigin,errorResponse,rateLimit,readJson} from '@/lib/server/http';import {parseIdentityQr} from '@/lib/kyc/qr';
+// Compatibility validation only. Identity data is persisted with final consent/submission.
+export async function POST(request){try{assertOrigin(request);rateLimit(request,'identity-qr',10);await requireAccount(request,{active:false});const body=await readJson(request),fields=parseIdentityQr(body.payload);return Response.json({ok:true,fields,stored:false,needsFinalConsent:true},{headers:{'Cache-Control':'private,no-store'}});}catch(e){return errorResponse(e);}}

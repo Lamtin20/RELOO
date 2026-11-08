@@ -2,6 +2,7 @@
 
 # dependencies
 /node_modules
+/tools/verification/node_modules/
 /.pnp
 .pnp.*
 .yarn/*
@@ -12,9 +13,13 @@
 
 # testing
 /coverage
+/output/
+/.playwright-cli/
 
 # next.js
 /.next/
+/.next-neighborhood-test/
+/.next-stays-test/
 /out/
 
 # production
@@ -39,3 +44,22 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Native mobile generated files
+.next-care-test/
+mobile/node_modules/
+mobile/android/.gradle/
+mobile/android/local.properties
+mobile/android/**/build/
+mobile/ios/**/build/
+mobile/ios/**/xcuserdata/
+*.keystore
+*.jks
+
+# Python analysis/service bytecode is generated, not release source.
+__pycache__/
+*.py[cod]
+
+# Generated test builds and accidental Windows cache tree
+/.next-*-test/
+/%SystemDrive%/

@@ -1,0 +1,22 @@
+[Unit]
+Description=RELOO production web and chat
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+# Replace with the unprivileged account and project directory on the laptop.
+User=reloo
+WorkingDirectory=/srv/reloo-app
+Environment=NODE_ENV=production
+Environment=HOSTNAME=127.0.0.1
+Environment=PORT=3000
+ExecStart=/usr/bin/node /srv/reloo-app/scripts/start-production.mjs
+Restart=on-failure
+RestartSec=5
+TimeoutStopSec=30
+NoNewPrivileges=true
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target

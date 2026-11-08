@@ -40,7 +40,7 @@ export default function FaqPage() {
   const addFaq = (e) => {
     e.preventDefault();
     if (!newFaq.question.trim() || !newFaq.answer.trim()) return;
-    saveFaqs([...faqs, { id: `faq_${Date.now()}`, question: newFaq.question, answer: newFaq.answer }]);
+    saveFaqs([...faqs, { id: `faq_${crypto.randomUUID()}`, question: newFaq.question, answer: newFaq.answer }]);
     setNewFaq({ question: "", answer: "" });
   };
 

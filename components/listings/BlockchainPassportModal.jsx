@@ -1,6 +1,7 @@
 "use client";
+import {usePassportStatus} from "./usePassportStatus";
 
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import {
   ChevronRight,
   Copy,
@@ -35,8 +36,6 @@ export function BlockchainPassportModal({
   orders = [],
 }) {
   const { user } = useAuth();
-  const [status, setStatus] = useState(null);
-  const [loading, setLoading] = useState(false);
   const [hashCopied, setHashCopied] = useState(false);
   const [historyOpen, setHistoryOpen] = useState(false);
 
@@ -51,33 +50,7 @@ export function BlockchainPassportModal({
   const canSeeResidual =
     user?.role === "admin" || (ownerId && user?.id === ownerId);
 
-  useEffect(() => {
-    if (!open || !passport?.hash) {
-      setStatus(null);
-      setLoading(false);
-      return;
-    }
-
-    let alive = true;
-    setLoading(true);
-
-    fetch(`/api/polygon/passport?hash=${encodeURIComponent(hash)}`)
-      .then((r) => r.json())
-      .then((data) => alive && setStatus(data))
-      .catch(
-        () =>
-          alive &&
-          setStatus({
-            ok: false,
-            passport: { status: "offline", statusLabel: "Lỗi kết nối" },
-          }),
-      )
-      .finally(() => alive && setLoading(false));
-
-    return () => {
-      alive = false;
-    };
-  }, [open, hash, passport]);
+  const {status,loading}=usePassportStatus(hash,open);
 
   if (!passport) return null;
 

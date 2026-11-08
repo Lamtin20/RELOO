@@ -1,0 +1,81 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {readFile} from 'node:fs/promises';
+import {randomUUID} from 'node:crypto';
+import {PGlite} from '@electric-sql/pglite';
+import {DEFAULT_BRAIN,validateBrain,validateKnowledge,validatePublication,matchKnowledge,brainVersionForEditor,knowledgeForStorage} from '../lib/chat-control/policy.js';
+import {chatHostConfigured,controlPathAllowed} from '../lib/chat-control/host.js';
+import {effectiveCrmPermissions} from '../lib/operations/access.js';
+import {invitationEligible} from '../lib/support/engagement.js';
+import {advisorSelectionSchema} from '../lib/chat-control/selection-schema.js';
+test('saved knowledge can be reopened, edited and published without trusting derived review fields',()=>{
+ const faq={question:'How do I find a camera?',answer:'Open search and choose the camera category.',source:'/help',rightsConfirmed:true};
+ const version=brainVersionForEditor({id:'version-one',knowledge:[faq]});
+ assert.deepEqual(knowledgeForStorage(version.knowledge),[faq]);
+ assert.deepEqual(version.knowledgeReview,[{index:0,reviewRequired:false}]);
+ assert.deepEqual(validateKnowledge(version.knowledge,{publish:true}),[faq]);
+ assert.equal(brainVersionForEditor(null),null);
+ assert.throws(()=>knowledgeForStorage([{...faq,reviewRequired:false}]),/KNOWLEDGE_INVALID/);
+ const financial={...faq,answer:'Refund guaranteed 100%'};
+ const blocked=brainVersionForEditor({knowledge:[financial]});
+ assert.equal(blocked.knowledgeReview[0].reviewRequired,true);
+ assert.throws(()=>validatePublication(DEFAULT_BRAIN,blocked.knowledge),/NEEDS_LEGAL_REVIEW/);
+});
+test('model constrained decoding cannot select invented product IDs, including an empty catalog',()=>{
+ const empty=advisorSelectionSchema([]);assert.equal(empty.properties.productIds.maxItems,0);
+ const schema=advisorSelectionSchema([{id:'public-one'},{id:'public-two'}]);assert.deepEqual(schema.properties.productIds.items.enum,['public-one','public-two']);assert.equal(schema.properties.productIds.maxItems,2);assert.equal(schema.additionalProperties,false);assert.ok(!schema.properties.intent.enum.includes('refund'));
+});
+test('brain configuration cannot inject providers, secrets, aggressive tracking or financial overrides',()=>{
+ const brain=structuredClone(DEFAULT_BRAIN);assert.deepEqual(validatePublication(brain,[]),brain);
+ for(const patch of [{endpoint:'https://external.invalid'},{name:'token=secret'},{engagement:{...brain.engagement,maxInvites:10}},{modules:['payment']}])assert.throws(()=>validateBrain({...brain,...patch}));
+ const faq={question:'How do I find a camera?',answer:'Open search and choose the camera category.',source:'/help',rightsConfirmed:true};
+ assert.equal(matchKnowledge(faq.question,[faq]).answer,faq.answer);
+ assert.throws(()=>validateKnowledge([{...faq,source:'https://external.invalid'}]));
+ assert.throws(()=>validateKnowledge([{...faq,rightsConfirmed:false}],{publish:true}),/RIGHTS/);
+ assert.throws(()=>validatePublication(brain,[{...faq,answer:'Refund guaranteed 100%'}]),/LEGAL_REVIEW/);
+ assert.throws(()=>validatePublication({...brain,greeting:{...brain.greeting,'en-US':'All payments are guaranteed'}},[]),/LEGAL_REVIEW/);
+ const permitted={allowed:true,analytics:true,marketing:true,elapsed:100,productPages:5,productSeconds:100};
+ assert.equal(invitationEligible(permitted,brain.engagement),'product');
+ for(const patch of [{dnt:true},{gpc:true},{analytics:false},{marketing:false},{invites:1}])assert.equal(invitationEligible({...permitted,...patch},brain.engagement),null);
+});
+test('management host is explicit staging-only and prevents exposing business endpoints',()=>{
+ assert.equal(chatHostConfigured({RELOO_ENVIRONMENT:'staging',RELOO_CHAT_CONTROL_HOST:'chat.reloo.vn',APP_ORIGIN:'https://staging.reloo.vn'}),true);
+ assert.equal(chatHostConfigured({RELOO_ENVIRONMENT:'production',RELOO_CHAT_CONTROL_HOST:'chat.reloo.vn',APP_ORIGIN:'https://reloo.vn'}),false);
+ assert.equal(chatHostConfigured({RELOO_ENVIRONMENT:'production',RELOO_MANAGEMENT_SSO:'production',RELOO_CHAT_CONTROL_HOST:'chat.reloo.vn',APP_ORIGIN:'https://reloo.vn',CRM_ORIGIN:'https://crm.reloo.vn'}),true);
+ for(const p of ['/api/orders','/api/db/bootstrap','/crm','/product/demo','/api/chat/messages'])assert.equal(controlPathAllowed(p),false);
+ assert.equal(controlPathAllowed('/api/crm/conversations','GET'),false);assert.equal(controlPathAllowed('/api/crm/conversations','POST'),true);
+ assert.equal(controlPathAllowed('/api/crm/ai/versions'),true);
+ const permissions=effectiveCrmPermissions({enabled:true,role:'staff',permissions:['crm.read','bots.publish','support.contacts']});assert.ok(permissions.includes('bots.read'));assert.ok(permissions.includes('support.read'));assert.ok(!permissions.includes('bots.write'));
+});
+test('actual SQL: immutable versions, atomic publication, replay protection, staff boundaries and retention',async()=>{
+ const db=new PGlite();try{
+ await db.exec(`create role anon;create role authenticated;create role service_role;create table profiles(id text primary key);create table crm_staff(profile_id text,enabled boolean,role text,permissions text[]);create table crm_records(id uuid default gen_random_uuid(),module text,title text,status text,created_by text,data jsonb);create table support_conversations(id uuid primary key,profile_id text,title text,status text default 'OPEN',created_at timestamptz default now());create table support_messages(id uuid default gen_random_uuid(),conversation_id uuid references support_conversations(id),role text,body text,model text,created_at timestamptz default now());insert into profiles values('editor'),('publisher'),('agent'),('other'),('viewer');insert into crm_staff values('editor',true,'staff',ARRAY['crm.read','bots.write']),('publisher',true,'staff',ARRAY['crm.read','bots.publish','support.assign']),('agent',true,'staff',ARRAY['crm.read','support.write']),('other',true,'staff',ARRAY['crm.read','support.write']),('viewer',true,'staff',ARRAY['crm.read','support.read']);`);
+ await db.exec(await readFile('supabase/migrations/20261024100000_contextual_support.sql','utf8'));
+ await db.exec(await readFile('supabase/migrations/20261024140000_chat_control.sql','utf8'));
+ const control=async(actor,action,data,key=randomUUID(),hash='a'.repeat(64))=>(await db.query('select reloo_ai_control($1,$2,$3,$4,$5) result',[actor,key,hash,action,JSON.stringify(data)])).rows[0].result;
+ await assert.rejects(control('viewer','save',{config:DEFAULT_BRAIN,knowledge:[]}),/DENIED/);
+ const key=randomUUID(),saved=await control('editor','save',{config:DEFAULT_BRAIN,knowledge:[]},key);assert.deepEqual(await control('editor','save',{config:DEFAULT_BRAIN,knowledge:[]},key),saved);
+ await assert.rejects(control('editor','save',{config:DEFAULT_BRAIN,knowledge:[]},key,'b'.repeat(64)),/CONFLICT/);
+ await assert.rejects(control('editor','publish',{id:saved.id,expected:null,reviewed:true,reason:'Verified synthetic configuration'}),/DENIED/);
+ await assert.rejects(control('publisher','publish',{id:saved.id,expected:null,reviewed:false,reason:'Testing only'}),/REVIEW/);
+ await control('publisher','publish',{id:saved.id,expected:null,reviewed:true,reason:'Verified synthetic configuration'});
+ const second=await control('editor','save',{config:{...DEFAULT_BRAIN,enabled:false},knowledge:[]});
+ await assert.rejects(control('publisher','publish',{id:second.id,expected:null,reviewed:true,reason:'Stale publication'}),/VERSION_CONFLICT/);
+ await control('publisher','publish',{id:second.id,expected:saved.id,reviewed:true,reason:'Pause synthetic bot'});
+ await control('publisher','publish',{id:saved.id,expected:second.id,reviewed:true,reason:'Roll back synthetic configuration'});
+ assert.equal((await db.query("select count(*)::int n from ai_control_audit where action='ROLLBACK_ACTIVATED'")).rows[0].n,1);
+ const conversation=randomUUID(),guest='c'.repeat(64),request=randomUUID();await db.query("insert into support_conversations(id,title,guest_hash,expires_at) values($1,'DEMO',$2,now()+interval '7 days')",[conversation,guest]);
+ const turn={action:'message',message:'DEMO query',answer:'DEMO answer',response:{ok:true},trace:{version:saved.id,path:'/explore',decision:'RULE_MATCH',channel:'web'}};
+ const commit=()=>db.query('select reloo_support_commit(null,$1,$2,$3,$4,$5)',[guest,conversation,request,'same',JSON.stringify(turn)]);await commit();await commit();
+ assert.equal((await db.query('select count(*)::int n from ai_events')).rows[0].n,1);assert.equal((await db.query('select count(*)::int n from support_messages')).rows[0].n,2);
+ assert.deepEqual((await db.query('select role from support_messages order by sequence')).rows.map(r=>r.role),['USER','ASSISTANT']);
+ await control('publisher','assign',{id:conversation,assignedTo:'agent'});
+ await assert.rejects(db.query("select reloo_support_staff('other',$1,'reply','DEMO',$2)",[conversation,randomUUID()]),/ASSIGNMENT_DENIED/);
+ await assert.rejects(db.query("select reloo_support_staff('viewer',$1,'reply','DEMO',$2)",[conversation,randomUUID()]),/STAFF_REQUIRED/);
+ const reply=randomUUID();await db.query("select reloo_support_staff('agent',$1,'reply','DEMO',$2)",[conversation,reply]);await db.query("select reloo_support_staff('agent',$1,'reply','DEMO',$2)",[conversation,reply]);
+ assert.equal((await db.query("select count(*)::int n from support_messages where role='STAFF'")).rows[0].n,1);
+ await assert.rejects(db.query('select reloo_support_commit(null,$1,$2,$3,$4,$5)',[guest,conversation,randomUUID(),'new',JSON.stringify(turn)]),/HANDOFF/);
+ await db.exec("update support_conversations set expires_at=now()-interval '1 day';select reloo_purge_support();select reloo_ai_purge()");assert.equal((await db.query('select count(*)::int n from ai_events')).rows[0].n,0);
+ const grants=(await db.query("select count(*)::int n from information_schema.routine_privileges where routine_schema='public' and grantee in ('PUBLIC','anon','authenticated') and (routine_name like 'reloo_ai%' or routine_name like 'reloo_support%')")).rows[0].n;assert.equal(grants,0);
+ }finally{await db.close()}
+});

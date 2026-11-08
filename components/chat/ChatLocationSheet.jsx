@@ -34,7 +34,8 @@ async function searchPlaces(query, lat, lng) {
   }
 }
 
-export function ChatLocationSheet({ open, onClose, onShare, initialAddress = "" }) {
+export function ChatLocationSheet(props){return props.open?<ChatLocationSheetContent {...props}/>:null;}
+function ChatLocationSheetContent({ open, onClose, onShare, initialAddress = "" }) {
   const [coords, setCoords] = useState(DEFAULT_CENTER);
   const [address, setAddress] = useState(initialAddress);
   const [loading, setLoading] = useState(false);
@@ -66,12 +67,7 @@ export function ChatLocationSheet({ open, onClose, onShare, initialAddress = "" 
     await finish(DEFAULT_CENTER.lat, DEFAULT_CENTER.lng, "Hồ Chí Minh, Việt Nam");
   }, []);
 
-  useEffect(() => {
-    if (!open) return;
-    setSearch("");
-    setPlaces([]);
-    loadCurrentLocation();
-  }, [open, loadCurrentLocation]);
+
 
   useEffect(() => {
     if (!open) return;

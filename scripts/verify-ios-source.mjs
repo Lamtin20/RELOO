@@ -1,0 +1,12 @@
+import fs from 'node:fs';
+import {createRequire} from 'node:module';
+const require=createRequire(new URL('../mobile/package.json',import.meta.url));
+const xcode=require('xcode'),project=xcode.project('mobile/ios/App/App.xcodeproj/project.pbxproj').parseSync();
+const resources=JSON.stringify(project.pbxResourcesBuildPhaseObj());
+if(!resources.includes('PrivacyInfo'))throw Error('PRIVACY_RESOURCE_MISSING');
+const config=JSON.parse(fs.readFileSync('mobile/capacitor.config.json'));
+if(config.appId!=='vn.reloo.app'||config.android.webContentsDebuggingEnabled!==false||config.server.cleartext!==false)throw Error('MOBILE_CONFIGURATION_INVALID');
+const source=fs.readFileSync('mobile/ios/App/App/SceneDelegate.swift','utf8');
+if(!source.includes('registerPluginInstance(RelooLocationPlugin())')||source.includes('requestAlwaysAuthorization'))throw Error('FOREGROUND_LOCATION_INVALID');
+const result={pbxParsed:true,privacyManifestInResources:true,appId:config.appId,foregroundLocationAdapterRegistered:true,debugWebContentsDisabled:true,splashDelayMs:config.plugins.SplashScreen.launchShowDuration,swiftCompiled:false,xcodeSimulatorRun:false,archiveSigned:false,note:'Structural checks only on Windows. Run the macOS workflow and on-device acceptance before release.'};
+fs.mkdirSync('output/ios-upgrade',{recursive:true});fs.writeFileSync('output/ios-upgrade/source-check.json',JSON.stringify(result,null,2));console.log(result);

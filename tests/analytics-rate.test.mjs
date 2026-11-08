@@ -1,0 +1,2 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {retryDelay} from '../lib/analytics/rate-policy.js';
+test('429 cooldown honors retry-after with bounded fallback and no retry loop',()=>{assert.equal(retryDelay(null),60);assert.equal(retryDelay('12'),12);assert.equal(retryDelay('99999'),300);assert.equal(retryDelay(new Date(10000).toUTCString(),0),10);assert.equal(retryDelay('bad'),60);});

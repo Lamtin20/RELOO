@@ -1,0 +1,80 @@
+limit_req_zone $http_cf_connecting_ip zone=reloo_sensitive:10m rate=2r/s;
+limit_req_zone $http_cf_connecting_ip zone=reloo_write:10m rate=10r/s;
+limit_req_zone $http_cf_connecting_ip zone=reloo_login:10m rate=10r/m;
+server {
+  listen 8080;
+  server_tokens off;
+  client_max_body_size 15m;
+  client_header_buffer_size 16k;
+  large_client_header_buffers 4 32k;
+  access_log off;
+  error_log /dev/null;
+  resolver 127.0.0.11 valid=5s ipv6=off;
+  proxy_buffer_size 32k;
+  proxy_buffers 8 32k;
+  proxy_busy_buffers_size 64k;
+  proxy_hide_header X-Content-Type-Options;
+  proxy_hide_header X-Frame-Options;
+  proxy_hide_header Strict-Transport-Security;
+  proxy_hide_header Referrer-Policy;
+  limit_req_status 429;
+  add_header X-Content-Type-Options nosniff always;
+  add_header X-Frame-Options DENY always;
+  add_header Strict-Transport-Security 'max-age=31536000' always;
+  add_header Referrer-Policy strict-origin-when-cross-origin always;
+  location = /api/auth/login {
+    limit_req zone=reloo_login burst=5 nodelay;
+    set $web_backend http://app:3000;
+    proxy_pass $web_backend;
+    proxy_http_version 1.1;
+    proxy_set_header Host $host;
+    proxy_set_header X-Forwarded-Proto https;
+    proxy_set_header X-Reloo-Client-IP $http_cf_connecting_ip;
+    proxy_set_header X-Reloo-Edge "${RELOO_EDGE_SECRET}";
+  }
+  location ~ ^/api/(auth|crm/access|security/smart-key|mobile/auth)(/|$) {
+    limit_req zone=reloo_sensitive burst=20 nodelay;
+    set $web_backend http://app:3000;
+    proxy_pass $web_backend;
+    proxy_http_version 1.1;
+    proxy_set_header Host $host;
+    proxy_set_header X-Forwarded-Proto https;
+    proxy_set_header X-Reloo-Client-IP $http_cf_connecting_ip;
+    proxy_set_header X-Reloo-Edge "${RELOO_EDGE_SECRET}";
+  }
+  location ~ ^/api/(listings|rent|profile|images|payments|rental)(/|$) {
+    limit_req zone=reloo_write burst=40 nodelay;
+    set $web_backend http://app:3000;
+    proxy_pass $web_backend;
+    proxy_http_version 1.1;
+    proxy_set_header Host $host;
+    proxy_set_header X-Forwarded-Proto https;
+    proxy_set_header X-Reloo-Client-IP $http_cf_connecting_ip;
+    proxy_set_header X-Reloo-Edge "${RELOO_EDGE_SECRET}";
+  }
+  location ~ /\.(env|git|svn|hg|npmrc)(/|$) { return 404; }
+  location / {
+    set $web_backend http://app:3000;
+    proxy_pass $web_backend;
+    proxy_http_version 1.1;
+    proxy_set_header Host $host;
+    proxy_set_header X-Forwarded-Proto https;
+    proxy_set_header X-Forwarded-Host $host;
+    proxy_set_header X-Forwarded-For $http_cf_connecting_ip;
+    proxy_set_header X-Reloo-Client-IP $http_cf_connecting_ip;
+    proxy_set_header X-Reloo-Edge "${RELOO_EDGE_SECRET}";
+    proxy_set_header Upgrade $http_upgrade;
+    proxy_set_header Connection "upgrade";
+    proxy_read_timeout 75s;
+  }
+  location /api/shorts/upload {
+    client_max_body_size 82m;
+    set $web_backend http://app:3000;
+    proxy_pass $web_backend;
+    proxy_set_header Host $host;
+    proxy_set_header X-Forwarded-Proto https;
+    proxy_set_header X-Reloo-Client-IP $http_cf_connecting_ip;
+    proxy_set_header X-Reloo-Edge "${RELOO_EDGE_SECRET}";
+    proxy_read_timeout 240s;
+  }
+}

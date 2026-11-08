@@ -1,0 +1,13 @@
+[Unit]
+Description=RELOO host and Docker management-port firewall
+After=docker.service tailscaled.service
+Requires=docker.service
+PartOf=docker.service
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/sbin/reloo-host-firewall
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target

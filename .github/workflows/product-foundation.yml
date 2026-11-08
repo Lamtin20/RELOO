@@ -1,0 +1,54 @@
+name: RELOO product foundation checks
+on:
+  pull_request:
+  push:
+    branches: [main,master]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+      - run: npm run rules:check
+      - name: V4 shared foundation contracts
+        run: node scripts/verify-v4-standard.mjs
+      - name: V4 primitive and locale tests
+        run: node --test tests/v4-foundation.test.mjs
+      - run: node scripts/check-source-secrets.mjs
+      - name: Scoped implementation lint
+        run: npx eslint components/superapp lib/product lib/runtime app/tim-kiem app/dang-tin app/giao-dich app/viec-lam app/api/superapp components/stays lib/stays proxy.js scripts/verify-product-rules.mjs scripts/verify-staging.mjs
+      - name: Domain, isolation and regression tests
+        run: >-
+          node --test tests/superapp.test.mjs tests/staging-environment.test.mjs
+          tests/home-discovery.test.mjs tests/mobile-navigation.test.mjs tests/auth-navigation.test.mjs tests/mini-app-navigation.test.mjs tests/purchase-resume.test.mjs
+          tests/security-hardening.test.mjs tests/stays.test.mjs tests/stays-host.test.mjs
+          tests/stays-api.test.mjs tests/stays-management.test.mjs tests/rental-selection.test.mjs
+          tests/neighborhood.test.mjs
+      - name: Build (no production credentials)
+        run: npm run build
+        env:
+          NEXT_PUBLIC_SUPABASE_URL: http://127.0.0.1:45999
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: ''
+          NEXT_TELEMETRY_DISABLED: '1'
+      - name: Save build identity
+        run: |
+          mkdir -p output/ci
+          git rev-parse HEAD > output/ci/commit.txt
+          cat .next/BUILD_ID > output/ci/build.txt
+          sha256sum lib/product/rules.json > output/ci/rules.sha256
+          find supabase/migrations -type f -name '*.sql' -exec sha256sum {} \; > output/ci/migrations.sha256
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: product-validation-${{ github.sha }}
+          path: output/ci/
+      # Hosted staging deploy is deliberately not represented as a passed/empty job.
+      # Provision the isolated resource contract in RELOO_STAGING_RUNBOOK before adding deployment credentials.

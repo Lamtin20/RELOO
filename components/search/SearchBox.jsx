@@ -1,11 +1,14 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useSyncExternalStore, useRef, useState, useId, useCallback } from "react";
 import Link from "next/link";
+import {useLocale} from '@/components/settings/LocaleProvider';
+import {searchBoxCopy} from '@/lib/i18n/search-box';
 import { useRouter } from "next/navigation";
 import { Bookmark, Clock, Search, X } from "lucide-react";
 
 import { CATEGORIES } from "@/lib/constants";
+import {usePersonalization} from '@/components/rental-care/PersonalizationProvider';
 import { Icon } from "@/components/ui";
 import {
   addRecentSearch,
@@ -25,25 +28,28 @@ import {
 
 export function SearchBox({
   variant = "header",
-  placeholder = "Tìm máy ảnh, lều camping, váy dạ hội...",
+  placeholder,
   value: controlledValue,
   onChange,
   onSearch,
   className = "",
   showSubmitButton = false,
-  submitLabel = "Tìm kiếm",
+  submitLabel,
   autoFocus = false,
 }) {
   const router = useRouter();
+  const panelId=useId(),panelRef=useRef(null),{locale}=useLocale(),copy=searchBoxCopy[locale]||searchBoxCopy['vi-VN'];
+  const {actor,epoch,enabled,record}=usePersonalization();
   const rootRef = useRef(null);
   const inputRef = useRef(null);
 
   const [internalValue, setInternalValue] = useState("");
   const [open, setOpen] = useState(false);
-  const [mounted, setMounted] = useState(false);
+  const mounted=useSyncExternalStore(()=>()=>{},()=>true,()=>false);
   const [tab, setTab] = useState("recent");
   const [recent, setRecent] = useState([]);
   const [saved, setSaved] = useState([]);
+  const [historyOwner,setHistoryOwner]=useState('');
   const [lastCategory, setLastCategory] = useState(null);
   const [suggestSlugs, setSuggestSlugs] = useState([]);
 
@@ -54,20 +60,16 @@ export function SearchBox({
     else setInternalValue(next);
   }
 
-  function refreshLists() {
-    setRecent(getRecentSearches());
-    setSaved(getSavedSearches());
-    setLastCategory(getLastViewedCategory());
+  const refreshLists=useCallback(() => {
+    const scope=window.__relooInterestScope,allowed=enabled&&scope?.actor===actor&&scope.epoch===epoch;
+    setHistoryOwner(allowed?actor+':'+epoch:'');
+    setRecent(allowed?getRecentSearches():[]);
+    setSaved(allowed?getSavedSearches():[]);
+    setLastCategory(allowed?getLastViewedCategory():null);
     setSuggestSlugs(getSuggestedCategorySlugs(getPreferredCategorySlugs()));
-  }
+  },[actor,epoch,enabled]);
 
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  useEffect(() => {
-    refreshLists();
-  }, [open]);
+  useEffect(()=>{const change=()=>refreshLists();window.addEventListener('reloo-interest-scope-changed',change);return()=>window.removeEventListener('reloo-interest-scope-changed',change);},[refreshLists]);
 
   useEffect(() => {
     function handlePointerDown(e) {
@@ -97,6 +99,7 @@ export function SearchBox({
       return;
     }
     addRecentSearch(term);
+    record('SEARCH',{query:term});
     refreshLists();
     if (onSearch) onSearch(term);
     else router.push(`/explore?q=${encodeURIComponent(term)}`);
@@ -139,13 +142,16 @@ export function SearchBox({
     refreshLists();
   }
 
-  const list = tab === "recent" ? recent : saved;
+  const ownsHistory=enabled&&historyOwner===actor+':'+epoch;
+  const list = ownsHistory?(tab === "recent" ? recent : saved):[];
   const isHero = variant === "hero";
   const isExplore = variant === "explore";
 
   return (
     <div
       ref={rootRef}
+      onKeyDown={event=>{if(event.key==='Escape'&&open){event.preventDefault();inputRef.current?.focus({preventScroll:true});setOpen(false)}else if(event.key==='ArrowDown'&&event.target===inputRef.current&&open){event.preventDefault();panelRef.current?.querySelector('button')?.focus()}}}
+      onBlur={event=>{if(!event.currentTarget.contains(event.relatedTarget))setOpen(false)}}
       className={[
         "search-box",
         `search-box--${variant}`,
@@ -164,47 +170,50 @@ export function SearchBox({
         </span>
         <input
           ref={inputRef}
-          type="text"
+          type="text" role="combobox" aria-autocomplete="none"
+          disabled={!mounted}
           value={value}
           onChange={(e) => setValue(e.target.value)}
           onFocus={handleFocus}
-          placeholder={placeholder}
+          placeholder={placeholder??copy.placeholder}
           className="search-box__input"
-          aria-label="Tìm kiếm sản phẩm"
+          aria-label={copy.input}
           aria-expanded={open}
-          aria-controls="search-suggest-panel"
+          aria-controls={open?panelId:undefined}
+          aria-haspopup="dialog"
           autoFocus={autoFocus}
         />
         {showSubmitButton && (
           <button
             type="submit"
+            disabled={!mounted}
             className={`search-box__submit search-box__submit--${variant}`}
           >
-            {submitLabel}
+            {submitLabel??copy.submit}
           </button>
         )}
       </form>
 
       {mounted && open && (
-        <div id="search-suggest-panel" className="search-suggest" role="dialog" aria-label="Gợi ý tìm kiếm">
+        <div id={panelId} ref={panelRef} className="search-suggest" role="dialog" aria-modal="false" aria-label={copy.suggestions}>
           <div className="search-suggest__tabs">
             <button
               type="button"
-              className={`search-suggest__tab ${tab === "recent" ? "is-active" : ""}`}
+              className={`search-suggest__tab ${tab === "recent" ? "is-active" : ""}`} aria-pressed={tab==='recent'}
               onClick={() => setTab("recent")}
             >
-              Gần đây
+              {copy.recent}
             </button>
             <button
               type="button"
-              className={`search-suggest__tab ${tab === "saved" ? "is-active" : ""}`}
+              className={`search-suggest__tab ${tab === "saved" ? "is-active" : ""}`} aria-pressed={tab==='saved'}
               onClick={() => setTab("saved")}
             >
-              Đã lưu
+              {copy.saved}
             </button>
-            {tab === "recent" && recent.length > 0 && (
+            {ownsHistory && tab === "recent" && recent.length > 0 && (
               <button type="button" className="search-suggest__clear" onClick={handleClearHistory}>
-                Xóa lịch sử
+                {copy.clear}
               </button>
             )}
           </div>
@@ -213,12 +222,12 @@ export function SearchBox({
             {list.length === 0 ? (
               <div className="search-suggest__empty">
                 {tab === "recent" ? (
-                  <p>Chưa có tìm kiếm gần đây. Thử gõ từ khóa hoặc chọn danh mục bên dưới.</p>
+                  <p>{copy.emptyRecent}</p>
                 ) : (
                   <p>
-                    Chưa lưu từ khóa nào.{" "}
+                    {copy.emptySaved}{" "}
                     <Link href="/explore?saved=1" onClick={() => setOpen(false)}>
-                      Xem tin đã lưu
+                      {copy.viewSaved}
                     </Link>
                   </p>
                 )}
@@ -243,8 +252,8 @@ export function SearchBox({
                       type="button"
                       className="search-suggest__row-save"
                       onClick={() => handleSaveRecent(term)}
-                      aria-label={`Lưu "${term}"`}
-                      title="Lưu tìm kiếm"
+                      aria-label={`${copy.save} "${term}"`}
+                      title={copy.saveSearch}
                     >
                       <Bookmark size={14} />
                     </button>
@@ -255,7 +264,7 @@ export function SearchBox({
                     onClick={() =>
                       tab === "recent" ? handleRemoveRecent(term) : handleRemoveSaved(term)
                     }
-                    aria-label={`Xóa "${term}"`}
+                    aria-label={`${copy.remove} "${term}"`}
                   >
                     <X size={14} />
                   </button>
@@ -265,7 +274,7 @@ export function SearchBox({
           </div>
 
           <div className="search-suggest__section">
-            <h4 className="search-suggest__heading">Gợi ý cho bạn</h4>
+            <h4 className="search-suggest__heading">{copy.suggested}</h4>
             <div className="search-suggest__grid">
               {suggestCategories.map((cat) => (
                 <button
@@ -279,8 +288,8 @@ export function SearchBox({
                   </span>
                   <span className="search-suggest__cat-text">
                     <span className="search-suggest__cat-name">{cat.name}</span>
-                    {lastCategory === cat.slug && (
-                      <span className="search-suggest__cat-badge">Đã xem gần đây</span>
+                    {ownsHistory && lastCategory === cat.slug && (
+                      <span className="search-suggest__cat-badge">{copy.viewed}</span>
                     )}
                   </span>
                 </button>
